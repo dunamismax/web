@@ -1,0 +1,222 @@
+:root {
+    /* Nord Color Palette */
+    --nord0: #2E3440;
+    --nord1: #3B4252;
+    --nord2: #434C5E;
+    --nord3: #4C566A;
+    --nord4: #D8DEE9;
+    --nord5: #E5E9F0;
+    --nord6: #ECEFF4;
+    --nord7: #8FBCBB;
+    --nord8: #88C0D0;
+    --nord9: #81A1C1;
+    --nord10: #5E81AC;
+    --nord11: #BF616A;
+    --nord14: #A3BE8C;
+
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    
+    /* Layout */
+    --border-radius: 8px;
+    --card-padding: var(--space-lg);
+    
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-default: 250ms ease;
+}
+
+/* Reset & Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--nord0);
+    color: var(--nord4);
+    font-family: 'Fira Code', monospace;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container */
+.container {
+    width: min(100% - 2rem, 800px);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+    flex: 1;
+}
+
+/* Typography */
+h1, h3 {
+    color: var(--nord8);
+    margin-bottom: var(--space-lg);
+}
+
+/* Forms & Inputs */
+input {
+    width: 100%;
+    padding: var(--space-sm) var(--space-lg);
+    background-color: var(--nord10);
+    color: var(--nord6);
+    border: none;
+    border-radius: var(--border-radius);
+    font-family: 'Fira Code', monospace;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    width: 100%;
+}
+
+.btn:hover {
+    background-color: var(--nord8);
+    transform: translateY(-1px);
+}
+
+/* Card Styles */
+.card {
+    background-color: var(--nord1);
+    border-radius: var(--border-radius);
+    padding: var(--card-padding);
+    margin-bottom: var(--space-xl);
+}
+
+/* Messenger Specific */
+.messenger-page {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.messenger-container {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-md);
+    scroll-behavior: smooth;
+}
+
+.message {
+    margin-bottom: var(--space-md);
+    padding: var(--space-md);
+    background-color: var(--nord2);
+    border-radius: var(--border-radius);
+    animation: fadeIn 0.3s ease-in;
+}
+
+.message.system {
+    background-color: var(--nord1);
+    color: var(--nord9);
+    font-style: italic;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+    font-size: 0.9rem;
+}
+
+.username {
+    color: var(--nord8);
+    font-weight: 500;
+}
+
+.timestamp {
+    color: var(--nord9);
+}
+
+.input-group {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background-color: var(--nord1);
+    border-top: 1px solid var(--nord3);
+}
+
+.input-group input {
+    margin-bottom: 0;
+}
+
+.input-group .btn {
+    width: auto;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--nord9);
+    font-size: 0.9rem;
+    margin-top: var(--space-md);
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.indicator.online {
+    background-color: var(--nord14);
+}
+
+.indicator.offline {
+    background-color: var(--nord11);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn var(--transition-default);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    :root {
+        --card-padding: var(--space-md);
+    }
+    
+    .input-group {
+        flex-direction: column;
+    }
+    
+    .input-group .btn {
+        width: 100%;
+    }
+} var(--space-md);
+    background-color: var(--nord1);
+    border: 2px solid var(--nord3);
+    border-radius: var(--border-radius);
+    color: var(--nord4);
+    font-family: 'Fira Code', monospace;
+    margin-bottom: var(--space-md);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--nord8);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-sm)

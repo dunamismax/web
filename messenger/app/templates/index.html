@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="messenger-page fade-in">
+    <h1>DunamisMax Messenger</h1>
+    
+    <!-- Username Form -->
+    <div id="username-form" class="card">
+        <h3>Choose Your Username</h3>
+        <form onsubmit="return connectToChat(event)" class="form-group">
+            <input 
+                type="text" 
+                id="username-input"
+                placeholder="Enter username..." 
+                pattern="[A-Za-z0-9_]{3,15}"
+                title="3-15 characters, letters, numbers, and underscores only"
+                required
+            >
+            <button type="submit" class="btn">Join Chat</button>
+        </form>
+    </div>
+
+    <!-- Chat Interface (Hidden by default) -->
+    <div id="chat-interface" class="messenger-container card" style="display: none;">
+        <div class="message-list" id="message-list">
+            <div class="message system">
+                <div class="message-content">
+                    Welcome to DunamisMax Messenger!
+                </div>
+            </div>
+        </div>
+
+        <div class="message-input">
+            <form id="message-form" onsubmit="return sendMessage(event)">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="message-input"
+                        placeholder="Type your message..." 
+                        autocomplete="off"
+                        required
+                    >
+                    <button type="submit" class="btn">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="connection-status">
+        <span id="connection-indicator" class="indicator offline"></span>
+        <span id="status-text">Not Connected</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let ws = null;
+    let username = '';
+    const messageList = document.getElementById('message-list');
+    const messageForm = document.getElementById('message-form');
+    const messageInput = document.getElementById('message-input');
+    const usernameForm = document.getElementById('username-form');
+    const chatInterface = document.getElementById('chat-interface');
+    const connectionIndicator = document.getElementById('connection-indicator');
+    const statusText = document.getElementById('status-text');
+
+    function connectToChat(event) {
+        event.preventDefault();
+        username = document.getElementById('username-input').value.trim();
+        
+        if (!username) return false;
+
+        // Use secure WebSocket if page is served over HTTPS
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}/ws/chat/${encodeURIComponent(username)}`;
+        
+        ws = new WebSocket(wsUrl);
+
+        ws.onopen = function() {
+            connectionIndicator.className = 'indicator online';
+            statusText.textContent = 'Connected';
+            usernameForm.style.display = 'none';
+            chatInterface.style.display = 'flex';
+        };
+
+        ws.onclose = function(event) {
+            connectionIndicator.className = 'indicator offline';
+            statusText.textContent = 'Disconnected';
+            
+            if (event.code === 1008) {
+                alert('Username already taken. Please choose another.');
+                usernameForm.style.display = 'block';
+                chatInterface.style.display = 'none';
+            } else {
+                addSystemMessage('Disconnected from server. Please refresh to reconnect.');
+            }
+        };
+
+        ws.onerror = function(error) {
+            console.error('WebSocket error:', error);
+            addSystemMessage('Connection error occurred');
+        };
+
+        ws.onmessage = function(event) {
+            const message = JSON.parse(event.data);
+            addMessage(message);
+        };
+
+        return false;
+    }
+
+    function addMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${message.type}`;
+
+        if (message.type === 'system') {
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    ${escapeHtml(message.text)}
+                </div>
+            `;
+        } else {
+            const time = new Date(message.timestamp).toLocaleTimeString();
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <span class="username">${escapeHtml(message.username)}</span>
+                    <span class="timestamp">${time}</span>
+                </div>
+                <div class="message-content">
+                    ${escapeHtml(message.text)}
+                </div>
+            `;
+        }
+
+        messageList.appendChild(messageDiv);
+        messageList.scrollTop = messageList.scrollHeight;
+    }
+
+    function addSystemMessage(text) {
+        const message = {
+            type: 'system',
+            text: text,
+            timestamp: new Date().toISOString()
+        };
+        addMessage(message);
+    }
+
+    function sendMessage(event) {
+        event.preventDefault();
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            const message = messageInput.value.trim();
+            if (message) {
+                ws.send(message);
+                messageInput.value = '';
+            }
+        } else {
+            addSystemMessage('Not connected to server');
+        }
+        return false;
+    }
+
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>
+{% endblock %}

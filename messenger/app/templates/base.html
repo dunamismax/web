@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DunamisMax Messenger</title>
+
+    <!-- Favicon setup -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
+    
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
