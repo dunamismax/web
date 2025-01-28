@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="about-container fade-in">
+    <h1>About Me</h1>
+    
+    <div class="about-content card">
+        <div class="bio">
+            <h2>Hi, I'm [Your Name]</h2>
+            <p>I'm a developer passionate about building efficient, elegant web applications. This site serves as my playground for experimenting with modern web technologies and sharing what I learn along the way.</p>
+            
+            <p>My focus is on creating high-performance web applications using minimal, carefully chosen tools:</p>
+            <ul>
+                <li>FastAPI for robust backend services</li>
+                <li>HTMX for dynamic frontend interactions</li>
+                <li>Raw SQL for database operations</li>
+                <li>Minimal JavaScript where necessary</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="connect card mt-2">
+        <h2>Connect With Me</h2>
+        <div class="social-links">
+            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" class="btn">
+                GitHub
+            </a>
+            <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" class="btn">
+                LinkedIn
+            </a>
+            <a href="mailto:your.email@example.com" class="btn">
+                Email
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .about-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .about-content {
+        margin-top: 2rem;
+    }
+
+    .bio ul {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+    }
+
+    .bio li {
+        margin: 0.5rem 0;
+        color: var(--nord4);
+    }
+
+    .social-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .connect {
+        text-align: center;
+    }
+
+    .connect .social-links {
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+</style>
+{% endblock %}

@@ -3,37 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}DunamisMax - API Playground{% endblock %}</title>
+    <meta name="description" content="DunamisMax - API Playground and Developer Blog">
+    
+    <title>{% block title %}DunamisMax{% endblock %} | API Playground</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='img/logo.svg') }}">
     
     <!-- Fira Code Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+    
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <header class="header">
-        <div class="header-content container">
-            <div class="logo">
-                <a href="/">
-                    <img src="{{ url_for('static', path='/img/logo.svg') }}" alt="DunamisMax Logo">
-                </a>
-            </div>
-            
-            {% include "components/nav.html" %}
-        </div>
-    </header>
-
-    <main class="main-content">
+    <!-- Navigation -->
+    {% include "partials/nav.html" %}
+    
+    <!-- Main Content -->
+    <main>
         <div class="container">
             {% block content %}{% endblock %}
         </div>
     </main>
-
-    <!-- Optional: Additional scripts block -->
-    {% block extra_scripts %}{% endblock %}
+    
+    <!-- Footer -->
+    {% include "partials/footer.html" %}
+    
+    <!-- Loading Indicator -->
+    <div class="htmx-indicator" id="loading-indicator">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    {% block scripts %}{% endblock %}
 </body>
 </html>

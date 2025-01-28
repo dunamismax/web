@@ -1,80 +1,90 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, WebSocket, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from pathlib import Path
-from fastapi.responses import HTMLResponse
 from loguru import logger
+from pathlib import Path
+from datetime import datetime
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="DunamisMax API Playground",
-    description="Interactive API testing and learning platform",
-    version="1.0.0",
+    title="DunamisMax", description="API Playground and Blog", version="1.0.0"
 )
 
-# Setup static files and templates
-BASE_DIR = Path(__file__).resolve().parent
-app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
-templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+# Mount static files
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-# Configure logging
+# Setup templates
+templates = Jinja2Templates(directory="app/templates")
+
+# Setup logging
 logger.add(
-    "logs/dunamismax.log",
-    rotation="500 MB",
-    retention="10 days",
-    level="INFO",
-    format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}",
+    "logs/app.log", rotation="500 MB", retention="10 days", level="INFO", serialize=True
 )
 
+# Active WebSocket connections for messenger
+active_connections: list[WebSocket] = []
 
-# Main routes
-@app.get("/", response_class=HTMLResponse)
+
+# Base context for all templates
+def get_base_context(request: Request):
+    return {"request": request, "current_year": datetime.now().year}
+
+
+@app.get("/")
 async def home(request: Request):
-    return templates.TemplateResponse(
-        "pages/home.html", {"request": request, "active_page": "home"}
-    )
+    """Render the home page."""
+    context = get_base_context(request)
+    return templates.TemplateResponse("pages/home.html", context)
 
 
-@app.get("/demos", response_class=HTMLResponse)
-async def demos(request: Request):
-    return templates.TemplateResponse(
-        "pages/demos.html", {"request": request, "active_page": "demos"}
-    )
+@app.get("/blog")
+async def blog(request: Request):
+    """Render the blog page."""
+    context = get_base_context(request)
+    return templates.TemplateResponse("pages/blog.html", context)
 
 
-@app.get("/tutorials", response_class=HTMLResponse)
-async def tutorials(request: Request):
-    return templates.TemplateResponse(
-        "pages/tutorials.html", {"request": request, "active_page": "tutorials"}
-    )
+@app.get("/about")
+async def about(request: Request):
+    """Render the about page."""
+    context = get_base_context(request)
+    return templates.TemplateResponse("pages/about.html", context)
 
 
-@app.get("/playground", response_class=HTMLResponse)
+@app.get("/playground")
 async def playground(request: Request):
-    return templates.TemplateResponse(
-        "pages/playground.html", {"request": request, "active_page": "playground"}
-    )
+    """Render the API playground page."""
+    context = get_base_context(request)
+    return templates.TemplateResponse("pages/playground.html", context)
 
 
-# Include API routers - only include websocket for now
-from dunamismax.app.api.demo import websocket
+@app.get("/messenger")
+async def messenger(request: Request):
+    """Render the messenger page."""
+    context = get_base_context(request)
+    return templates.TemplateResponse("pages/messenger.html", context)
 
-# Mount API routers
-api_routers = [
-    (websocket.router, "/api/demo/websocket"),
-    # Comment out until we create these routers
-    # (streaming.router, "/api/demo/streaming"),
-    # (async_ops.router, "/api/demo/async"),
-    # (basics.router, "/api/tutorials/basics"),
-    # (validation.router, "/api/tutorials/validation"),
-    # (security.router, "/api/tutorials/security"),
-    # (experiments.router, "/api/playground")
-]
 
-for router, prefix in api_routers:
-    app.include_router(router, prefix=prefix)
+@app.websocket("/ws/messenger")
+async def messenger_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for the messenger feature."""
+    await websocket.accept()
+    active_connections.append(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            # Broadcast message to all connected clients
+            for connection in active_connections:
+                await connection.send_text(data)
+    except Exception as e:
+        logger.exception(f"WebSocket error: {e}")
+    finally:
+        active_connections.remove(websocket)
 
-if __name__ == "__main__":
-    import uvicorn
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+# Import and include routers
+from app.api import blog, messenger, playground
+
+app.include_router(blog.router, prefix="/api/blog", tags=["blog"])
+app.include_router(messenger.router, prefix="/api/messenger", tags=["messenger"])
+app.include_router(playground.router, prefix="/api/playground", tags=["playground"])
