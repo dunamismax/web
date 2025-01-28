@@ -1,0 +1,74 @@
+:root {
+  --nord0: #2E3440;  /* Darkest background */
+  --nord1: #3B4252;
+  --nord2: #434C5E;
+  --nord3: #4C566A;
+  --nord4: #D8DEE9;
+  --nord5: #E5E9F0;
+  --nord6: #ECEFF4;
+  --nord7: #8FBCBB;
+  --nord8: #88C0D0;
+  --nord9: #81A1C1;
+  --nord10: #5E81AC;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--nord0);
+  color: var(--nord6);
+  font-family: 'Fira Code', monospace;
+}
+
+header, footer {
+  text-align: center;
+  padding: 1rem;
+}
+
+h1, h2, p, label {
+  color: var(--nord6);
+}
+
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+nav a {
+  margin-right: 1rem;
+  color: var(--nord8);
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+form input, form textarea, form button {
+  width: 100%;
+  font-family: 'Fira Code', monospace;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--nord1);
+  border: 1px solid var(--nord2);
+  color: var(--nord6);
+}
+
+form button {
+  cursor: pointer;
+  background-color: var(--nord10);
+  border: none;
+}
+
+form button:hover {
+  background-color: var(--nord9);
+}
+
+/* Example: you can style an HTMX loading spinner */
+.htmx-request, [hx-request] {
+  opacity: 0.6;
+}
