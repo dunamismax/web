@@ -1,29 +1,16 @@
 :root {
-    /* Nord Color Palette */
-    --nord0: #2E3440;
-    --nord1: #3B4252;
-    --nord2: #434C5E;
-    --nord3: #4C566A;
-    --nord4: #D8DEE9;
-    --nord5: #E5E9F0;
-    --nord6: #ECEFF4;
-    --nord7: #8FBCBB;
-    --nord8: #88C0D0;
-    --nord9: #81A1C1;
-    --nord10: #5E81AC;
-    --nord11: #BF616A;
-    --nord14: #A3BE8C;
-
     /* Spacing */
     --space-xs: 0.25rem;
     --space-sm: 0.5rem;
     --space-md: 1rem;
     --space-lg: 1.5rem;
     --space-xl: 2rem;
+    --space-2xl: 3rem;
     
     /* Layout */
     --border-radius: 8px;
-    --card-padding: var(--space-lg);
+    --container-width: 800px;
+    --header-height: 60px;
     
     /* Transitions */
     --transition-fast: 150ms ease;
@@ -38,8 +25,8 @@
 }
 
 body {
-    background-color: var(--nord0);
-    color: var(--nord4);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
     font-family: 'Fira Code', monospace;
     line-height: 1.6;
     min-height: 100vh;
@@ -49,56 +36,94 @@ body {
 
 /* Container */
 .container {
-    width: min(100% - 2rem, 800px);
+    width: min(100% - 2rem, var(--container-width));
     margin: 0 auto;
     padding: var(--space-xl) var(--space-md);
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Typography */
 h1, h3 {
-    color: var(--nord8);
+    color: var(--color-heading);
+    margin-bottom: var(--space-lg);
+    text-align: center;
+}
+
+h1 { font-size: 2rem; }
+h3 { font-size: 1.25rem; }
+
+/* Forms & Inputs */
+.form-group {
     margin-bottom: var(--space-lg);
 }
 
-/* Forms & Inputs */
 input {
     width: 100%;
-    padding: var(--space-sm) var(--space-lg);
-    background-color: var(--nord10);
-    color: var(--nord6);
+    padding: var(--space-md);
+    background-color: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    color: var(--color-text-primary);
+    font-family: 'Fira Code', monospace;
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--color-focus-ring);
+    background-color: var(--color-bg-tertiary);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md) var(--space-xl);
+    background-color: var(--color-button-primary);
+    color: var(--color-text-bright);
     border: none;
     border-radius: var(--border-radius);
     font-family: 'Fira Code', monospace;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     transition: all var(--transition-fast);
-    width: 100%;
 }
 
 .btn:hover {
-    background-color: var(--nord8);
+    background-color: var(--color-button-hover);
     transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
 }
 
 /* Card Styles */
 .card {
-    background-color: var(--nord1);
+    background-color: var(--color-bg-secondary);
     border-radius: var(--border-radius);
-    padding: var(--card-padding);
-    margin-bottom: var(--space-xl);
+    padding: var(--space-xl);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Messenger Specific */
 .messenger-page {
-    max-width: 800px;
+    max-width: var(--container-width);
     margin: 0 auto;
+    width: 100%;
 }
 
 .messenger-container {
     height: 70vh;
     display: flex;
     flex-direction: column;
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .message-list {
@@ -106,48 +131,59 @@ input {
     overflow-y: auto;
     padding: var(--space-md);
     scroll-behavior: smooth;
+    background-color: var(--color-bg-tertiary);
 }
 
 .message {
     margin-bottom: var(--space-md);
     padding: var(--space-md);
-    background-color: var(--nord2);
+    background-color: var(--color-bg-secondary);
     border-radius: var(--border-radius);
-    animation: fadeIn 0.3s ease-in;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    animation: slideIn 0.3s ease-in;
 }
 
 .message.system {
-    background-color: var(--nord1);
-    color: var(--nord9);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-muted);
     font-style: italic;
+    border-left: 3px solid var(--color-info);
 }
 
 .message-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: var(--space-sm);
     font-size: 0.9rem;
 }
 
 .username {
-    color: var(--nord8);
+    color: var(--color-accent-primary);
     font-weight: 500;
 }
 
 .timestamp {
-    color: var(--nord9);
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+}
+
+.message-content {
+    color: var(--color-text-primary);
+    word-break: break-word;
 }
 
 .input-group {
     display: flex;
     gap: var(--space-md);
     padding: var(--space-md);
-    background-color: var(--nord1);
-    border-top: 1px solid var(--nord3);
+    background-color: var(--color-bg-secondary);
+    border-top: 2px solid var(--color-border);
 }
 
 .input-group input {
     margin-bottom: 0;
+    background-color: var(--color-bg-tertiary);
 }
 
 .input-group .btn {
@@ -157,8 +193,9 @@ input {
 .connection-status {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-sm);
-    color: var(--nord9);
+    color: var(--color-text-muted);
     font-size: 0.9rem;
     margin-top: var(--space-md);
 }
@@ -171,11 +208,11 @@ input {
 }
 
 .indicator.online {
-    background-color: var(--nord14);
+    background-color: var(--color-success);
 }
 
 .indicator.offline {
-    background-color: var(--nord11);
+    background-color: var(--color-error);
 }
 
 /* Animations */
@@ -184,39 +221,59 @@ input {
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes slideIn {
+    from { 
+        opacity: 0; 
+        transform: translateX(-10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .fade-in {
     animation: fadeIn var(--transition-default);
+}
+
+/* Scrollbar Styling */
+.message-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.message-list::-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+    border-radius: var(--border-radius);
+}
+
+.message-list::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: var(--border-radius);
+}
+
+.message-list::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-hover);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     :root {
-        --card-padding: var(--space-md);
+        --space-xl: 1.5rem;
     }
     
     .input-group {
         flex-direction: column;
+        gap: var(--space-sm);
     }
     
     .input-group .btn {
         width: 100%;
     }
-} var(--space-md);
-    background-color: var(--nord1);
-    border: 2px solid var(--nord3);
-    border-radius: var(--border-radius);
-    color: var(--nord4);
-    font-family: 'Fira Code', monospace;
-    margin-bottom: var(--space-md);
+    
+    .messenger-container {
+        height: 80vh;
+    }
+    
+    h1 { font-size: 1.75rem; }
+    h3 { font-size: 1.1rem; }
 }
-
-input:focus {
-    outline: none;
-    border-color: var(--nord8);
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-sm)

@@ -1,0 +1,70 @@
+:root {
+    /* Nord Color Palette - Polar Night (Dark) */
+    --nord0: #2E3440;  /* Dark bg */
+    --nord1: #3B4252;  /* Lighter bg */
+    --nord2: #434C5E;  /* Selection bg */
+    --nord3: #4C566A;  /* Subtle borders */
+
+    /* Nord Color Palette - Snow Storm (Light) */
+    --nord4: #D8DEE9;  /* Main text */
+    --nord5: #E5E9F0;  /* Subtle text */
+    --nord6: #ECEFF4;  /* Bright text */
+
+    /* Nord Color Palette - Frost (Blues) */
+    --nord7: #8FBCBB;  /* Cyan/mint */
+    --nord8: #88C0D0;  /* Light blue */
+    --nord9: #81A1C1;  /* Mid blue */
+    --nord10: #5E81AC; /* Dark blue */
+
+    /* Nord Color Palette - Aurora (Accents) */
+    --nord11: #BF616A;  /* Red/error */
+    --nord12: #D08770;  /* Orange/warning */
+    --nord13: #EBCB8B;  /* Yellow/modification */
+    --nord14: #A3BE8C;  /* Green/success */
+    --nord15: #B48EAD;  /* Purple/special */
+
+    /* Semantic Color Mapping */
+    --color-bg-primary: var(--nord0);
+    --color-bg-secondary: var(--nord1);
+    --color-bg-tertiary: var(--nord2);
+    --color-bg-hover: var(--nord2);
+    --color-bg-active: var(--nord3);
+
+    --color-border: var(--nord3);
+    --color-border-hover: var(--nord4);
+    
+    --color-text-primary: var(--nord4);
+    --color-text-secondary: var(--nord9);
+    --color-text-muted: var(--nord3);
+    --color-text-bright: var(--nord6);
+    
+    --color-link: var(--nord8);
+    --color-link-hover: var(--nord7);
+    
+    --color-heading: var(--nord8);
+    --color-heading-hover: var(--nord7);
+    
+    --color-accent-primary: var(--nord8);
+    --color-accent-secondary: var(--nord7);
+    
+    /* Status Colors */
+    --color-success: var(--nord14);
+    --color-warning: var(--nord12);
+    --color-error: var(--nord11);
+    --color-info: var(--nord9);
+    --color-special: var(--nord15);
+    
+    /* Interactive Element Colors */
+    --color-button-primary: var(--nord10);
+    --color-button-hover: var(--nord8);
+    --color-button-active: var(--nord9);
+    
+    --color-icon-primary: var(--nord8);
+    --color-icon-hover: var(--nord7);
+    --color-icon-muted: var(--nord9);
+
+    /* Focus State Colors */
+    --color-focus-ring: var(--nord8);
+    --color-selection-bg: var(--nord2);
+    --color-selection-text: var(--nord6);
+}

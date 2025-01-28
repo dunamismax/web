@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DunamisMax - Digital Solutions</title>
+    <title>DunamisMax - Web Apps</title>
 
     <!-- Favicon setup -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
     <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
-    
+
+    <!-- Theme and Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', path='nord.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
 </head>
@@ -23,11 +26,11 @@
                     </svg>
                     <h1>DunamisMax</h1>
                 </div>
-                <p class="tagline">Digital Solutions & Web Services</p>
+                <p class="tagline">Python FastAPI Web Apps & Services</p>
             </header>
 
             <section class="services fade-in">
-                <h2>Our Services</h2>
+                <h2>Services</h2>
                 <div class="service-grid">
                     {% for service in services %}
                     <a href="{{ service.url }}" class="service-card">
