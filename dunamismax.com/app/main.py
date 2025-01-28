@@ -1,3 +1,4 @@
+# app/main.py
 import uvicorn
 from fastapi import FastAPI
 from loguru import logger
@@ -5,6 +6,7 @@ from loguru import logger
 from .api import main_routes, blog, contact, message_board
 from .db.database import create_pool, close_pool
 from .db.queries import CREATE_CONTACT_TABLE
+from .config import DATABASE_URL  # Import the config
 
 
 def create_app() -> FastAPI:

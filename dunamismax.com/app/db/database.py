@@ -1,10 +1,8 @@
+# app/db/database.py
 import asyncpg
 from loguru import logger
-import os
-
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://user:password@localhost:5432/dunamismax"
-)
+from .queries import CREATE_CONTACT_TABLE
+from app.config import DATABASE_URL  # Import from config.py
 
 
 async def create_pool():

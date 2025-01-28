@@ -6,3 +6,5 @@ asyncpg
 SQLAlchemy
 httpx
 loguru
+email-validator
+python-dotenv
