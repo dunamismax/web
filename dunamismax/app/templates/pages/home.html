@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}DunamisMax - Modern API Playground{% endblock %}
+
+{% block content %}
+<div class="api-card">
+    <h1 class="api-title">Welcome to DunamisMax</h1>
+    <p class="mb-2">
+        Explore and experiment with modern API patterns in a minimalist, high-performance environment.
+    </p>
+    <div class="mb-4">
+        <h2 class="mb-2">Featured Sections:</h2>
+        <div class="api-card">
+            <h3 class="api-title">Demo APIs</h3>
+            <p>Explore live examples of WebSocket connections, streaming responses, and async operations.</p>
+            <a href="/demos" class="button mt-2">View Demos</a>
+        </div>
+        
+        <div class="api-card">
+            <h3 class="api-title">API Tutorials</h3>
+            <p>Learn about REST basics, request validation, and security best practices.</p>
+            <a href="/tutorials" class="button mt-2">Start Learning</a>
+        </div>
+        
+        <div class="api-card">
+            <h3 class="api-title">API Playground</h3>
+            <p>Test and experiment with various API endpoints in an interactive environment.</p>
+            <a href="/playground" class="button mt-2">Start Experimenting</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DunamisMax - API Playground{% endblock %}</title>
+    
+    <!-- Fira Code Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content container">
+            <div class="logo">
+                <a href="/">
+                    <img src="{{ url_for('static', path='/img/logo.svg') }}" alt="DunamisMax Logo">
+                </a>
+            </div>
+            
+            {% include "components/nav.html" %}
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Optional: Additional scripts block -->
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
