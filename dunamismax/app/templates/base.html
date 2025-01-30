@@ -10,6 +10,12 @@
         body, .page-wrapper, .container {
             background-color: var(--nord0) !important;
         }
+
+        /* Center all headings and titles */
+        h1, h2, h3 {
+            text-align: center;
+            width: 100%;
+        }
     </style>
 
     <!-- Favicon setup -->
@@ -40,7 +46,10 @@
 
     <!-- Set current year -->
     <script>
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+        });
     </script>
     
     {% block scripts %}{% endblock %}

@@ -164,9 +164,7 @@
 /* ---------------------------------------------------------------------
    CSS Reset for Consistent Styling Across Browsers
 --------------------------------------------------------------------- */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
@@ -175,21 +173,16 @@ body, h1, h2, h3, p, figure, blockquote, dl, dd {
     padding: 0;
 }
 
-ul[role='list'],
-ol[role='list'] {
+ul[role='list'], ol[role='list'] {
     list-style: none;
 }
 
-img,
-picture {
+img, picture {
     max-width: 100%;
     display: block;
 }
 
-input,
-button,
-textarea,
-select {
+input, button, textarea, select {
     font: inherit;
 }
 
@@ -209,8 +202,7 @@ table {
     width: 100%;
 }
 
-th,
-td {
+th, td {
     text-align: left;
     padding: 0.5rem;
 }
@@ -249,6 +241,7 @@ body {
 h1, h2, h3 {
     color: var(--color-heading);
     line-height: 1.2;
+    text-align: center; /* Center all headings */
 }
 
 h1 { 
@@ -270,6 +263,7 @@ p {
     color: var(--color-text-primary);
     font-size: var(--font-size-sm);
     margin-bottom: var(--space-md);
+    text-align: center; /* Center paragraphs if desired */
 }
 
 /* =====================================================================
@@ -283,6 +277,7 @@ p {
     background-color: var(--color-bg-secondary);
     padding: var(--space-md) var(--space-lg);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center header content */
 }
 
 .logo-container {
@@ -356,6 +351,7 @@ footer {
 
 .card h3, .card p {
     color: var(--color-text-primary);
+    text-align: center; /* Ensure text within cards is centered */
 }
 
 /* ---------------------------------------------------------------------
@@ -601,7 +597,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* ---------------------------------------------------------------------
-   Chat Interface
+   Chat Interface (Messenger Page)
 --------------------------------------------------------------------- */
 .messenger-container {
     display: flex;
@@ -620,6 +616,7 @@ input:focus, textarea:focus, select:focus {
     padding: var(--space-md) var(--space-lg);
     background-color: var(--color-bg-secondary);
     border-bottom: 1px solid var(--color-border);
+    text-align: center; /* Center content if necessary */
 }
 
 .chat-status {

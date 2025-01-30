@@ -2,13 +2,20 @@
 
 {% block content %}
 <div class="messenger-page fade-in">
-    <!-- Messenger Page Title -->
-    <h2 class="page-title">DunamisMax Messenger</h2>
-    
+    <header class="messenger-header">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <h1>DunamisMax Messenger</h1>
+        </div>
+        <p class="tagline">Connect and chat in real-time</p>
+    </header>
+
     <!-- Username Form -->
     <div id="username-form" class="card login-card">
-        <h3 class="centered-text">Welcome to DunamisMax Messenger</h3>
-        <p class="form-description centered-text">Choose a username to start messaging</p>
+        <h3>Welcome to DunamisMax Messenger</h3>
+        <p class="form-description">Choose a username to start messaging</p>
         <form onsubmit="return connectToChat(event)" class="form-group">
             <div class="input-wrapper">
                 <input 
@@ -29,7 +36,7 @@
         </form>
     </div>
 
-    <!-- Chat Interface (Hidden by default) -->
+    <!-- Chat Interface -->
     <div id="chat-interface" class="messenger-container card" style="display: none;">
         <div class="chat-header">
             <div class="chat-status">
@@ -45,7 +52,7 @@
         <div class="message-list" id="message-list">
             <div class="message system">
                 <div class="message-content">
-                    <i data-feather="info" class="message-icon"></i>
+                    <i data-feather="info"></i>
                     Welcome to DunamisMax Messenger!
                 </div>
             </div>
@@ -74,9 +81,7 @@
 
 {% block scripts %}
 <script>
-    // JavaScript Code for Messenger Functionality
-
-    // WebSocket variable
+    // WebSocket and DOM variables
     let ws = null;
     let username = '';
 
@@ -89,24 +94,17 @@
     const connectionIndicator = document.getElementById('connection-indicator');
     const statusText = document.getElementById('status-text');
 
-    /**
-     * Connect to the chat WebSocket server
-     * @param {Event} event - The form submission event
-     * @returns {boolean} - Prevents default form submission
-     */
     function connectToChat(event) {
         event.preventDefault();
         username = document.getElementById('username-input').value.trim();
         
         if (!username) return false;
 
-        // Determine WebSocket protocol based on page protocol
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsUrl = `${protocol}//${window.location.host}/ws/chat/${encodeURIComponent(username)}`;
+        const wsUrl = protocol + '//' + window.location.host + '/ws/chat/' + encodeURIComponent(username);
         
         ws = new WebSocket(wsUrl);
 
-        // Handle successful connection
         ws.onopen = function() {
             connectionIndicator.className = 'indicator online';
             statusText.textContent = 'Connected';
@@ -115,7 +113,6 @@
             messageInput.focus();
         };
 
-        // Handle connection closure
         ws.onclose = function(event) {
             connectionIndicator.className = 'indicator offline';
             statusText.textContent = 'Disconnected';
@@ -129,13 +126,11 @@
             }
         };
 
-        // Handle connection errors
         ws.onerror = function(error) {
             console.error('WebSocket error:', error);
             addSystemMessage('Connection error occurred');
         };
 
-        // Handle incoming messages
         ws.onmessage = function(event) {
             const message = JSON.parse(event.data);
             addMessage(message);
@@ -144,9 +139,6 @@
         return false;
     }
 
-    /**
-     * Disconnect from the chat WebSocket server
-     */
     function disconnectFromChat() {
         if (ws) {
             ws.close();
@@ -157,10 +149,6 @@
         addSystemMessage('Welcome to DunamisMax Messenger!');
     }
 
-    /**
-     * Add a message to the message list
-     * @param {Object} message - The message object
-     */
     function addMessage(message) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${message.type}`;
@@ -168,7 +156,7 @@
         if (message.type === 'system') {
             messageDiv.innerHTML = `
                 <div class="message-content">
-                    <i data-feather="info" class="message-icon"></i>
+                    <i data-feather="info"></i>
                     ${escapeHtml(message.text)}
                 </div>
             `;
@@ -187,15 +175,9 @@
 
         messageList.appendChild(messageDiv);
         messageList.scrollTop = messageList.scrollHeight;
-        
-        // Re-initialize Feather icons for new content
         feather.replace();
     }
 
-    /**
-     * Add a system message to the message list
-     * @param {string} text - The system message text
-     */
     function addSystemMessage(text) {
         const message = {
             type: 'system',
@@ -205,10 +187,6 @@
         addMessage(message);
     }
 
-    /**
-     * Display an error message
-     * @param {string} text - The error message text
-     */
     function showError(text) {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message fade-in';
@@ -219,17 +197,11 @@
         usernameForm.insertBefore(errorDiv, usernameForm.firstChild);
         feather.replace();
         
-        // Remove error after 5 seconds
         setTimeout(() => {
             errorDiv.remove();
         }, 5000);
     }
 
-    /**
-     * Send a message through the WebSocket
-     * @param {Event} event - The form submission event
-     * @returns {boolean} - Prevents default form submission
-     */
     function sendMessage(event) {
         event.preventDefault();
         if (ws && ws.readyState === WebSocket.OPEN) {
@@ -245,11 +217,6 @@
         return false;
     }
 
-    /**
-     * Escape HTML to prevent XSS
-     * @param {string} unsafe - The unsafe string
-     * @returns {string} - The escaped string
-     */
     function escapeHtml(unsafe) {
         return unsafe
             .replace(/&/g, "&amp;")
@@ -259,7 +226,7 @@
             .replace(/'/g, "&#039;");
     }
 
-    // Handle Enter key in username input
+    // Event Listeners
     document.getElementById('username-input').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -267,7 +234,7 @@
         }
     });
 
-    // Focus username input on load
+    // Initialize
     window.addEventListener('load', function() {
         document.getElementById('username-input').focus();
     });
