@@ -942,6 +942,139 @@ input:focus, textarea:focus, select:focus {
     }
 }
 
+/* Privacy Policy Page Styles */
+.privacy-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.privacy-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.privacy-header .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--nord8);
+    text-decoration: none;
+    margin-bottom: 1rem;
+}
+
+.privacy-header h1 {
+    color: var(--nord6);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.privacy-header .last-updated {
+    color: var(--nord4);
+    font-size: 0.9rem;
+}
+
+.privacy-content {
+    background: var(--nord1);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.privacy-content section {
+    margin-bottom: 2.5rem;
+}
+
+.privacy-content h2 {
+    color: var(--nord8);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--nord3);
+    padding-bottom: 0.5rem;
+}
+
+.privacy-content h3 {
+    color: var(--nord7);
+    font-size: 1.4rem;
+    margin: 1.5rem 0 1rem;
+}
+
+.privacy-content h4 {
+    color: var(--nord7);
+    font-size: 1.2rem;
+    margin: 1.2rem 0 0.8rem;
+}
+
+.privacy-content p {
+    color: var(--nord4);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.privacy-content ul {
+    list-style-type: none;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-content ul li {
+    color: var(--nord4);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.privacy-content ul li:before {
+    content: "•";
+    color: var(--nord8);
+    position: absolute;
+    left: -1.5rem;
+}
+
+.privacy-content .overview ul li {
+    color: var(--nord8);
+    font-weight: 500;
+}
+
+.privacy-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--nord3);
+    text-align: center;
+}
+
+.privacy-footer p {
+    color: var(--nord4);
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .privacy-page {
+        padding: 1rem;
+    }
+
+    .privacy-content {
+        padding: 1.5rem;
+    }
+
+    .privacy-header h1 {
+        font-size: 2rem;
+    }
+
+    .privacy-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .privacy-content h3 {
+        font-size: 1.2rem;
+    }
+
+    .privacy-content h4 {
+        font-size: 1.1rem;
+    }
+}
+
 /* =====================================================================
    Additional Enhancements
    ===================================================================== */

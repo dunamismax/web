@@ -21,7 +21,7 @@ logging.basicConfig(
 logger = logging.getLogger("DunamisMaxFiles")
 
 # Load environment variables
-ENV_PATH = Path("/home/sawyer/github/web/converter_service/.env")
+ENV_PATH = Path(__file__).parent.parent / ".env"
 if os.path.exists(ENV_PATH):
     load_dotenv(ENV_PATH)
 else:
@@ -30,13 +30,12 @@ else:
 # Initialize FastAPI with proper configuration
 app = FastAPI(title=os.getenv("APP_NAME", "DunamisMax File Converter"))
 
-# Define base directories - Updated to reflect correct structure
-BASE_DIR = Path("/home/sawyer/github/web/converter_service")
-APP_DIR = BASE_DIR / "app"
-UPLOAD_DIR = APP_DIR / "uploads"
-CONVERTED_DIR = APP_DIR / "converted"
-STATIC_DIR = APP_DIR / "static"
-TEMPLATES_DIR = APP_DIR / "templates"
+# Define base directories relative to this file
+BASE_DIR = Path(__file__).parent
+UPLOAD_DIR = BASE_DIR / "uploads"
+CONVERTED_DIR = BASE_DIR / "converted"
+STATIC_DIR = BASE_DIR / "static"
+TEMPLATES_DIR = BASE_DIR / "templates"
 
 # Ensure required directories exist with proper permissions
 for dir_path in [UPLOAD_DIR, CONVERTED_DIR, STATIC_DIR, TEMPLATES_DIR]:
@@ -53,7 +52,7 @@ ALLOWED_FORMATS = {
     "video": ["mp4", "mov", "avi", "mkv", "webm"],
 }
 
-# Mount static files and templates - Using correct paths
+# Mount static files and templates
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
@@ -95,11 +94,36 @@ async def save_upload(file: UploadFile, path: Path):
         raise HTTPException(status_code=500, detail="Failed to save uploaded file")
 
 
-# Routes
+# Update the root route
 @app.get("/")
 async def root(request: Request):
     """Render the main page"""
-    return templates.TemplateResponse("files.html", {"request": request})
+    try:
+        return templates.TemplateResponse(
+            "files.html",
+            {
+                "request": request,
+                "messages": [],  # Empty list when no messages
+                "error": None,  # No error by default
+            },
+        )
+    except Exception as e:
+        logger.error(f"Template rendering error: {e}")
+        return templates.TemplateResponse(
+            "files.html",
+            {"request": request, "messages": [], "error": str(e)},
+            status_code=500,
+        )
+
+
+@app.get("/privacy")
+async def privacy(request: Request):
+    """Render the privacy policy page"""
+    try:
+        return templates.TemplateResponse("privacy.html", {"request": request})
+    except Exception as e:
+        logger.error(f"Privacy template rendering error: {e}")
+        raise HTTPException(status_code=500, detail=f"Template error: {str(e)}")
 
 
 @app.post("/api/convert")

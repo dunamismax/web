@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
@@ -10,15 +10,12 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-app = FastAPI(title="DunamisMax AI Agents")
+app = FastAPI()
 
-# Mount static files
-app.mount(
-    "/static", StaticFiles(directory=Path(__file__).parent / "static"), name="static"
-)
-
-# Templates
-templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
+# Mount static files and templates
+BASE_DIR = Path(__file__).parent
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # Initialize agent manager
 agent_manager = AgentManager()
@@ -36,8 +33,14 @@ async def root(request: Request):
 async def chat(request: Request, agent_id: str):
     """Render the chat interface for a specific agent"""
     if agent_id not in available_agents:
-        raise HTTPException(status_code=404, detail="Agent not found")
-
+        return templates.TemplateResponse(
+            "index.html",
+            {
+                "request": request,
+                "agents": available_agents,
+                "error": "Agent not found",
+            },
+        )
     agent = available_agents[agent_id]
     return templates.TemplateResponse("chat.html", {"request": request, "agent": agent})
 
@@ -47,11 +50,6 @@ async def websocket_endpoint(websocket: WebSocket, agent_id: str):
     """WebSocket endpoint for agent chat"""
     try:
         await agent_manager.connect(websocket, agent_id)
-    except Exception as e:
-        print(f"Connection error: {e}")
-        return
-
-    try:
         while True:
             message = await websocket.receive_text()
             await agent_manager.get_agent_response(agent_id, message, websocket)
@@ -60,15 +58,7 @@ async def websocket_endpoint(websocket: WebSocket, agent_id: str):
     except Exception as e:
         print(f"Error in websocket: {e}")
         await agent_manager.disconnect(websocket)
-        try:
-            await websocket.close(code=1011, reason="Internal server error")
-        except:
-            pass
 
 
 if __name__ == "__main__":
-    host = os.getenv("HOST", "0.0.0.0")
-    port = int(os.getenv("PORT", 8200))
-    debug = os.getenv("DEBUG", "False").lower() == "true"
-
-    uvicorn.run("app.main:app", host=host, port=port, reload=debug)
+    uvicorn.run("main:app", host="0.0.0.0", port=8200)

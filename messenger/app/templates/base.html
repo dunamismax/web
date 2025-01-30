@@ -3,61 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DunamisMax Messenger</title>
+    <title>{% block title %}DunamisMax Messenger{% endblock %}</title>
 
-    <style>
-        /* Force consistent background color */
-        body, .page-wrapper, .container {
-            background-color: var(--nord0) !important;
-        }
+    <!-- Security Headers -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
 
-        /* Center all headings and titles */
-        h1, h2, h3 {
-            text-align: center;
-            width: 100%;
-        }
-    </style>
-
-    <!-- Favicon setup -->
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
     <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
-    
-    <!-- Theme and Styles -->
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    
+    {% block extra_css %}{% endblock %}
+
     <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
 
-    <!-- Meta tags -->
-    <meta name="description" content="Real-time messaging platform">
+    <!-- SEO Optimization -->
+    <meta name="description" content="{% block meta_description %}Real-time messaging platform{% endblock %}">
     <meta name="theme-color" content="#2E3440">
+    <meta name="keywords" content="messenger, chat, real-time messaging, DunamisMax">
     
-    <!-- Open Graph tags -->
-    <meta property="og:title" content="DunamisMax Messenger">
-    <meta property="og:description" content="Connect and chat in real-time">
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="{% block og_title %}DunamisMax Messenger{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Connect and chat in real-time{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="DunamisMax">
+    
+    {% block extra_meta %}{% endblock %}
+
+    <style>
+    .nav-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        gap: 2rem;
+    }
+    
+    .nav-links a {
+        color: var(--color-text-primary);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        transition: all var(--transition-fast);
+        background-color: var(--color-bg-secondary);
+    }
+    
+    .nav-links a:hover {
+        background-color: var(--color-bg-tertiary);
+        transform: translateY(-2px);
+    }
+    
+    .nav-links a.active {
+        background-color: var(--color-button-primary);
+        color: var(--color-text-bright);
+    }
+    
+    @media (max-width: 768px) {
+        .nav-container {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-links a {
+            width: auto;
+            text-align: center;
+        }
+    }
+    </style>
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="https://dunamismax.com">Home</a>
+                <a href="https://files.dunamismax.com">File Converter</a>
+                <a href="https://agents.dunamismax.com">AI Agents</a>
+                <a href="https://messenger.dunamismax.com" class="active">Messenger</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
     <div class="page-wrapper">
+        <!-- Status Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.category }}">
+                    {{ message.content }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <main class="container">
             {% block content %}{% endblock %}
         </main>
 
-        <footer>
-            <p>&copy; <span id="current-year"></span> DunamisMax. All rights reserved.</p>
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="https://dunamismax.com">Home</a>
+                    <a href="/privacy">Privacy</a>
+                    <a href="https://github.com/dunamismax" target="_blank" rel="noopener">GitHub</a>
+                    {% block footer_links %}{% endblock %}
+                </div>
+                <p class="footer-copyright">&copy; <span id="current-year"></span> DunamisMax</p>
+            </div>
         </footer>
     </div>
 
-    <!-- Set current year -->
+    <!-- Core Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Feather Icons
+            feather.replace();
+            
             // Set current year
             document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // Handle navigation highlighting
+            const currentPath = window.location.hostname;
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.href.includes(currentPath)) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Handle alert dismissal
+            document.querySelectorAll('.alert').forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 300);
+                }, 5000);
+            });
         });
     </script>
-    
+
     {% block scripts %}{% endblock %}
+
+    <!-- Error Handling -->
+    {% if error %}
+    <div class="error-notification">
+        <i data-feather="alert-triangle"></i>
+        {{ error }}
+    </div>
+    {% endif %}
 </body>
 </html>

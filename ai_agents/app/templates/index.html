@@ -2,37 +2,53 @@
 
 {% block content %}
 <div class="ai-agents-page fade-in">
-    <header class="agents-header">
-        <div class="logo">
-            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
-                <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2zM12 22v-6.5"/>
-                <path d="M22 8.5l-10 7-10-7"/>
-                <path d="M2 15.5l10-7 10 7"/>
-                <path d="M12 2v6.5"/>
-            </svg>
-            <h1>DunamisMax AI Agents</h1>
-        </div>
-        <p class="tagline">Chat with specialized AI agents</p>
+    <header class="converter-header">
+        <h1>AI Agents</h1>
+        <p class="tagline">Chat with specialized AI personalities and assistants</p>
     </header>
 
-    <div class="agents-grid">
-        {% for agent in agents.values() %}
-        <a href="/chat/{{ agent.id }}" class="agent-card card">
-            <i data-feather="{{ agent.icon }}"></i>
-            <h3>{{ agent.name }}</h3>
-            <p>{{ agent.description }}</p>
-            <span class="agent-link">Chat Now <i data-feather="message-square"></i></span>
-        </a>
-        {% endfor %}
-    </div>
-</div>
-{% endblock %}
+    <div class="converter-container card">
+        <div class="converter-header">
+            <h2><i data-feather="cpu"></i> Available Agents</h2>
+            <p class="format-info">Choose an AI agent to start chatting</p>
+        </div>
 
-{% block scripts %}
-<script>
-    // Re-initialize Feather icons after dynamic content loads
-    document.addEventListener('DOMContentLoaded', function() {
-        feather.replace();
-    });
-</script>
+        <div class="agents-grid">
+            {% for agent in agents.values() %}
+            <a href="/chat/{{ agent.id }}" class="agent-card card">
+                <i data-feather="{{ agent.icon }}"></i>
+                <h3>{{ agent.name }}</h3>
+                <p>{{ agent.description }}</p>
+                <span class="agent-link">Chat Now <i data-feather="message-square"></i></span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <section class="features-section">
+        <h3>Features</h3>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i data-feather="zap"></i>
+                <h4>Real-time Chat</h4>
+                <p>Instant responses with streaming messages</p>
+            </div>
+            <div class="feature-card">
+                <i data-feather="shield"></i>
+                <h4>Secure</h4>
+                <p>Private conversations, no data stored</p>
+            </div>
+            <div class="feature-card">
+                <i data-feather="brain"></i>
+                <h4>Expert Knowledge</h4>
+                <p>Specialized agents for different topics</p>
+            </div>
+            <div class="feature-card">
+                <i data-feather="users"></i>
+                <h4>Free to Use</h4>
+                <p>No registration or payment required</p>
+            </div>
+        </div>
+    </section>
+</div>
 {% endblock %}

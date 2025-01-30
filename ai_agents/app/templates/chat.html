@@ -1,210 +1,160 @@
 {% extends "base.html" %}
 
+{% block title %}{{ agent.name }} - DunamisMax AI Agents{% endblock %}
+
 {% block content %}
 <div class="chat-page fade-in">
-    <header class="chat-header">
+    <header class="converter-header">
         <a href="/" class="back-link">
             <i data-feather="arrow-left"></i>
             Back to Agents
         </a>
-        <div class="agent-info">
-            <i data-feather="{{ agent.icon }}"></i>
-            <h1>{{ agent.name }}</h1>
-        </div>
+        <h1>{{ agent.name }}</h1>
+        <p class="tagline">{{ agent.description }}</p>
     </header>
 
-    <div class="chat-container card">
-        <div class="chat-messages" id="chat-messages">
-            <div class="message system">
-                <div class="message-content">
-                    <i data-feather="info"></i>
-                    <span>Connected to {{ agent.name }}. Start chatting!</span>
-                </div>
-            </div>
+    <div class="converter-container card">
+        <div class="converter-header">
+            <h2>
+                <i data-feather="{{ agent.icon }}"></i>
+                Chat Session
+            </h2>
+            <p class="format-info">Real-time conversation with {{ agent.name }}</p>
         </div>
 
-        <div class="message-input">
-            <form id="message-form" onsubmit="return sendMessage(event)">
-                <div class="input-group">
-                    <input 
-                        type="text" 
-                        id="message-input"
-                        placeholder="Type your message..." 
-                        autocomplete="off"
-                        required
-                    >
-                    <button type="submit" class="btn">
-                        <i data-feather="send"></i>
-                        Send
-                    </button>
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message system">
+                    <div class="message-content">
+                        <i data-feather="info"></i>
+                        <span>Connected to {{ agent.name }}. Start chatting!</span>
+                    </div>
                 </div>
-            </form>
+            </div>
+
+            <div class="message-input">
+                <form id="message-form" onsubmit="return sendMessage(event)">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="message-input"
+                            placeholder="Type your message..." 
+                            autocomplete="off"
+                            required
+                        >
+                        <button type="submit" class="btn">
+                            <i data-feather="send"></i>
+                            Send
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
+
+    <div id="connection-status" class="connection-status" style="display: none;">
+        <i data-feather="wifi-off"></i>
+        <span>Reconnecting...</span>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
+let ws = null;
+const messagesContainer = document.getElementById('chat-messages');
+const messageInput = document.getElementById('message-input');
+const connectionStatus = document.getElementById('connection-status');
 
-    let ws = null;
-    const messagesContainer = document.getElementById('chat-messages');
-    const messageInput = document.getElementById('message-input');
+function connectWebSocket() {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/ws/chat/{{ agent.id }}`;
+    
+    ws = new WebSocket(wsUrl);
 
-    // Connect to WebSocket
-    function connectWebSocket() {
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsUrl = `${protocol}//${window.location.host}/ws/chat/{{ agent.id }}`;
-        
-        ws = new WebSocket(wsUrl);
+    ws.onopen = () => {
+        connectionStatus.style.display = 'none';
+    };
 
-        ws.onopen = () => {
-            console.log('Connected to agent');
-        };
+    ws.onclose = () => {
+        connectionStatus.style.display = 'flex';
+        setTimeout(connectWebSocket, 1000);
+    };
 
-        ws.onclose = () => {
-            console.log('Disconnected from agent');
-            setTimeout(connectWebSocket, 1000);  // Reconnect after 1 second
-        };
+    ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        addMessage(message);
+    };
+}
 
-        ws.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-            addMessage(message);
-        };
+function sendMessage(event) {
+    event.preventDefault();
+    const message = messageInput.value.trim();
+    
+    if (message && ws && ws.readyState === WebSocket.OPEN) {
+        addMessage({
+            type: 'message',
+            role: 'user',
+            content: message
+        });
+
+        ws.send(message);
+        messageInput.value = '';
+        messageInput.focus();
+    }
+    return false;
+}
+
+function addMessage(message) {
+    if (message.is_error) {
+        createMessageElement(message);
+        return;
     }
 
-    // Send message
-    function sendMessage(event) {
-        event.preventDefault();
-        const message = messageInput.value.trim();
-        
-        if (message && ws && ws.readyState === WebSocket.OPEN) {
-            // Add user message to chat
-            addMessage({
-                type: 'message',
-                role: 'user',
-                content: message
-            });
-
-            // Send to websocket
-            ws.send(message);
-            
-            // Clear input
-            messageInput.value = '';
-            messageInput.focus();
-        }
-        return false;
-    }
-
-    // Add message to chat
-    function addMessage(message) {
-        if (message.is_error) {
-            // Handle error messages
-            createMessageElement(message);
+    if (message.is_chunk) {
+        if (message.is_complete) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
             return;
         }
 
-        if (message.is_chunk) {
-            if (message.is_complete) {
-                // Final chunk - just scroll to bottom
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                return;
-            }
-
-            if (message.is_first_chunk) {
-                // Create new message div for first chunk
-                createMessageElement(message);
-            } else {
-                // Append to existing message
-                const lastMessage = messagesContainer.lastElementChild;
-                if (lastMessage && lastMessage.classList.contains('assistant')) {
-                    const contentDiv = lastMessage.querySelector('.message-content');
-                    contentDiv.textContent += message.content;
-                }
-            }
-        } else {
-            // Handle regular (non-streaming) messages like user input
+        if (message.is_first_chunk) {
             createMessageElement(message);
+        } else {
+            const lastMessage = messagesContainer.lastElementChild;
+            if (lastMessage && lastMessage.classList.contains('assistant')) {
+                const contentDiv = lastMessage.querySelector('.message-content');
+                contentDiv.textContent += message.content;
+            }
         }
-        
-        // Scroll to bottom
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    } else {
+        createMessageElement(message);
     }
+    
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
 
-    class ChatManager {
-        constructor(agentId) {
-            this.agentId = agentId;
-            this.ws = null;
-            this.reconnectTimeout = null;
-            this.messageQueue = [];
-        }
+function createMessageElement(message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${message.role}`;
     
-        connect() {
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            this.ws = new WebSocket(`${protocol}//${window.location.host}/ws/chat/${this.agentId}`);
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
     
-            this.ws.onopen = () => {
-                console.log('WebSocket connected');
-                this.flushMessageQueue();
-            };
-    
-            this.ws.onmessage = (event) => this.handleMessage(event);
-            this.ws.onclose = () => this.scheduleReconnect();
-        }
-    
-        handleMessage(event) {
-            const message = JSON.parse(event.data);
-            if (message.type === 'message') {
-                this.appendMessage(message);
-            } else if (message.type === 'error') {
-                this.showError(message.content);
-            }
-        }
-    
-        appendMessage(message) {
-            // Message handling logic
-        }
-    
-        sendMessage(content) {
-            if (this.ws.readyState === WebSocket.OPEN) {
-                this.ws.send(content);
-            } else {
-                this.messageQueue.push(content);
-            }
-        }
-    
-        scheduleReconnect() {
-            if (!this.reconnectTimeout) {
-                this.reconnectTimeout = setTimeout(() => this.connect(), 2000);
-            }
-        }
-    
-        flushMessageQueue() {
-            while (this.messageQueue.length > 0) {
-                const message = this.messageQueue.shift();
-                this.ws.send(message);
-            }
-        }
-    }
-
-    // Helper function to create message elements
-    function createMessageElement(message) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${message.role}`;
-        
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'message-content';
+    if (message.is_error) {
+        contentDiv.innerHTML = `<i data-feather="alert-triangle"></i><span>${message.content}</span>`;
+    } else {
         contentDiv.textContent = message.content || '';
-        
-        messageDiv.appendChild(contentDiv);
-        messagesContainer.appendChild(messageDiv);
-
-        // Re-initialize Feather icons if the message contains any
-        feather.replace();
     }
+    
+    messageDiv.appendChild(contentDiv);
+    messagesContainer.appendChild(messageDiv);
+    feather.replace();
+}
 
-    // Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
     connectWebSocket();
     messageInput.focus();
+});
 </script>
 {% endblock %}
