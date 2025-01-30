@@ -1,198 +1,242 @@
-# DunamisMax
+# DunamisMax Main Site
 
-**DunamisMax** is a professional suite of modern web applications built with FastAPI, offering seamless real-time communication and intelligent assistance through its integrated services.
+Central hub for the DunamisMax web application suite, serving as the primary entry point and service directory for all DunamisMax services.
 
-## Core Services
+## Features
 
-### [Main Site](https://dunamismax.com)
-
-Central hub for accessing all DunamisMax services and information.
-
-- Service directory
-- Documentation access
-- Project overview
-
-### [Messenger](https://messenger.dunamismax.com)
-
-Real-time communication platform using WebSocket technology.
-
-- Instant messaging
-- User presence indicators
-- Session persistence
-- Automatic reconnection
-
-### [AI Agents](https://agents.dunamismax.com)
-
-Suite of specialized AI assistants for various tasks.
-
-- Multiple agent personalities
-- Real-time response streaming
-- Specialized task handling
-- Interactive chat interface
+- **Service Directory:** Quick access to all DunamisMax services
+- **Responsive Design:** Optimized for all device sizes
+- **Nord Theme:** Clean, modern aesthetic using the Nord color palette
+- **Fast Loading:** Minimal dependencies for optimal performance
+- **SEO Optimized:** Meta tags and semantic HTML structure
+- **Accessible:** Follows web accessibility guidelines
 
 ## Technology Stack
 
-### Backend Framework
+### Backend
 
-- **FastAPI** - Modern Python web framework for building high-performance APIs
-- **Uvicorn** - Lightning-fast ASGI server implementation
-- **Python 3.x** - Core programming language
-- **WebSocket** - For real-time bidirectional communication
-- **Jinja2** - Server-side templating engine
+- FastAPI - Web framework
+- Uvicorn - ASGI server
+- Python 3.x - Core language
+- Jinja2 - Template engine
 
 ### Frontend
 
-- **HTML5** - Semantic markup
-- **CSS3**
-  - Custom CSS variables
+- HTML5 - Semantic markup
+- CSS3
+  - CSS Variables
   - Nord color theme
-  - Flexbox and Grid layouts
+  - Flexbox/Grid layouts
   - Responsive design
-- **Vanilla JavaScript** - No framework dependencies
-- **Feather Icons** - SVG icon library
-- **Fira Code** - Monospace font
+- Vanilla JavaScript - Minimal, no frameworks
+- Feather Icons - UI icons
+- Fira Code - Monospace font
 
-### Infrastructure & Deployment
+### Infrastructure
 
-- **Caddy** - Modern reverse proxy server
-  - Automatic HTTPS
-  - Zero-config SSL
-  - HTTP/3 support
-- **Cloudflare**
-  - DNS management
-  - CDN services
-  - DDoS protection
-  - SSL/TLS encryption
+- Caddy - Reverse proxy
+- Cloudflare - DNS and CDN
 
 ## Project Structure
 
 ```bash
-web/
-├── ai_agents/                  # AI Agents Application
-│   ├── app/
-│   │   ├── static/            # Static assets
-│   │   ├── templates/         # HTML templates
-│   │   ├── agents.py         # AI agent logic
-│   │   └── main.py          # FastAPI application
-│   └── requirements.txt     # Python dependencies
-│
-├── dunamismax/               # Main Website
-│   ├── app/
-│   │   ├── static/          # Static assets
-│   │   ├── templates/       # HTML templates
-│   │   └── main.py         # FastAPI application
-│   └── requirements.txt    # Python dependencies
-│
-└── messenger/               # Real-time Messenger
-    ├── app/
-    │   ├── static/         # Static assets
-    │   ├── templates/      # HTML templates
-    │   ├── messenger.py   # WebSocket logic
-    │   └── main.py       # FastAPI application
-    └── requirements.txt   # Python dependencies
+dunamismax/
+├── app/
+│   ├── static/
+│   │   ├── favicon.ico    # Site favicon
+│   │   ├── logo.svg       # Site logo
+│   │   └── styles.css     # Main stylesheet
+│   ├── templates/
+│   │   ├── base.html      # Base template
+│   │   └── index.html     # Homepage
+│   ├── __init__.py
+│   └── main.py           # FastAPI application
+├── README.md
+└── requirements.txt
 ```
 
-## Quick Start
+## Installation
 
-1. **Clone the Repository**
-
-   ```bash
-   git clone https://github.com/dunamismax/DunamisMax.git
-   cd DunamisMax
-   ```
-
-2. **Set Up Environment**
+1. **Set Up Virtual Environment**
 
    ```bash
    python3 -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. **Install Dependencies**
+2. **Install Dependencies**
 
    ```bash
-   # Install for each service
-   pip install -r web/dunamismax/requirements.txt
-   pip install -r web/messenger/requirements.txt
-   pip install -r web/ai_agents/requirements.txt
+   pip install -r requirements.txt
    ```
 
-4. **Launch Services**
+3. **Run the Application**
 
    ```bash
-   # Main site (Port 8000)
-   uvicorn web.dunamismax.app.main:app --host 0.0.0.0 --port 8000 --reload
-
-   # Messenger (Port 8100)
-   uvicorn web.messenger.app.main:app --host 0.0.0.0 --port 8100 --reload
-
-   # AI Agents (Port 8200)
-   uvicorn web.ai_agents.app.main:app --host 0.0.0.0 --port 8200 --reload
+   uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
-## Development Setup
+4. **Access the Site**
+   - Local development: `http://localhost:8000`
+   - Production: `https://dunamismax.com`
 
-### Prerequisites
+## Page Components
 
-- Python 3.11+
-- Node.js 18+ (for development tools)
-- Git
+### Homepage Elements
 
-### Environment Configuration
+- Site header with logo
+- Service navigation cards
+- Quick links to subdomains
+- Footer with contact information
 
-- Copy `.env.example` to `.env` in each service directory
-- Configure environment variables as needed
-- See individual service READMEs for specific settings
+### Service Cards
 
-### Local Development
+- AI Agents link and description
+- Messenger link and description
+- Additional service previews
 
-1. Start services in development mode (see Launch Services above)
-2. Access development endpoints:
-   - Main: <http://localhost:8000>
-   - Messenger: <http://localhost:8100>
-   - AI Agents: <http://localhost:8200>
+### Navigation
 
-## Production Deployment
+- Clean, intuitive interface
+- Visual feedback on interaction
+- Mobile-responsive menu
+- Icon-based navigation
 
-### Infrastructure Requirements
+## Styling
 
-- Linux server with Python 3.11+
-- Caddy server installed and configured
-- Cloudflare account for DNS management
+### Nord Theme Implementation
 
-### Deployment Steps
+```css
+:root {
+    /* Nord Color Palette */
+    --nord0: #2E3440;  /* Dark Background */
+    --nord1: #3B4252;  /* Lighter Background */
+    --nord4: #D8DEE9;  /* Main Text */
+    --nord8: #88C0D0;  /* Accent Color */
+}
+```
 
-1. Clone repository to production server
-2. Set up Python virtual environments
-3. Install production dependencies
-4. Configure Caddy reverse proxy
-5. Set up Cloudflare DNS and SSL
-6. Launch services using production settings
+### Responsive Breakpoints
 
-## Service Documentation
+```css
+/* Mobile devices */
+@media (max-width: 768px) {
+    /* Mobile-specific styles */
+}
 
-- [AI Agents Documentation](web/ai_agents/README.md)
-- [Messenger Documentation](web/messenger/README.md)
-- [Main Site Documentation](web/dunamismax/README.md)
+/* Tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Tablet-specific styles */
+}
+
+/* Desktops */
+@media (min-width: 1025px) {
+    /* Desktop-specific styles */
+}
+```
+
+## Development
+
+### Running Locally
+
+```bash
+# With auto-reload
+uvicorn app.main:app --reload --port 8000
+
+# Production mode
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+### Template Modification
+
+1. Base template (`base.html`) contains:
+   - Common HTML structure
+   - Meta tags
+   - CSS/JS includes
+   - Header/Footer
+
+2. Index template (`index.html`) contains:
+   - Service cards
+   - Main content
+   - Navigation elements
+
+### Static Files
+
+- Place new static files in `app/static/`
+- Access via `{{ url_for('static', path='filename') }}`
+- Automatically served by FastAPI
+
+## Production Setup
+
+### Server Configuration
+
+1. Configure Caddy reverse proxy:
+
+   ```caddy
+   dunamismax.com {
+       reverse_proxy localhost:8000
+       encode gzip
+       header {
+           Strict-Transport-Security "max-age=31536000;"
+       }
+   }
+   ```
+
+2. Set up Cloudflare:
+   - Enable SSL/TLS
+   - Configure DNS records
+   - Enable caching
+   - Set up firewall rules
+
+### Deployment
+
+1. Clone repository
+2. Install production dependencies
+3. Configure environment
+4. Start application with production server
+5. Set up monitoring
+
+## Performance Optimization
+
+- Minified CSS
+- Optimized SVG icons
+- Cached static files
+- Compressed responses
+- Lazy loading images
+- Preloaded critical assets
+
+## Security Features
+
+- HTTPS enforcement
+- Security headers
+- Rate limiting
+- XSS protection
+- CSRF protection
+- Content Security Policy
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -am 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create your feature branch
 
-## Contact & Support
+   ```bash
+   git checkout -b feature/new-feature
+   ```
 
-- **Email:** [dunamismax@tutamail.com](mailto:dunamismax@tutamail.com)
-- **GitHub:** [github.com/dunamismax](https://github.com/dunamismax)
-- **Bluesky:** [bsky.app/profile/dunamismax.bsky.social](https://bsky.app/profile/dunamismax.bsky.social)
+3. Commit your changes
+
+   ```bash
+   git commit -am 'Add new feature'
+   ```
+
+4. Push to the branch
+
+   ```bash
+   git push origin feature/new-feature
+   ```
+
+5. Create a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-© 2024 DunamisMax. All rights reserved.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
