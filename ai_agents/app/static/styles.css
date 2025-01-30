@@ -1,3 +1,5 @@
+/* styles.css */
+
 :root {
     /* Spacing */
     --space-xs: 0.25rem;   /* 4px */
@@ -81,7 +83,7 @@ p {
 
 /* Common Components */
 .card {
-    background-color: var(--color-bg-primary); /* Changed from var(--nord1) */
+    background-color: var(--nord1); /* Reverted back to var(--nord1) */
     border: 1px solid var(--nord3);
     border-radius: var(--border-radius);
     padding: var(--space-lg);
@@ -93,7 +95,7 @@ p {
 
 .btn {
     padding: var(--space-sm) var(--space-md);
-    background-color: var(--nord8);
+    background-color: var(--nord3);
     color: var(--nord6);
     border: none;
     border-radius: var(--border-radius);
@@ -302,7 +304,7 @@ input:focus {
     flex: 1;
     overflow-y: auto;
     padding: var(--space-lg);
-    background-color: var(--nord4);
+    background-color: var(--nord4); /* Adjusted for chat page consistency */
 }
 
 .message {
@@ -404,15 +406,6 @@ input:focus {
     align-items: center;
     margin-bottom: var(--space-xs);
     font-size: var(--font-size-sm);
-}
-
-.chat-header {
-    padding: var(--space-md);
-    background-color: var(--nord1);
-    border-bottom: 1px solid var(--nord3);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }
 
 .chat-status {
@@ -542,4 +535,34 @@ footer {
     h1 { font-size: var(--font-size-lg); }
     h2 { font-size: var(--font-size-base); }
     h3 { font-size: var(--font-size-sm); }
+}
+
+/* Page-Specific Backgrounds */
+
+/* Agents Chat Page */
+.chat-page {
+    background-color: var(--color-bg-primary); /* Desired background color */
+}
+
+/* Main Page */
+.ai-agents-page {
+    background-color: var(--color-bg-primary); /* Or any other desired color */
+}
+
+/* Messenger Subpage */
+.messenger-page {
+    background-color: var(--color-bg-primary); /* Or any other desired color */
+}
+
+/* Ensure that nested .card elements maintain their specific backgrounds */
+.chat-page .chat-container {
+    background-color: var(--nord1); /* Ensures chat container has correct background */
+}
+
+.messenger-page .messenger-container {
+    background-color: var(--nord1); /* Ensures messenger container has correct background */
+}
+
+.ai-agents-page .agent-card {
+    background-color: var(--nord1); /* Ensures agent cards have correct background */
 }

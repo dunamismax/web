@@ -1,70 +1,136 @@
 :root {
-    /* Nord Color Palette - Polar Night (Dark) */
-    --nord0: #2E3440;  /* Dark bg */
-    --nord1: #3B4252;  /* Lighter bg */
-    --nord2: #434C5E;  /* Selection bg */
-    --nord3: #4C566A;  /* Subtle borders */
+    /* ==============================
+       Nord Color Palette - Polar Night (Dark)
+    =============================== */
+    --nord0: #2E3440;  /* Dark Background */
+    --nord1: #3B4252;  /* Lighter Background */
+    --nord2: #434C5E;  /* Selection Background */
+    --nord3: #4C566A;  /* Subtle Borders */
 
-    /* Nord Color Palette - Snow Storm (Light) */
-    --nord4: #D8DEE9;  /* Main text */
-    --nord5: #E5E9F0;  /* Subtle text */
-    --nord6: #ECEFF4;  /* Bright text */
+    /* ==============================
+       Nord Color Palette - Snow Storm (Light)
+    =============================== */
+    --nord4: #D8DEE9;  /* Main Text */
+    --nord5: #E5E9F0;  /* Subtle Text */
+    --nord6: #ECEFF4;  /* Bright Text */
 
-    /* Nord Color Palette - Frost (Blues) */
-    --nord7: #8FBCBB;  /* Cyan/mint */
-    --nord8: #88C0D0;  /* Light blue */
-    --nord9: #81A1C1;  /* Mid blue */
-    --nord10: #5E81AC; /* Dark blue */
+    /* ==============================
+       Nord Color Palette - Frost (Blues)
+    =============================== */
+    --nord7: #8FBCBB;  /* Cyan/Mint */
+    --nord8: #88C0D0;  /* Light Blue */
+    --nord9: #81A1C1;  /* Mid Blue */
+    --nord10: #5E81AC; /* Dark Blue */
 
-    /* Nord Color Palette - Aurora (Accents) */
-    --nord11: #BF616A;  /* Red/error */
-    --nord12: #D08770;  /* Orange/warning */
-    --nord13: #EBCB8B;  /* Yellow/modification */
-    --nord14: #A3BE8C;  /* Green/success */
-    --nord15: #B48EAD;  /* Purple/special */
+    /* ==============================
+       Nord Color Palette - Aurora (Accents)
+    =============================== */
+    --nord11: #BF616A;  /* Red/Error */
+    --nord12: #D08770;  /* Orange/Warning */
+    --nord13: #EBCB8B;  /* Yellow/Modification */
+    --nord14: #A3BE8C;  /* Green/Success */
+    --nord15: #B48EAD;  /* Purple/Special */
 
-    /* Semantic Color Mapping */
+    /* ==============================
+       Semantic Color Mapping
+    =============================== */
+    /* Background Colors */
     --color-bg-primary: var(--nord0);
     --color-bg-secondary: var(--nord1);
     --color-bg-tertiary: var(--nord2);
     --color-bg-hover: var(--nord2);
     --color-bg-active: var(--nord3);
 
+    /* Border Colors */
     --color-border: var(--nord3);
     --color-border-hover: var(--nord4);
-    
+
+    /* Text Colors */
     --color-text-primary: var(--nord4);
     --color-text-secondary: var(--nord9);
     --color-text-muted: var(--nord3);
     --color-text-bright: var(--nord6);
-    
+
+    /* Link Colors */
     --color-link: var(--nord8);
     --color-link-hover: var(--nord7);
-    
+
+    /* Heading Colors */
     --color-heading: var(--nord8);
     --color-heading-hover: var(--nord7);
-    
+
+    /* Accent Colors */
     --color-accent-primary: var(--nord8);
     --color-accent-secondary: var(--nord7);
-    
-    /* Status Colors */
+
+    /* ==============================
+       Status Colors
+    =============================== */
     --color-success: var(--nord14);
     --color-warning: var(--nord12);
     --color-error: var(--nord11);
     --color-info: var(--nord9);
     --color-special: var(--nord15);
-    
-    /* Interactive Element Colors */
+
+    /* ==============================
+       Interactive Element Colors
+    =============================== */
     --color-button-primary: var(--nord10);
     --color-button-hover: var(--nord8);
     --color-button-active: var(--nord9);
-    
+
     --color-icon-primary: var(--nord8);
     --color-icon-hover: var(--nord7);
     --color-icon-muted: var(--nord9);
 
-    /* Focus State Colors */
+    /* ==============================
+       Focus State Colors
+    =============================== */
     --color-focus-ring: var(--nord8);
     --color-selection-bg: var(--nord2);
     --color-selection-text: var(--nord6);
+
+    /* ==============================
+       Additional Semantic Colors
+    =============================== */
+    /* Alerts */
+    --color-alert-success-bg: var(--color-success);
+    --color-alert-success-text: var(--nord6);
+    
+    --color-alert-warning-bg: var(--color-warning);
+    --color-alert-warning-text: var(--nord6);
+    
+    --color-alert-error-bg: var(--color-error);
+    --color-alert-error-text: var(--nord6);
+    
+    /* Badges */
+    --color-badge-success-bg: var(--color-success);
+    --color-badge-success-text: var(--nord6);
+    
+    --color-badge-warning-bg: var(--color-warning);
+    --color-badge-warning-text: var(--nord6);
+    
+    --color-badge-error-bg: var(--color-error);
+    --color-badge-error-text: var(--nord6);
+    
+    /* Modals */
+    --color-modal-bg: var(--color-bg-secondary);
+    --color-modal-border: var(--color-border);
+    --color-modal-header-bg: var(--color-bg-primary);
+    --color-modal-header-text: var(--color-text-primary);
+    
+    /* Tooltips */
+    --color-tooltip-bg: var(--color-bg-tertiary);
+    --color-tooltip-text: var(--color-text-primary);
+    
+    /* ==============================
+       Responsive Variables (Optional)
+    =============================== */
+    /* Example: Adjustments for smaller screens */
+    @media (max-width: 768px) {
+        :root {
+            /* Adjust font sizes, spacing, etc., if needed */
+            --color-text-primary: var(--nord5);
+        }
+    }
 }
