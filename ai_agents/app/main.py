@@ -44,15 +44,16 @@ async def websocket_endpoint(websocket: WebSocket, agent_id: str):
     try:
         while True:
             message = await websocket.receive_text()
-            response = await agent_manager.get_agent_response(agent_id, message)
-            await websocket.send_json(
-                {"type": "message", "role": "assistant", "content": response}
-            )
+            await agent_manager.get_agent_response(agent_id, message, websocket)
     except WebSocketDisconnect:
         await agent_manager.disconnect(websocket)
     except Exception as e:
         print(f"Error in websocket: {e}")
         await agent_manager.disconnect(websocket)
+        try:
+            await websocket.close(code=1011, reason="Internal server error")
+        except:
+            pass
 
 
 if __name__ == "__main__":

@@ -93,24 +93,60 @@
             
             // Clear input
             messageInput.value = '';
+            messageInput.focus();
         }
         return false;
     }
 
     // Add message to chat
     function addMessage(message) {
+        if (message.is_error) {
+            // Handle error messages
+            createMessageElement(message);
+            return;
+        }
+
+        if (message.is_chunk) {
+            if (message.is_complete) {
+                // Final chunk - just scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                return;
+            }
+
+            if (message.is_first_chunk) {
+                // Create new message div for first chunk
+                createMessageElement(message);
+            } else {
+                // Append to existing message
+                const lastMessage = messagesContainer.lastElementChild;
+                if (lastMessage && lastMessage.classList.contains('assistant')) {
+                    const contentDiv = lastMessage.querySelector('.message-content');
+                    contentDiv.textContent += message.content;
+                }
+            }
+        } else {
+            // Handle regular (non-streaming) messages like user input
+            createMessageElement(message);
+        }
+        
+        // Scroll to bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Helper function to create message elements
+    function createMessageElement(message) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${message.role}`;
         
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
-        contentDiv.textContent = message.content;
+        contentDiv.textContent = message.content || '';
         
         messageDiv.appendChild(contentDiv);
         messagesContainer.appendChild(messageDiv);
-        
-        // Scroll to bottom
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Re-initialize Feather icons if the message contains any
+        feather.replace();
     }
 
     // Initialize

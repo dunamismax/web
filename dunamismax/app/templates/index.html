@@ -1,70 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DunamisMax - Web Apps</title>
+{% extends "base.html" %}
 
-    <!-- Favicon setup -->
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
-    <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
-
-    <!-- Theme and Styles -->
-    <link rel="stylesheet" href="{{ url_for('static', path='nord.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
-</head>
-<body>
-    <main>
-        <div class="container">
-            <header class="hero fade-in">
-                <div class="logo">
-                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="2" fill="none">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
-                    <h1>DunamisMax</h1>
-                </div>
-                <p class="tagline">Python FastAPI Web Apps & Services</p>
-            </header>
-
-            <section class="services fade-in">
-                <h2>Services</h2>
-                <div class="service-grid">
-                    {% for service in services %}
-                    <a href="{{ service.url }}" class="service-card">
-                        <i data-feather="{{ service.icon }}"></i>
-                        <h3>{{ service.name }}</h3>
-                        <p>{{ service.description }}</p>
-                        <span class="service-link">Launch <i data-feather="arrow-right"></i></span>
-                    </a>
-                    {% endfor %}
-                </div>
-            </section>
-
-            <footer class="fade-in">
-                <p>&copy; <span id="current-year"></span> DunamisMax. All rights reserved.</p>
-            </footer>
+{% block content %}
+<div class="main-page fade-in">
+    <header class="hero">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <h1>DunamisMax</h1>
         </div>
-    </main>
+        <p class="tagline">Python FastAPI Web Apps & Services</p>
+    </header>
 
-    <script>
-        // Initialize Feather Icons
-        feather.replace();
+    <div class="services-grid">
+        {% for service in services %}
+        <a href="{{ service.url }}" class="service-card card">
+            <i data-feather="{{ service.icon }}"></i>
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+            <div class="service-link">Launch <i data-feather="arrow-right"></i></div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
 
-        // Set current year
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-
-        // Add hover effect to service cards
-        document.querySelectorAll('.service-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.querySelector('.service-link').style.opacity = '1';
-            });
-            card.addEventListener('mouseleave', () => {
-                card.querySelector('.service-link').style.opacity = '0';
-            });
-        });
-    </script>
-</body>
-</html>
+{% block scripts %}
+<script>
+    // Initialize Feather Icons
+    feather.replace();
+</script>
+{% endblock %}
