@@ -1,6 +1,6 @@
 # DunamisMax
 
-**DunamisMax** is a professional suite of modern web applications built with FastAPI and powered by o1-mini AI reasoning. It offers seamless real-time communication and intelligent assistance through its integrated services.
+**DunamisMax** is a professional suite of modern web applications built with FastAPI and powered by chatgpt-4o-latest. It offers seamless real-time communication and intelligent assistance through its integrated services.
 
 ## Core Services
 
@@ -23,34 +23,25 @@ Real-time communication platform using WebSocket technology.
 
 ### [AI Agents](https://agents.dunamismax.com)
 
-Suite of specialized AI assistants powered by o1-mini with advanced reasoning capabilities.
+Suite of specialized AI assistants powered by chatgpt-4o-latest.
 
-- Multiple reasoning-enhanced agents
-- Step-by-step problem decomposition
-- Chain-of-thought processing
+- Multiple specialized agents
 - Real-time response streaming
 - Context-aware conversations
 - Interactive chat interface
+- Task-specific assistance
+- Intelligent problem-solving
 
 ## Technology Stack
 
 ### Backend Framework
 
 - **FastAPI** - Modern Python web framework for building high-performance APIs
-- **o1-mini** - AI language model with reasoning capabilities
+- **chatgpt-4o-latest** - Advanced AI language model
 - **Uvicorn** - Lightning-fast ASGI server implementation
 - **Python 3.x** - Core programming language
 - **WebSocket** - For real-time bidirectional communication
 - **Jinja2** - Server-side templating engine
-- **Custom Reasoning Engine** - Advanced logical processing system
-
-### AI & Reasoning Stack
-
-- **o1-mini** - Core AI model
-- **Chain-of-thought Engine** - Step-by-step reasoning
-- **Context Manager** - Maintains conversation context
-- **Pattern Recognition** - Identifies solution patterns
-- **Logic Validator** - Ensures reasoning consistency
 
 ### Frontend
 
@@ -85,7 +76,6 @@ web/
 │   │   ├── static/            # Static assets
 │   │   ├── templates/         # HTML templates
 │   │   ├── agents.py         # AI agent definitions
-│   │   ├── reasoning.py      # Reasoning engine
 │   │   └── main.py          # FastAPI application
 │   ├── .env                 # Environment variables
 │   └── requirements.txt     # Python dependencies
@@ -136,7 +126,7 @@ web/
    ```bash
    # Set up AI agents environment
    cp web/ai_agents/.env.example web/ai_agents/.env
-   # Add your O1_API_KEY and configure reasoning settings
+   # Add your API key and other settings
    ```
 
 5. **Launch Services**
@@ -157,13 +147,12 @@ web/
 ### Prerequisites
 
 - Python 3.11+
-- o1-mini API access
+- OpenAI API access
 - Git
 
 ### Environment Configuration
 
-- Configure o1-mini API key in ai_agents/.env
-- Set up reasoning engine parameters
+- Configure API key in ai_agents/.env
 - Configure environment variables as needed
 - See individual service READMEs for specific settings
 
@@ -182,13 +171,13 @@ web/
 - Linux server with Python 3.11+
 - Caddy server installed and configured
 - Cloudflare account for DNS management
-- Valid o1-mini API key
+- Valid OpenAI API key
 
 ### Deployment Steps
 
 1. Clone repository to production server
 2. Set up Python virtual environments
-3. Configure o1-mini credentials
+3. Configure API credentials
 4. Install production dependencies
 5. Configure Caddy reverse proxy
 6. Set up Cloudflare DNS and SSL

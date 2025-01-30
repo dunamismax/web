@@ -1,14 +1,14 @@
 # DunamisMax AI Agents
 
-Interactive AI chat interface built with FastAPI, WebSockets, and o1-mini. Part of the DunamisMax suite of web applications.
+Interactive AI chat interface built with FastAPI, WebSockets, and chatgpt-4o-latest. Part of the DunamisMax suite of web applications.
 
 ## Features
 
 - Real-time AI chat interactions
 - Multiple specialized AI agents
 - Streaming responses for immediate feedback
-- Advanced reasoning capabilities
-- Chain-of-thought processing
+- Intelligent problem-solving
+- Natural conversation flow
 - Chat history within session
 - Responsive design for all devices
 - Connection status indicators
@@ -24,8 +24,7 @@ Interactive AI chat interface built with FastAPI, WebSockets, and o1-mini. Part 
 - WebSockets - Real-time communication
 - Uvicorn - ASGI server
 - Python 3.x - Core language
-- o1-mini - AI language model
-- Custom reasoning engine - For enhanced agent responses
+- chatgpt-4o-latest - AI language model
 
 ### Frontend
 
@@ -59,7 +58,6 @@ ai_agents/
 │   │   └── index.html      # Agent selection
 │   ├── __init__.py
 │   ├── agents.py          # AI agent definitions
-│   ├── reasoning.py       # Reasoning engine
 │   └── main.py           # FastAPI application
 ├── .env                  # Environment variables
 ├── README.md
@@ -68,34 +66,25 @@ ai_agents/
 
 ## Available Agents
 
-Each agent utilizes o1-mini with specialized reasoning patterns:
+Each agent is specialized for specific tasks:
 
-1. **Logic Agent**
-   - Step-by-step reasoning
-   - Problem decomposition
-   - Analytical thinking
+1. **General Assistant**
+   - Task assistance
+   - Information queries
+   - General guidance
+   - Problem-solving
 
 2. **Code Assistant**
-   - Code analysis
-   - Pattern recognition
-   - Solution optimization
-   - Debugging logic
+   - Programming help
+   - Code review
+   - Debugging assistance
+   - Technical guidance
 
 3. **Research Assistant**
-   - Information synthesis
-   - Critical analysis
-   - Structured reasoning
-   - Knowledge organization
-
-## Reasoning System
-
-The agents use a custom reasoning engine that:
-
-- Breaks down complex queries into logical steps
-- Applies domain-specific reasoning patterns
-- Maintains context across conversation
-- Validates logical consistency
-- Provides structured explanations
+   - Information gathering
+   - Topic exploration
+   - Data analysis
+   - Knowledge synthesis
 
 ## Installation
 
@@ -116,7 +105,7 @@ The agents use a custom reasoning engine that:
 
    ```bash
    cp .env.example .env
-   # Edit .env with your O1_API_KEY and other settings
+   # Edit .env with your OPENAI_API_KEY and other settings
    ```
 
 4. **Run the Application**
@@ -139,7 +128,6 @@ The agents use a custom reasoning engine that:
     "role": "user|assistant",
     "content": "Message content",
     "agent_id": "agent-identifier",
-    "reasoning_steps": ["step1", "step2", ...], // New field
     "is_chunk": boolean,
     "is_complete": boolean
 }
@@ -147,7 +135,6 @@ The agents use a custom reasoning engine that:
 
 ### Streaming Responses
 
-- Messages include reasoning steps
 - Real-time response streaming
 - Final chunk marked with `is_complete: true`
 - Error handling for incomplete streams
@@ -164,7 +151,6 @@ The agents use a custom reasoning engine that:
        name = "Agent Name"
        description = "Agent capabilities"
        icon = "feather-icon-name"
-       reasoning_pattern = "analytical|creative|technical"  # New field
    ```
 
 2. Register in available agents:
@@ -173,20 +159,6 @@ The agents use a custom reasoning engine that:
    available_agents = {
        "new-agent": NewAgent()
    }
-   ```
-
-### Customizing Reasoning
-
-1. Define reasoning pattern in `reasoning.py`:
-
-   ```python
-   def custom_reasoning_pattern(query):
-       steps = [
-           analyze_query(query),
-           decompose_problem(query),
-           generate_solution(query)
-       ]
-       return steps
    ```
 
 ### Testing
@@ -203,7 +175,6 @@ python -m pytest tests/
 - Rate limiting protection
 - Input validation
 - Response validation
-- Reasoning validation
 - System notifications for errors
 
 ## Security Features
