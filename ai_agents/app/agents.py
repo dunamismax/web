@@ -211,7 +211,7 @@ class AgentManager:
 
         try:
             stream = client.chat.completions.create(
-                model="chatgpt-4o-latest",
+                model="o1-mini",
                 messages=[
                     {
                         "role": "developer",
