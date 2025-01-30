@@ -55,19 +55,15 @@ class FileConverterService:
     async def handle_conversion(
         self, file: UploadFile, output_format: str = "mp3"
     ) -> dict:
-        """Handles file upload and starts the conversion process."""
         file_ext = self._get_file_extension(file.filename)
         task_id = str(uuid.uuid4())
 
-        # ✅ Validate input file format
         if not self._is_valid_extension(file_ext):
             raise HTTPException(400, "Unsupported file format.")
 
-        # ✅ Save original file
         upload_path = self.upload_dir / f"{task_id}_original.{file_ext}"
         await self._save_file(file, upload_path)
 
-        # ✅ Track conversion task
         self.tasks[task_id] = {
             "status": "queued",
             "original_name": file.filename,
@@ -77,9 +73,11 @@ class FileConverterService:
             "error": None,
         }
 
-        # ✅ Start background conversion task
-        asyncio.create_task(self._process_file(task_id, output_format))
+        logger.info(
+            f"🚀 Task Created: {task_id} - {self.tasks[task_id]}"
+        )  # ✅ Debugging log
 
+        asyncio.create_task(self._process_file(task_id, output_format))
         return {"task_id": task_id}
 
     async def _process_file(self, task_id: str, output_format: str):
@@ -144,9 +142,10 @@ class FileConverterService:
                 logger.error(f"Cleanup error: {e}")
 
     async def get_status(self, task_id: str) -> dict:
-        """Checks the status of a file conversion task."""
         task = self.tasks.get(task_id)
+
         if not task:
+            logger.error(f"❌ Task Not Found: {task_id}")  # ✅ Debugging log
             raise HTTPException(404, "Task not found.")
 
         return {
