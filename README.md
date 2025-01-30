@@ -1,6 +1,6 @@
 # DunamisMax
 
-**DunamisMax** is a professional suite of modern web applications built with FastAPI, offering seamless real-time communication and intelligent assistance through its integrated services.
+**DunamisMax** is a professional suite of modern web applications built with FastAPI and powered by o1-mini AI reasoning. It offers seamless real-time communication and intelligent assistance through its integrated services.
 
 ## Core Services
 
@@ -23,11 +23,13 @@ Real-time communication platform using WebSocket technology.
 
 ### [AI Agents](https://agents.dunamismax.com)
 
-Suite of specialized AI assistants for various tasks.
+Suite of specialized AI assistants powered by o1-mini with advanced reasoning capabilities.
 
-- Multiple agent personalities
+- Multiple reasoning-enhanced agents
+- Step-by-step problem decomposition
+- Chain-of-thought processing
 - Real-time response streaming
-- Specialized task handling
+- Context-aware conversations
 - Interactive chat interface
 
 ## Technology Stack
@@ -35,10 +37,20 @@ Suite of specialized AI assistants for various tasks.
 ### Backend Framework
 
 - **FastAPI** - Modern Python web framework for building high-performance APIs
+- **o1-mini** - AI language model with reasoning capabilities
 - **Uvicorn** - Lightning-fast ASGI server implementation
 - **Python 3.x** - Core programming language
 - **WebSocket** - For real-time bidirectional communication
 - **Jinja2** - Server-side templating engine
+- **Custom Reasoning Engine** - Advanced logical processing system
+
+### AI & Reasoning Stack
+
+- **o1-mini** - Core AI model
+- **Chain-of-thought Engine** - Step-by-step reasoning
+- **Context Manager** - Maintains conversation context
+- **Pattern Recognition** - Identifies solution patterns
+- **Logic Validator** - Ensures reasoning consistency
 
 ### Frontend
 
@@ -46,7 +58,7 @@ Suite of specialized AI assistants for various tasks.
 - **CSS3**
   - Custom CSS variables
   - Nord color theme
-  - Flexbox and Grid layouts
+  - Flexbox/Grid layouts
   - Responsive design
 - **Vanilla JavaScript** - No framework dependencies
 - **Feather Icons** - SVG icon library
@@ -72,8 +84,10 @@ web/
 │   ├── app/
 │   │   ├── static/            # Static assets
 │   │   ├── templates/         # HTML templates
-│   │   ├── agents.py         # AI agent logic
+│   │   ├── agents.py         # AI agent definitions
+│   │   ├── reasoning.py      # Reasoning engine
 │   │   └── main.py          # FastAPI application
+│   ├── .env                 # Environment variables
 │   └── requirements.txt     # Python dependencies
 │
 ├── dunamismax/               # Main Website
@@ -86,9 +100,9 @@ web/
 └── messenger/               # Real-time Messenger
     ├── app/
     │   ├── static/         # Static assets
-    │   ├── templates/      # HTML templates
-    │   ├── messenger.py   # WebSocket logic
-    │   └── main.py       # FastAPI application
+    │   │   ├── templates/  # HTML templates
+    │   │   ├── messenger.py# WebSocket logic
+    │   │   └── main.py    # FastAPI application
     └── requirements.txt   # Python dependencies
 ```
 
@@ -117,7 +131,15 @@ web/
    pip install -r web/ai_agents/requirements.txt
    ```
 
-4. **Launch Services**
+4. **Configure AI Environment**
+
+   ```bash
+   # Set up AI agents environment
+   cp web/ai_agents/.env.example web/ai_agents/.env
+   # Add your O1_API_KEY and configure reasoning settings
+   ```
+
+5. **Launch Services**
 
    ```bash
    # Main site (Port 8000)
@@ -135,12 +157,13 @@ web/
 ### Prerequisites
 
 - Python 3.11+
-- Node.js 18+ (for development tools)
+- o1-mini API access
 - Git
 
 ### Environment Configuration
 
-- Copy `.env.example` to `.env` in each service directory
+- Configure o1-mini API key in ai_agents/.env
+- Set up reasoning engine parameters
 - Configure environment variables as needed
 - See individual service READMEs for specific settings
 
@@ -159,15 +182,17 @@ web/
 - Linux server with Python 3.11+
 - Caddy server installed and configured
 - Cloudflare account for DNS management
+- Valid o1-mini API key
 
 ### Deployment Steps
 
 1. Clone repository to production server
 2. Set up Python virtual environments
-3. Install production dependencies
-4. Configure Caddy reverse proxy
-5. Set up Cloudflare DNS and SSL
-6. Launch services using production settings
+3. Configure o1-mini credentials
+4. Install production dependencies
+5. Configure Caddy reverse proxy
+6. Set up Cloudflare DNS and SSL
+7. Launch services using production settings
 
 ## Service Documentation
 

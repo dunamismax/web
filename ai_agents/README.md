@@ -1,12 +1,14 @@
 # DunamisMax AI Agents
 
-Interactive AI chat interface built with FastAPI and WebSockets. Part of the DunamisMax suite of web applications.
+Interactive AI chat interface built with FastAPI, WebSockets, and o1-mini. Part of the DunamisMax suite of web applications.
 
 ## Features
 
 - Real-time AI chat interactions
 - Multiple specialized AI agents
 - Streaming responses for immediate feedback
+- Advanced reasoning capabilities
+- Chain-of-thought processing
 - Chat history within session
 - Responsive design for all devices
 - Connection status indicators
@@ -22,7 +24,8 @@ Interactive AI chat interface built with FastAPI and WebSockets. Part of the Dun
 - WebSockets - Real-time communication
 - Uvicorn - ASGI server
 - Python 3.x - Core language
-- AI Agent System - Custom implementation
+- o1-mini - AI language model
+- Custom reasoning engine - For enhanced agent responses
 
 ### Frontend
 
@@ -56,6 +59,7 @@ ai_agents/
 │   │   └── index.html      # Agent selection
 │   ├── __init__.py
 │   ├── agents.py          # AI agent definitions
+│   ├── reasoning.py       # Reasoning engine
 │   └── main.py           # FastAPI application
 ├── .env                  # Environment variables
 ├── README.md
@@ -64,22 +68,34 @@ ai_agents/
 
 ## Available Agents
 
-Each agent has specialized capabilities and personality traits:
+Each agent utilizes o1-mini with specialized reasoning patterns:
 
-1. **General Assistant**
-   - General-purpose help
-   - Task assistance
-   - Information queries
+1. **Logic Agent**
+   - Step-by-step reasoning
+   - Problem decomposition
+   - Analytical thinking
 
 2. **Code Assistant**
-   - Programming help
-   - Code review
-   - Debugging assistance
+   - Code analysis
+   - Pattern recognition
+   - Solution optimization
+   - Debugging logic
 
-3. **Writing Assistant**
-   - Content creation
-   - Editing and proofreading
-   - Style suggestions
+3. **Research Assistant**
+   - Information synthesis
+   - Critical analysis
+   - Structured reasoning
+   - Knowledge organization
+
+## Reasoning System
+
+The agents use a custom reasoning engine that:
+
+- Breaks down complex queries into logical steps
+- Applies domain-specific reasoning patterns
+- Maintains context across conversation
+- Validates logical consistency
+- Provides structured explanations
 
 ## Installation
 
@@ -100,7 +116,7 @@ Each agent has specialized capabilities and personality traits:
 
    ```bash
    cp .env.example .env
-   # Edit .env with your settings
+   # Edit .env with your O1_API_KEY and other settings
    ```
 
 4. **Run the Application**
@@ -123,6 +139,7 @@ Each agent has specialized capabilities and personality traits:
     "role": "user|assistant",
     "content": "Message content",
     "agent_id": "agent-identifier",
+    "reasoning_steps": ["step1", "step2", ...], // New field
     "is_chunk": boolean,
     "is_complete": boolean
 }
@@ -130,7 +147,8 @@ Each agent has specialized capabilities and personality traits:
 
 ### Streaming Responses
 
-- Messages are streamed in chunks for real-time feedback
+- Messages include reasoning steps
+- Real-time response streaming
 - Final chunk marked with `is_complete: true`
 - Error handling for incomplete streams
 
@@ -146,6 +164,7 @@ Each agent has specialized capabilities and personality traits:
        name = "Agent Name"
        description = "Agent capabilities"
        icon = "feather-icon-name"
+       reasoning_pattern = "analytical|creative|technical"  # New field
    ```
 
 2. Register in available agents:
@@ -154,6 +173,20 @@ Each agent has specialized capabilities and personality traits:
    available_agents = {
        "new-agent": NewAgent()
    }
+   ```
+
+### Customizing Reasoning
+
+1. Define reasoning pattern in `reasoning.py`:
+
+   ```python
+   def custom_reasoning_pattern(query):
+       steps = [
+           analyze_query(query),
+           decompose_problem(query),
+           generate_solution(query)
+       ]
+       return steps
    ```
 
 ### Testing
@@ -170,6 +203,7 @@ python -m pytest tests/
 - Rate limiting protection
 - Input validation
 - Response validation
+- Reasoning validation
 - System notifications for errors
 
 ## Security Features
@@ -179,6 +213,7 @@ python -m pytest tests/
 - Rate limiting (via Cloudflare)
 - Secure WebSocket connections
 - Error message sanitization
+- API key protection
 
 ## Deployment
 
