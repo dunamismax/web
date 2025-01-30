@@ -1,37 +1,223 @@
 /* styles.css */
 
-:root {
-    /* Spacing */
-    --space-xs: 0.25rem;   /* 4px */
-    --space-sm: 0.5rem;    /* 8px */
-    --space-md: 0.75rem;   /* 12px */
-    --space-lg: 1.25rem;   /* 20px */
-    --space-xl: 1.75rem;   /* 28px */
-    --space-2xl: 2.5rem;   /* 40px */
-    
-    /* Layout */
-    --border-radius: 6px;
-    --container-width: 1000px;
-    --header-height: 48px;
-    
-    /* Typography */
-    --font-size-sm: 0.875rem;
-    --font-size-base: 1rem;
-    --font-size-lg: 1.125rem;
-    --font-size-xl: 1.25rem;
-    
-    /* Transitions */
-    --transition-fast: 150ms ease;
-    --transition-default: 250ms ease;
+/* =====================================================================
+   Root Variables
+   ===================================================================== */
+
+   :root {
+    /* ---------------------------------------------------------------------
+       Spacing
+    --------------------------------------------------------------------- */
+    --space-xxs: 0.125rem;   /* 2px */
+    --space-xs: 0.25rem;     /* 4px */
+    --space-sm: 0.5rem;      /* 8px */
+    --space-md: 0.75rem;     /* 12px */
+    --space-lg: 1.25rem;     /* 20px */
+    --space-xl: 1.75rem;     /* 28px */
+    --space-2xl: 2rem;       /* 32px */
+    --space-3xl: 3rem;       /* 48px */
+
+    /* ---------------------------------------------------------------------
+       Border Radius
+    --------------------------------------------------------------------- */
+    --border-radius: 0.375rem; /* 6px */
+
+    /* ---------------------------------------------------------------------
+       Transition Durations
+    --------------------------------------------------------------------- */
+    --transition-fast: 0.2s ease-in-out;
+    --transition-default: 0.3s ease;
+    --transition-slow: 0.5s ease;
+
+    /* ---------------------------------------------------------------------
+       Font Sizes
+    --------------------------------------------------------------------- */
+    --font-size-xxs: 0.625rem;    /* 10px */
+    --font-size-xs: 0.75rem;      /* 12px */
+    --font-size-sm: 0.875rem;     /* 14px */
+    --font-size-base: 1rem;       /* 16px */
+    --font-size-lg: 1.25rem;      /* 20px */
+    --font-size-xl: 1.5rem;       /* 24px */
+    --font-size-2xl: 2rem;        /* 32px */
+
+    /* ---------------------------------------------------------------------
+       Nord Color Palette
+    --------------------------------------------------------------------- */
+    --nord0: #2E3440;    /* Dark Background */
+    --nord1: #3B4252;    /* Lighter Background */
+    --nord2: #434C5E;    /* Selection Background */
+    --nord3: #4C566A;    /* Subtle Borders */
+    --nord4: #D8DEE9;    /* Main Text */
+    --nord5: #E5E9F0;    /* Subtle Text */
+    --nord6: #ECEFF4;    /* Bright Text */
+    --nord7: #8FBCBB;    /* Cyan/Mint */
+    --nord8: #88C0D0;    /* Light Blue */
+    --nord9: #81A1C1;    /* Mid Blue */
+    --nord10: #5E81AC;   /* Dark Blue */
+    --nord11: #BF616A;   /* Red/Error */
+    --nord12: #D08770;   /* Orange/Warning */
+    --nord13: #EBCB8B;   /* Yellow/Modification */
+    --nord14: #A3BE8C;   /* Green/Success */
+    --nord15: #B48EAD;   /* Purple/Special */
+
+    /* ---------------------------------------------------------------------
+       Semantic Color Mapping
+    --------------------------------------------------------------------- */
+    /* Backgrounds */
+    --color-bg-primary: var(--nord0);
+    --color-bg-secondary: var(--nord1);
+    --color-bg-tertiary: var(--nord2);
+    --color-bg-hover: var(--nord2);
+    --color-bg-active: var(--nord3);
+
+    /* Borders */
+    --color-border: var(--nord3);
+    --color-border-hover: var(--nord4);
+
+    /* Text */
+    --color-text-primary: var(--nord4);
+    --color-text-secondary: var(--nord9);
+    --color-text-muted: var(--nord3);
+    --color-text-bright: var(--nord6);
+
+    /* Links */
+    --color-link: var(--nord8);
+    --color-link-hover: var(--nord7);
+
+    /* Headings */
+    --color-heading: var(--nord8);
+    --color-heading-hover: var(--nord7);
+
+    /* Accents */
+    --color-accent-primary: var(--nord8);
+    --color-accent-secondary: var(--nord7);
+
+    /* Status Colors */
+    --color-success: var(--nord14);
+    --color-warning: var(--nord12);
+    --color-error: var(--nord11);
+    --color-info: var(--nord9);
+    --color-special: var(--nord15);
+
+    /* Buttons */
+    --color-button-primary: var(--nord10);
+    --color-button-hover: var(--nord8);
+    --color-button-active: var(--nord9);
+
+    /* Icons */
+    --color-icon-primary: var(--nord8);
+    --color-icon-hover: var(--nord7);
+    --color-icon-muted: var(--nord9);
+
+    /* Focus */
+    --color-focus-ring: var(--nord8);
+
+    /* Selection */
+    --color-selection-bg: var(--nord2);
+    --color-selection-text: var(--nord6);
+
+    /* ---------------------------------------------------------------------
+       Additional Semantic Colors
+    --------------------------------------------------------------------- */
+    /* Alerts */
+    --color-alert-success-bg: var(--color-success);
+    --color-alert-success-text: var(--nord6);
+    --color-alert-warning-bg: var(--color-warning);
+    --color-alert-warning-text: var(--nord6);
+    --color-alert-error-bg: var(--color-error);
+    --color-alert-error-text: var(--nord6);
+
+    /* Badges */
+    --color-badge-success-bg: var(--color-success);
+    --color-badge-success-text: var(--nord6);
+    --color-badge-warning-bg: var(--color-warning);
+    --color-badge-warning-text: var(--nord6);
+    --color-badge-error-bg: var(--color-error);
+    --color-badge-error-text: var(--nord6);
+
+    /* Modals */
+    --color-modal-bg: var(--color-bg-secondary);
+    --color-modal-border: var(--color-border);
+    --color-modal-header-bg: var(--color-bg-primary);
+    --color-modal-header-text: var(--color-text-primary);
+
+    /* Tooltips */
+    --color-tooltip-bg: var(--color-bg-tertiary);
+    --color-tooltip-text: var(--color-text-primary);
+
+    /* ---------------------------------------------------------------------
+       Responsive Variables
+    --------------------------------------------------------------------- */
+    @media (max-width: 768px) {
+        :root {
+            --space-xl: 1.5rem;
+            --space-2xl: 2rem;
+            --space-3xl: 2.5rem;
+        }
+    }
 }
 
-/* Reset & Base Styles */
-* {
+/* =====================================================================
+   Reset & Base Styles
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   CSS Reset for Consistent Styling Across Browsers
+--------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
     box-sizing: border-box;
+}
+
+body, h1, h2, h3, p, figure, blockquote, dl, dd {
     margin: 0;
     padding: 0;
 }
 
+ul[role='list'],
+ol[role='list'] {
+    list-style: none;
+}
+
+img,
+picture {
+    max-width: 100%;
+    display: block;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 0.5rem;
+}
+
+/* ---------------------------------------------------------------------
+   Base Styles for Body and Layout
+--------------------------------------------------------------------- */
 body {
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
@@ -46,17 +232,22 @@ body {
     min-height: 100vh;
 }
 
-/* Container */
 .container {
-    width: min(100% - 2rem, var(--container-width));
+    width: min(100% - 2rem, 1200px); /* Adjust as needed */
     margin: 0 auto;
     padding: var(--space-xl) var(--space-md);
     flex: 1;
 }
 
-/* Typography */
+/* =====================================================================
+   Typography
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Headings and Paragraphs
+--------------------------------------------------------------------- */
 h1, h2, h3 {
-    color: var(--nord4);
+    color: var(--color-heading);
     line-height: 1.2;
 }
 
@@ -76,107 +267,212 @@ h3 {
 }
 
 p {
-    color: var(--nord4);
+    color: var(--color-text-primary);
     font-size: var(--font-size-sm);
     margin-bottom: var(--space-md);
 }
 
-/* Common Components */
-.card {
-    background-color: var(--nord1); /* Reverted back to var(--nord1) */
-    border: 1px solid var(--nord3);
-    border-radius: var(--border-radius);
-    padding: var(--space-lg);
+/* =====================================================================
+   Layout Components
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Site Header
+--------------------------------------------------------------------- */
+.site-header {
+    background-color: var(--color-bg-secondary);
+    padding: var(--space-md) var(--space-lg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.card h3, .card p {
-    color: var(--color-text-primary); /* Ensures readability */
-}
-
-.btn {
-    padding: var(--space-sm) var(--space-md);
-    background-color: var(--nord3);
-    color: var(--nord6);
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: var(--font-size-sm);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-sm);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.btn:hover {
-    background-color: var(--nord8);
-}
-
-.btn-small {
-    padding: var(--space-xs) var(--space-sm);
-    font-size: var(--font-size-sm);
-}
-
-.btn-outline {
-    background-color: transparent;
-    border: 1px solid var(--nord3);
-}
-
-/* Form Elements */
-input {
-    width: 100%;
-    padding: var(--space-sm) var(--space-md);
-    background-color: var(--nord2);
-    border: 1px solid var(--nord3);
-    border-radius: var(--border-radius);
-    color: var(--nord4);
-    font-size: var(--font-size-sm);
-    font-family: inherit;
-}
-
-input:focus {
-    outline: none;
-    border-color: var(--nord8);
-}
-
-.input-group {
+.logo-container {
     display: flex;
+    align-items: center;
+    justify-content: center;
     gap: var(--space-md);
-}
-
-/* Main Site Styles */
-.hero {
-    text-align: center;
-    margin-bottom: var(--space-2xl);
 }
 
 .logo {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: var(--space-md);
-    margin-bottom: var(--space-lg);
+    gap: var(--space-sm);
+    text-decoration: none;
+    color: var(--color-text-primary);
 }
 
 .logo svg {
-    stroke: var(--nord7);
-    width: 32px;
-    height: 32px;
+    stroke: var(--color-icon-primary);
+    width: 40px;
+    height: 40px;
     transition: stroke var(--transition-default);
 }
 
 .logo:hover svg {
-    stroke: var(--nord8);
+    stroke: var(--color-icon-hover);
 }
 
+/* ---------------------------------------------------------------------
+   Tagline
+--------------------------------------------------------------------- */
 .tagline {
-    color: var(--nord4);
+    color: var(--color-text-muted);
     opacity: 0.8;
     font-size: var(--font-size-lg);
     text-align: center;
     margin-bottom: var(--space-xl);
 }
 
-/* Services Grid (Main Site) */
+/* ---------------------------------------------------------------------
+   Footer
+--------------------------------------------------------------------- */
+footer {
+    text-align: center;
+    padding: var(--space-lg);
+    color: var(--color-text-muted);
+    opacity: 0.7;
+    font-size: var(--font-size-sm);
+}
+
+/* =====================================================================
+   Common Components
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Cards
+--------------------------------------------------------------------- */
+.card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-lg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h3, .card p {
+    color: var(--color-text-primary);
+}
+
+/* ---------------------------------------------------------------------
+   Buttons
+--------------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--color-button-primary);
+    color: var(--color-text-bright);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.btn:hover {
+    background-color: var(--color-button-hover);
+    color: var(--color-bg-primary);
+}
+
+.btn:active {
+    background-color: var(--color-button-active);
+}
+
+.btn-small {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.btn-outline:hover {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-bright);
+}
+
+/* ---------------------------------------------------------------------
+   Form Elements
+--------------------------------------------------------------------- */
+input, textarea, select {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 3px rgba(136, 192, 208, 0.3); /* Light blue focus ring */
+}
+
+/* ---------------------------------------------------------------------
+   Input Groups
+--------------------------------------------------------------------- */
+.input-group {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.input-group input {
+    flex: 1;
+}
+
+/* ---------------------------------------------------------------------
+   Centered Text Utility
+--------------------------------------------------------------------- */
+.centered-text {
+    text-align: center;
+}
+
+/* ---------------------------------------------------------------------
+   Form Groups
+--------------------------------------------------------------------- */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* ---------------------------------------------------------------------
+   Error Messages
+--------------------------------------------------------------------- */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    margin-bottom: var(--space-md);
+    background-color: var(--color-alert-error-bg);
+    color: var(--color-alert-error-text);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-sm);
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* =====================================================================
+   Specific Components
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Services Grid (Main Page)
+--------------------------------------------------------------------- */
 .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -185,27 +481,61 @@ input:focus {
 
 .service-card {
     text-decoration: none;
-    transition: all var(--transition-default);
+    transition: transform var(--transition-fast), background-color var(--transition-fast);
 }
 
 .service-card:hover {
-    transform: translateY(-2px);
-    background-color: var(--nord2);
+    transform: translateY(-4px);
+    background-color: var(--color-bg-tertiary);
+}
+
+.service-card i,
+.service-card svg,
+.service-card [data-feather] {
+    stroke: var(--color-icon-primary);
+    color: var(--color-icon-primary);
+    margin-bottom: var(--space-sm);
+    width: 24px;
+    height: 24px;
 }
 
 .service-card:hover i,
-.service-card:hover svg {
-    stroke: var(--nord7);
-    color: var(--nord7);
+.service-card:hover svg,
+.service-card:hover [data-feather] {
+    stroke: var(--color-icon-hover);
+    color: var(--color-icon-hover);
 }
 
-.service-link:hover i,
-.service-link:hover svg {
-    stroke: var(--nord7);
-    color: var(--nord7);
+/* ---------------------------------------------------------------------
+   Service Link
+--------------------------------------------------------------------- */
+.service-link {
+    margin-top: auto;
+    color: var(--color-link);
+    opacity: 0.8;
+    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: opacity var(--transition-fast);
 }
 
-/* Agents Grid */
+.service-link:hover {
+    opacity: 1;
+}
+
+.service-link i,
+.service-link svg,
+.service-link [data-feather] {
+    stroke: var(--color-icon-primary);
+    color: var(--color-icon-primary);
+    width: 16px;
+    height: 16px;
+}
+
+/* ---------------------------------------------------------------------
+   Agents Grid
+--------------------------------------------------------------------- */
 .agents-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -218,230 +548,84 @@ input:focus {
     flex-direction: column;
     gap: var(--space-sm);
     text-decoration: none;
-    transition: all var(--transition-default);
+    transition: transform var(--transition-fast), background-color var(--transition-fast);
 }
 
 .agent-card:hover {
-    transform: translateY(-2px);
-    background-color: var(--nord2);
+    transform: translateY(-4px);
+    background-color: var(--color-bg-tertiary);
 }
 
-.service-card i,
-.service-card svg,
-.service-card [data-feather],
 .agent-card i,
 .agent-card svg,
 .agent-card [data-feather] {
-    stroke: var(--nord7);
-    color: var(--nord7);
+    stroke: var(--color-icon-primary);
+    color: var(--color-icon-primary);
     margin-bottom: var(--space-sm);
+    width: 24px;
+    height: 24px;
 }
 
-.service-link i,
-.service-link svg,
-.service-link [data-feather] {
-    stroke: var(--nord7);
-    color: var(--nord7);
-    width: 16px;
-    height: 16px;
-    margin: 0;
+.agent-card:hover i,
+.agent-card:hover svg,
+.agent-card:hover [data-feather] {
+    stroke: var(--color-icon-hover);
+    color: var(--color-icon-hover);
 }
 
-.message-icon {
-    stroke: var(--nord7);
-    color: var(--nord7);
-    width: 16px;
-    height: 16px;
-    margin-right: var(--space-sm);
-}
-
-.agent-card p {
-    color: var(--nord4);
-    opacity: 0.7;
-}
-
+/* ---------------------------------------------------------------------
+   Agent Link
+--------------------------------------------------------------------- */
 .agent-link {
     margin-top: auto;
-    color: var(--nord8);
+    color: var(--color-link);
     opacity: 0.8;
     font-size: var(--font-size-sm);
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-}
-
-/* Chat Interface */
-.chat-container {
-    height: calc(100vh - 160px);
-    display: flex;
-    flex-direction: column;
-}
-
-.chat-header {
-    padding: var(--space-md) var(--space-lg);
-    background-color: var(--nord1);
-    border-bottom: 1px solid var(--nord3);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.back-link {
-    color: var(--nord4);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    opacity: 0.8;
     transition: opacity var(--transition-fast);
 }
 
-.back-link:hover {
+.agent-link:hover {
     opacity: 1;
 }
 
-.chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--space-lg);
-    background-color: var(--nord4); /* Adjusted for chat page consistency */
+.agent-link i,
+.agent-link svg,
+.agent-link [data-feather] {
+    stroke: var(--color-icon-primary);
+    color: var(--color-icon-primary);
+    width: 16px;
+    height: 16px;
 }
 
-.message {
-    margin-bottom: var(--space-md);
-    padding: var(--space-md);
-    border-radius: var(--border-radius);
-    max-width: 85%;
-    font-size: var(--font-size-sm);
-}
-
-.message.user {
-    margin-left: auto;
-    background-color: var(--nord2);
-    color: var(--nord6);
-}
-
-.message.assistant {
-    margin-right: auto;
-    background-color: var(--nord1);
-    border: 1px solid var(--nord3);
-    color: var(--nord4);
-}
-
-.message.system {
-    margin: 0 auto;
-    max-width: none;
-    background-color: transparent;
-    color: var(--nord4);
-    opacity: 0.7;
-    font-style: italic;
-    text-align: center;
-    padding: var(--space-sm);
-}
-
-/* Messenger Specific Styles */
-.messenger-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: var(--space-lg);
-}
-
-.messenger-header {
-    padding: var(--space-lg);
-    margin-bottom: var(--space-lg);
-}
-
-.login-card {
-    max-width: 400px;
-    margin: auto;
-}
-
+/* ---------------------------------------------------------------------
+   Chat Interface
+--------------------------------------------------------------------- */
 .messenger-container {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: var(--nord1);
-    border: 1px solid var(--nord3);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
     overflow: hidden;
     height: calc(100vh - 200px);
 }
 
-.message-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--space-lg);
-    background-color: var(--nord0);
-}
-
-.message {
-    margin-bottom: var(--space-md);
-    padding: var(--space-md);
-    border-radius: var(--border-radius);
-    max-width: 85%;
-}
-
-.message.user {
-    margin-left: auto;
-    background-color: var(--nord2);
-    color: var(--nord6);
-}
-
-.message.system {
-    margin: 0 auto;
-    max-width: none;
-    background-color: transparent;
-    color: var(--nord4);
-    opacity: 0.7;
-    font-style: italic;
-    text-align: center;
-}
-
-.message-header {
+.chat-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-xs);
-    font-size: var(--font-size-sm);
+    padding: var(--space-md) var(--space-lg);
+    background-color: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .chat-status {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-}
-
-.message-input {
-    padding: var(--space-md);
-    background-color: var(--nord1);
-    border-top: 1px solid var(--nord3);
-}
-
-.input-wrapper {
-    margin-bottom: var(--space-md);
-}
-
-.input-help {
-    display: block;
-    margin-top: var(--space-xs);
-    color: var(--nord4);
-    opacity: 0.7;
-    font-size: var(--font-size-sm);
-}
-
-.error-message {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm);
-    margin-bottom: var(--space-md);
-    background-color: var(--nord11);
-    color: var(--nord6);
-    border-radius: var(--border-radius);
-    font-size: var(--font-size-sm);
 }
 
 .indicator {
@@ -451,18 +635,134 @@ input:focus {
 }
 
 .indicator.online {
-    background-color: var(--nord14);
+    background-color: var(--color-success);
 }
 
 .indicator.offline {
-    background-color: var(--nord11);
+    background-color: var(--color-error);
 }
 
-/* Animations */
-.fade-in {
-    animation: fadeIn 0.3s ease-out;
+.message-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-lg);
+    background-color: var(--color-bg-primary);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
 }
 
+.message {
+    padding: var(--space-md);
+    border-radius: var(--border-radius);
+    max-width: 85%;
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-md);
+}
+
+.message.user {
+    align-self: flex-end;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-bright);
+}
+
+.message.assistant {
+    align-self: flex-start;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+}
+
+.message.system {
+    align-self: center;
+    background-color: transparent;
+    color: var(--color-text-primary);
+    opacity: 0.7;
+    font-style: italic;
+    text-align: center;
+    padding: var(--space-sm);
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.username {
+    font-weight: 600;
+    color: var(--color-heading);
+}
+
+.timestamp {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.message-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.message-icon {
+    stroke: var(--color-icon-primary);
+    color: var(--color-icon-primary);
+    width: 16px;
+    height: 16px;
+    margin-right: var(--space-sm);
+}
+
+/* ---------------------------------------------------------------------
+   Message Input
+--------------------------------------------------------------------- */
+.message-input {
+    padding: var(--space-md);
+    background-color: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border);
+}
+
+.message-input .input-group {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.message-input input {
+    flex: 1;
+}
+
+.message-input .btn {
+    flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------
+   Login Card
+--------------------------------------------------------------------- */
+.login-card {
+    max-width: 400px;
+    margin: 0 auto var(--space-xl) auto;
+}
+
+.login-card h3 {
+    text-align: center;
+    margin-bottom: var(--space-sm);
+}
+
+.login-card .form-description {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+}
+
+/* =====================================================================
+   Utilities
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Animations
+--------------------------------------------------------------------- */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -473,96 +773,127 @@ input:focus {
     to { opacity: 1; transform: translateX(0); }
 }
 
-/* Footer */
-footer {
+/* ---------------------------------------------------------------------
+   Text Centering Utility
+--------------------------------------------------------------------- */
+.text-center {
     text-align: center;
-    padding: var(--space-lg);
-    color: var(--nord4);
-    opacity: 0.7;
-    font-size: var(--font-size-sm);
 }
 
-/* Scrollbar Styling */
+/* =====================================================================
+   Scrollbar Styling
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Custom Scrollbar
+--------------------------------------------------------------------- */
 ::-webkit-scrollbar {
     width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--nord0);
+    background: var(--color-bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--nord3);
+    background: var(--color-border);
     border-radius: var(--border-radius);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--nord4);
+    background: var(--color-border-hover);
 }
 
-/* Responsive Design */
+/* =====================================================================
+   Responsive Design
+   ===================================================================== */
+
 @media (max-width: 768px) {
+    /* Adjust spacing variables */
     :root {
         --space-xl: 1.5rem;
         --space-2xl: 2rem;
+        --space-3xl: 2.5rem;
     }
 
+    /* Container padding */
     .container {
         padding: var(--space-lg) var(--space-md);
     }
 
+    /* Grid adjustments */
     .services-grid,
-    .agents-grid {
+    .agents-grid,
+    .messenger-page .messenger-container {
         grid-template-columns: 1fr;
     }
 
+    /* Input group direction */
     .input-group {
         flex-direction: column;
     }
 
+    /* Button width */
     .btn {
         width: 100%;
     }
 
+    /* Message max-width */
     .message {
         max-width: 90%;
     }
 
+    /* Logo alignment */
+    .logo-container,
     .logo {
         flex-direction: column;
     }
 
-    h1 { font-size: var(--font-size-lg); }
-    h2 { font-size: var(--font-size-base); }
-    h3 { font-size: var(--font-size-sm); }
+    /* Centered text */
+    .centered-text {
+        text-align: center;
+    }
+
+    /* Typography adjustments */
+    h1 { 
+        font-size: var(--font-size-lg); 
+    }
+
+    h2 { 
+        font-size: var(--font-size-base); 
+    }
+
+    h3 { 
+        font-size: var(--font-size-sm); 
+    }
+
+    /* Messenger container height adjustment */
+    .messenger-page .messenger-container {
+        height: calc(100vh - 200px);
+    }
 }
 
-/* Page-Specific Backgrounds */
+/* =====================================================================
+   Additional Enhancements
+   ===================================================================== */
 
-/* Agents Chat Page */
-.chat-page {
-    background-color: var(--color-bg-primary); /* Desired background color */
+/* ---------------------------------------------------------------------
+   Message List Enhancements
+--------------------------------------------------------------------- */
+.message-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
 }
 
-/* Main Page */
-.ai-agents-page {
-    background-color: var(--color-bg-primary); /* Or any other desired color */
+/* ---------------------------------------------------------------------
+   Input Help Text
+--------------------------------------------------------------------- */
+.input-help {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
 }
 
-/* Messenger Subpage */
-.messenger-page {
-    background-color: var(--color-bg-primary); /* Or any other desired color */
-}
-
-/* Ensure that nested .card elements maintain their specific backgrounds */
-.chat-page .chat-container {
-    background-color: var(--nord1); /* Ensures chat container has correct background */
-}
-
-.messenger-page .messenger-container {
-    background-color: var(--nord1); /* Ensures messenger container has correct background */
-}
-
-.ai-agents-page .agent-card {
-    background-color: var(--nord1); /* Ensures agent cards have correct background */
-}
+/* =====================================================================
+   End of styles.css
+   ===================================================================== */

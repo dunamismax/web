@@ -17,7 +17,6 @@
     <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
     
     <!-- Theme and Styles -->
-    <link rel="stylesheet" href="{{ url_for('static', path='nord.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
     
     <!-- Fonts and Icons -->
@@ -46,13 +45,15 @@
     </div>
 
     <!-- Base scripts -->
-    <script>
-        // Initialize Feather Icons
+<script>
+    // Initialize Feather Icons after DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
         feather.replace();
+    });
 
-        // Set current year
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
+    // Set current year
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
     
     {% block scripts %}{% endblock %}
 </body>
