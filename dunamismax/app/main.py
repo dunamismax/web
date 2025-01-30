@@ -27,7 +27,13 @@ async def root(request: Request):
                     "description": "Real-time chat application using WebSocket technology",
                     "url": "https://messenger.dunamismax.com",
                     "icon": "message-square",
-                }
+                },
+                {
+                    "name": "AI Agents",
+                    "description": "Chat with specialized AI personalities and assistants",
+                    "url": "https://agents.dunamismax.com",
+                    "icon": "cpu",
+                },
                 # Add more services here as they become available
             ],
         },

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="ai-agents-page fade-in">
+    <header class="agents-header">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2zM12 22v-6.5"/>
+                <path d="M22 8.5l-10 7-10-7"/>
+                <path d="M2 15.5l10-7 10 7"/>
+                <path d="M12 2v6.5"/>
+            </svg>
+            <h1>DunamisMax AI Agents</h1>
+        </div>
+        <p class="tagline">Chat with specialized AI personalities</p>
+    </header>
+
+    <div class="agents-grid">
+        {% for agent in agents.values() %}
+        <a href="/chat/{{ agent.id }}" class="agent-card card">
+            <i data-feather="{{ agent.icon }}"></i>
+            <h3>{{ agent.name }}</h3>
+            <p>{{ agent.description }}</p>
+            <span class="agent-link">Chat Now <i data-feather="message-square"></i></span>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Initialize Feather Icons
+    feather.replace();
+</script>
+{% endblock %}

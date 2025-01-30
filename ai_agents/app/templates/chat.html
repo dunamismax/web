@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="chat-page fade-in">
+    <header class="chat-header">
+        <a href="/" class="back-link">
+            <i data-feather="arrow-left"></i>
+            Back to Agents
+        </a>
+        <div class="agent-info">
+            <i data-feather="{{ agent.icon }}"></i>
+            <h1>{{ agent.name }}</h1>
+        </div>
+    </header>
+
+    <div class="chat-container card">
+        <div class="chat-messages" id="chat-messages">
+            <div class="message system">
+                <div class="message-content">
+                    <i data-feather="info"></i>
+                    <span>Connected to {{ agent.name }}. Start chatting!</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="message-input">
+            <form id="message-form" onsubmit="return sendMessage(event)">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="message-input"
+                        placeholder="Type your message..." 
+                        autocomplete="off"
+                        required
+                    >
+                    <button type="submit" class="btn">
+                        <i data-feather="send"></i>
+                        Send
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Initialize Feather Icons
+    feather.replace();
+
+    let ws = null;
+    const messagesContainer = document.getElementById('chat-messages');
+    const messageInput = document.getElementById('message-input');
+
+    // Connect to WebSocket
+    function connectWebSocket() {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}/ws/chat/{{ agent.id }}`;
+        
+        ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => {
+            console.log('Connected to agent');
+        };
+
+        ws.onclose = () => {
+            console.log('Disconnected from agent');
+            setTimeout(connectWebSocket, 1000);  // Reconnect after 1 second
+        };
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            addMessage(message);
+        };
+    }
+
+    // Send message
+    function sendMessage(event) {
+        event.preventDefault();
+        const message = messageInput.value.trim();
+        
+        if (message && ws && ws.readyState === WebSocket.OPEN) {
+            // Add user message to chat
+            addMessage({
+                type: 'message',
+                role: 'user',
+                content: message
+            });
+
+            // Send to websocket
+            ws.send(message);
+            
+            // Clear input
+            messageInput.value = '';
+        }
+        return false;
+    }
+
+    // Add message to chat
+    function addMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${message.role}`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.textContent = message.content;
+        
+        messageDiv.appendChild(contentDiv);
+        messagesContainer.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Initialize
+    connectWebSocket();
+    messageInput.focus();
+</script>
+{% endblock %}

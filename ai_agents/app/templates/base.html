@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DunamisMax AI Agents</title>
+
+    <!-- Favicon setup -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
+    
+    <!-- Theme and Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', path='nord.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+
+    <!-- Meta tags -->
+    <meta name="description" content="Chat with specialized AI personalities and assistants">
+    <meta name="theme-color" content="#2E3440">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="DunamisMax AI Agents">
+    <meta property="og:description" content="Chat with specialized AI personalities and assistants">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="DunamisMax">
+</head>
+<body>
+    <div class="page-wrapper">
+        <main class="container">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <p>&copy; <span id="current-year"></span> DunamisMax. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Base scripts -->
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Set current year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>
