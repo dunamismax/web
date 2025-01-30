@@ -133,6 +133,62 @@
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
+    class ChatManager {
+        constructor(agentId) {
+            this.agentId = agentId;
+            this.ws = null;
+            this.reconnectTimeout = null;
+            this.messageQueue = [];
+        }
+    
+        connect() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            this.ws = new WebSocket(`${protocol}//${window.location.host}/ws/chat/${this.agentId}`);
+    
+            this.ws.onopen = () => {
+                console.log('WebSocket connected');
+                this.flushMessageQueue();
+            };
+    
+            this.ws.onmessage = (event) => this.handleMessage(event);
+            this.ws.onclose = () => this.scheduleReconnect();
+        }
+    
+        handleMessage(event) {
+            const message = JSON.parse(event.data);
+            if (message.type === 'message') {
+                this.appendMessage(message);
+            } else if (message.type === 'error') {
+                this.showError(message.content);
+            }
+        }
+    
+        appendMessage(message) {
+            // Message handling logic
+        }
+    
+        sendMessage(content) {
+            if (this.ws.readyState === WebSocket.OPEN) {
+                this.ws.send(content);
+            } else {
+                this.messageQueue.push(content);
+            }
+        }
+    
+        scheduleReconnect() {
+            if (!this.reconnectTimeout) {
+                this.reconnectTimeout = setTimeout(() => this.connect(), 2000);
+            }
+        }
+    
+        flushMessageQueue() {
+            while (this.messageQueue.length > 0) {
+                const message = this.messageQueue.shift();
+                this.ws.send(message);
+            }
+        }
+    }
+
     // Helper function to create message elements
     function createMessageElement(message) {
         const messageDiv = document.createElement('div');

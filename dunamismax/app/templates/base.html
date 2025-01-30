@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DunamisMax</title>
 
+    <style>
+        /* Force consistent background color */
+        body, .page-wrapper, .container {
+            background-color: var(--nord0) !important;
+        }
+    </style>
+
     <!-- Favicon setup -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
     <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">

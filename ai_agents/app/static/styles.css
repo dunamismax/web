@@ -81,15 +81,19 @@ p {
 
 /* Common Components */
 .card {
-    background-color: var(--nord1);
+    background-color: var(--color-bg-primary); /* Changed from var(--nord1) */
     border: 1px solid var(--nord3);
     border-radius: var(--border-radius);
     padding: var(--space-lg);
 }
 
+.card h3, .card p {
+    color: var(--color-text-primary); /* Ensures readability */
+}
+
 .btn {
     padding: var(--space-sm) var(--space-md);
-    background-color: var(--nord3);
+    background-color: var(--nord8);
     color: var(--nord6);
     border: none;
     border-radius: var(--border-radius);
@@ -298,7 +302,7 @@ input:focus {
     flex: 1;
     overflow-y: auto;
     padding: var(--space-lg);
-    background-color: var(--nord0);
+    background-color: var(--nord4);
 }
 
 .message {
