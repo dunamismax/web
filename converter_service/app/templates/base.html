@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DunamisMax File Converter</title>
+
+    <!-- Consistent Nord Theme Enforcement -->
+    <style>
+        :root {
+            --nord0: #2E3440;
+            --nord1: #3B4252;
+            --nord3: #4C566A;
+            --nord4: #D8DEE9;
+            --nord6: #ECEFF4;
+            --nord7: #8FBCBB;
+            --nord8: #88C0D0;
+            --nord10: #5E81AC;
+            --nord11: #BF616A;
+            
+            --color-accent-primary: var(--nord8);
+            --color-border: var(--nord3);
+            --color-bg-tertiary: var(--nord1);
+            --color-text-muted: var(--nord4);
+            --color-alert-error-bg: #BF616A33;
+            --color-alert-error-text: var(--nord6);
+        }
+
+        body, .page-wrapper, .container {
+            background-color: var(--nord0) !important;
+            color: var(--nord4);
+            font-family: 'Fira Code', monospace;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            width: 100%;
+            color: var(--nord8);
+        }
+    </style>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
+    
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    
+    <!-- Font & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+
+    <!-- SEO Optimization -->
+    <meta name="description" content="Professional file conversion service supporting audio, video, and voicemail formats">
+    <meta name="theme-color" content="#2E3440">
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="DunamisMax File Converter">
+    <meta property="og:description" content="Convert between audio/video formats with professional quality, including voicemail-optimized WAV files">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ url_for('static', path='og-file-converter.png') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <main class="container">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="nord3-text">
+            <p>&copy; <span id="current-year"></span> DunamisMax. Secure file conversions · <a href="/privacy" class="nord8-link">Privacy Policy</a></p>
+        </footer>
+    </div>
+
+    <!-- Core Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize feather icons
+            feather.replace();
+            
+            // Set current year
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

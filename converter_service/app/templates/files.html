@@ -1,0 +1,56 @@
+<!-- files.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="container">
+        <h1>Professional File Conversion</h1>
+        <p class="tagline nord4">Transform media files between formats with studio quality</p>
+
+        <div class="converter-container card nord1-bg">
+            <div class="converter-header">
+                <h2 class="nord8"><i data-feather="refresh-cw"></i> File Converter</h2>
+                <p class="nord4">Supported formats: MP3, WAV, OGG, FLAC, MP4, MOV, AVI</p>
+            </div>
+
+            <div class="drop-zone nord3-border" id="dropZone">
+                <i data-feather="upload" class="nord4"></i>
+                <p class="nord4">Drag & drop files or click to browse</p>
+                <input type="file" id="fileInput" hidden accept=".mp3,.wav,.ogg,.flac,.mp4,.mov,.avi">
+            </div>
+
+            <div class="conversion-options nord3-bg">
+                <div class="form-group">
+                    <label class="nord4">Output Format:</label>
+                    <select id="formatSelect" class="custom-select nord3-bg nord4">
+                        <optgroup label="Audio Formats">
+                            <option value="mp3">MP3</option>
+                            <option value="wav">Standard WAV</option>
+                            <option value="voicemail_wav">Voicemail WAV</option>
+                        </optgroup>
+                        <optgroup label="Video Formats">
+                            <option value="mp4">MP4</option>
+                            <option value="mov">MOV</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <div class="processing-ui">
+                <div class="progress-bar nord3-bg">
+                    <div class="progress-fill nord8-bg" id="progressFill"></div>
+                </div>
+                <div class="status-text nord4" id="statusText">Ready for conversion</div>
+                <div class="conversion-results" id="resultsContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// (Keep previous JavaScript implementation)
+// [Previous JS code here...]
+</script>
+{% endblock %}

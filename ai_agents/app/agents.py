@@ -17,7 +17,7 @@ if not api_key:
     raise ValueError("OPENAI_API_KEY environment variable is not set")
 
 # Rate limiting configuration
-RATE_LIMIT_PER_MINUTE = int(os.getenv("RATE_LIMIT_PER_MINUTE", 60))
+RATE_LIMIT_PER_MINUTE = int(os.getenv("RATE_LIMIT_PER_MINUTE", 10))
 MAX_WEBSOCKET_CONNECTIONS = int(os.getenv("MAX_WEBSOCKET_CONNECTIONS", 1000))
 
 client = OpenAI(api_key=api_key)
