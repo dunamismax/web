@@ -50,9 +50,12 @@
         </footer>
     </div>
 
-    <!-- Set current year -->
+    <!-- Base scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Feather Icons
+            feather.replace();
+            
             // Set current year
             document.getElementById('current-year').textContent = new Date().getFullYear();
         });

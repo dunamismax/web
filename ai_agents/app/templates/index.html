@@ -30,6 +30,9 @@
 
 {% block scripts %}
 <script>
-
+    // Re-initialize Feather icons after dynamic content loads
+    document.addEventListener('DOMContentLoaded', function() {
+        feather.replace();
+    });
 </script>
 {% endblock %}
