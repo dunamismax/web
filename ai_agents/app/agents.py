@@ -5,6 +5,8 @@ from typing import Dict, List
 import json
 from dotenv import load_dotenv
 import asyncio
+from datetime import datetime, timedelta
+from collections import defaultdict
 
 # Load environment variables
 load_dotenv()
@@ -13,6 +15,10 @@ load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("OPENAI_API_KEY environment variable is not set")
+
+# Rate limiting configuration
+RATE_LIMIT_PER_MINUTE = int(os.getenv("RATE_LIMIT_PER_MINUTE", 60))
+MAX_WEBSOCKET_CONNECTIONS = int(os.getenv("MAX_WEBSOCKET_CONNECTIONS", 1000))
 
 client = OpenAI(api_key=api_key)
 
@@ -177,28 +183,74 @@ available_agents = {
 }
 
 
+class RateLimiter:
+    def __init__(self, rate_limit_per_minute):
+        self.rate_limit = rate_limit_per_minute
+        self.requests = defaultdict(list)
+
+    def is_rate_limited(self, client_id: str) -> bool:
+        now = datetime.now()
+        minute_ago = now - timedelta(minutes=1)
+
+        # Clean up old requests
+        self.requests[client_id] = [
+            req_time for req_time in self.requests[client_id] if req_time > minute_ago
+        ]
+
+        # Check if rate limit is exceeded
+        if len(self.requests[client_id]) >= self.rate_limit:
+            return True
+
+        # Add new request
+        self.requests[client_id].append(now)
+        return False
+
+
 class AgentManager:
     def __init__(self):
         self.active_connections: Dict[str, List[WebSocket]] = {
             agent_id: [] for agent_id in available_agents
         }
+        self.rate_limiter = RateLimiter(RATE_LIMIT_PER_MINUTE)
+        self.total_connections = 0
 
     async def connect(self, websocket: WebSocket, agent_id: str):
-        """Connect a client to an agent"""
+        """Connect a client to an agent with rate limiting"""
+        if self.total_connections >= MAX_WEBSOCKET_CONNECTIONS:
+            await websocket.close(code=1008, reason="Maximum connections reached")
+            return
+
         await websocket.accept()
         if agent_id in self.active_connections:
             self.active_connections[agent_id].append(websocket)
+            self.total_connections += 1
 
     async def disconnect(self, websocket: WebSocket):
         """Disconnect a client"""
         for connections in self.active_connections.values():
             if websocket in connections:
                 connections.remove(websocket)
+                self.total_connections -= 1
 
     async def get_agent_response(
         self, agent_id: str, message: str, websocket: WebSocket
     ) -> None:
-        """Stream the response from the AI agent"""
+        """Stream the response from the AI agent with rate limiting"""
+        # Generate a unique client ID based on websocket
+        client_id = str(id(websocket))
+
+        # Check rate limit
+        if self.rate_limiter.is_rate_limited(client_id):
+            await websocket.send_json(
+                {
+                    "type": "message",
+                    "role": "assistant",
+                    "content": "Rate limit exceeded. Please wait a moment before sending more messages.",
+                    "is_error": True,
+                }
+            )
+            return
+
         if agent_id not in available_agents:
             await websocket.send_json(
                 {
@@ -211,10 +263,10 @@ class AgentManager:
 
         try:
             stream = client.chat.completions.create(
-                model="chatgpt-4o-latest",
+                model="gpt-4",
                 messages=[
                     {
-                        "role": "developer",
+                        "role": "system",
                         "content": available_agents[agent_id]["system_prompt"],
                     },
                     {"role": "user", "content": message},
@@ -222,11 +274,9 @@ class AgentManager:
                 stream=True,
             )
 
-            # Initialize response tracking
             full_response = ""
             first_chunk = True
 
-            # Stream each chunk as it arrives
             for chunk in stream:
                 if hasattr(chunk.choices[0].delta, "content"):
                     content = chunk.choices[0].delta.content
@@ -244,7 +294,6 @@ class AgentManager:
                         first_chunk = False
                         await asyncio.sleep(0.01)
 
-            # Send a final chunk to indicate completion
             await websocket.send_json(
                 {
                     "type": "message",

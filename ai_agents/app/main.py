@@ -1,9 +1,14 @@
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import uvicorn
 from .agents import AgentManager, available_agents
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI(title="DunamisMax AI Agents")
 
@@ -31,7 +36,7 @@ async def root(request: Request):
 async def chat(request: Request, agent_id: str):
     """Render the chat interface for a specific agent"""
     if agent_id not in available_agents:
-        return {"error": "Agent not found"}, 404
+        raise HTTPException(status_code=404, detail="Agent not found")
 
     agent = available_agents[agent_id]
     return templates.TemplateResponse("chat.html", {"request": request, "agent": agent})
@@ -40,7 +45,12 @@ async def chat(request: Request, agent_id: str):
 @app.websocket("/ws/chat/{agent_id}")
 async def websocket_endpoint(websocket: WebSocket, agent_id: str):
     """WebSocket endpoint for agent chat"""
-    await agent_manager.connect(websocket, agent_id)
+    try:
+        await agent_manager.connect(websocket, agent_id)
+    except Exception as e:
+        print(f"Connection error: {e}")
+        return
+
     try:
         while True:
             message = await websocket.receive_text()
@@ -57,4 +67,8 @@ async def websocket_endpoint(websocket: WebSocket, agent_id: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8200, reload=True)
+    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", 8200))
+    debug = os.getenv("DEBUG", "False").lower() == "true"
+
+    uvicorn.run("app.main:app", host=host, port=port, reload=debug)
