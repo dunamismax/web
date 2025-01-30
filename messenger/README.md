@@ -1,155 +1,165 @@
-# DunamisMax
+# DunamisMax Messenger
 
-**DunamisMax** is a suite of modern web applications built with FastAPI. It includes a real-time Messenger and AI-powered Agents, offering seamless communication and intelligent assistance.
+Real-time messaging application built with FastAPI and WebSockets. Part of the DunamisMax suite of web applications.
+
+## Features
+
+- Real-time bidirectional communication using WebSockets
+- Clean, minimal interface with Nord theme
+- Username-based chat rooms
+- System notifications for user join/leave events
+- Responsive design for all devices
+- Connection status indicators
+- Message persistence during session
+- Automatic reconnection on disconnection
 
 ## Technology Stack
 
-### Backend Framework
+### Backend
 
-- **FastAPI** - Modern Python web framework for building high-performance APIs
-- **Uvicorn** - Lightning-fast ASGI server implementation
-- **Python 3.x** - Core programming language
-- **WebSocket** - For real-time bidirectional communication
-- **Jinja2** - Server-side templating engine
+- FastAPI - Web framework
+- WebSockets - Real-time communication
+- Uvicorn - ASGI server
+- Python 3.x - Core language
 
 ### Frontend
 
-- **HTML5** - Semantic markup
-- **CSS3** 
-  - Custom CSS variables
+- HTML5 - Semantic markup
+- CSS3 - Styling
+  - CSS Variables
   - Nord color theme
-  - Flexbox and Grid layouts
-  - Responsive design
-- **Vanilla JavaScript** - No framework dependencies
-- **Feather Icons** - SVG icon library (via CDN)
-- **Fira Code** - Monospace font (via Google Fonts)
+  - Flexbox/Grid layouts
+- Vanilla JavaScript - No framework dependencies
+- Feather Icons - UI icons
+- Fira Code - Monospace font
 
-### Infrastructure & Deployment
+### Infrastructure
 
-- **Caddy** - Modern reverse proxy server
-  - Automatic HTTPS
-  - Zero-config SSL
-  - HTTP/3 support
-- **Cloudflare**
-  - DNS management
-  - CDN services
-  - DDoS protection
-  - SSL/TLS encryption
+- Caddy - Reverse proxy
+- Cloudflare - DNS and CDN
+- WebSocket secure connections (wss://)
 
 ## Project Structure
 
 ```bash
-web/
-├── ai_agents/                  # AI Agents Application
-│   ├── app/
-│   │   ├── static/            # Static assets
-│   │   ├── templates/         # HTML templates
-│   │   ├── agents.py         # AI agent logic
-│   │   └── main.py          # FastAPI application
-│   ├── .env                 # Environment variables
-│   └── requirements.txt     # Python dependencies
-│
-├── dunamismax/               # Main Website
-│   ├── app/
-│   │   ├── static/          # Static assets
-│   │   ├── templates/       # HTML templates
-│   │   └── main.py         # FastAPI application
-│   └── requirements.txt    # Python dependencies
-│
-├── messenger/               # Real-time Messenger
-│   ├── app/
-│   │   ├── static/         # Static assets
-│   │   ├── templates/      # HTML templates
-│   │   ├── messenger.py   # WebSocket logic
-│   │   └── main.py       # FastAPI application
-│   └── requirements.txt   # Python dependencies
-│
-├── .gitignore             # Git ignore rules
-├── LICENSE               # Project license
-└── README.md            # Project documentation
+messenger/
+├── app/
+│   ├── static/
+│   │   ├── favicon.ico      # Site favicon
+│   │   ├── logo.svg         # Site logo
+│   │   └── styles.css       # Stylesheets
+│   ├── templates/
+│   │   ├── base.html        # Base template
+│   │   └── index.html       # Main messenger interface
+│   ├── __init__.py
+│   ├── main.py             # FastAPI application
+│   └── messenger.py        # WebSocket logic
+├── README.md
+└── requirements.txt
 ```
-
-## Features
-
-- **Messenger:** Real-time chat using WebSockets
-- **AI Agents:** Interactive AI assistants for various tasks
-- **Responsive Design:** Optimized for all devices
-- **Clean UI:** Consistent styling with the Nord color palette
-
-## Key Components
-
-- Three separate FastAPI applications:
-  - **Main Site** (dunamismax.com)
-  - **AI Agents** (agents.dunamismax.com)
-  - **Messenger** (messenger.dunamismax.com)
-- Real-time WebSocket communication
-- Multi-user support
-- Cross-subdomain consistent styling
-- Zero-dependency frontend
 
 ## Installation
 
-1. **Clone the Repository**
-
-   ```bash
-   git clone https://github.com/dunamismax/DunamisMax.git
-   cd DunamisMax
-   ```
-
-2. **Create a Virtual Environment**
+1. **Set Up Virtual Environment**
 
    ```bash
    python3 -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. **Install Dependencies**
+2. **Install Dependencies**
 
    ```bash
-   # Install dependencies for each application
-   pip install -r web/dunamismax/requirements.txt
-   pip install -r web/messenger/requirements.txt
-   pip install -r web/ai_agents/requirements.txt
+   pip install -r requirements.txt
    ```
 
-4. **Run the Applications**
+3. **Run the Application**
 
    ```bash
-   # Main site
-   uvicorn web.dunamismax.app.main:app --host 0.0.0.0 --port 8000 --reload
-
-   # Messenger
-   uvicorn web.messenger.app.main:app --host 0.0.0.0 --port 8100 --reload
-
-   # AI Agents
-   uvicorn web.ai_agents.app.main:app --host 0.0.0.0 --port 8200 --reload
+   uvicorn app.main:app --host 0.0.0.0 --port 8100 --reload
    ```
 
-5. **Access the Applications**
-   - Main Site: `http://localhost:8000`
-   - Messenger: `http://localhost:8100`
-   - AI Agents: `http://localhost:8200`
+4. **Access the Application**
+   - Local development: `http://localhost:8100`
+   - Production: `https://messenger.dunamismax.com`
+
+## WebSocket Events
+
+### Client Events
+
+- `connect` - Initial connection with username
+- `disconnect` - User leaves chat
+- `message` - New message sent
+
+### Server Events
+
+- `system` - System notifications (user join/leave)
+- `message` - Broadcast messages to all users
+- `error` - Error notifications
+
+## Message Format
+
+```javascript
+{
+    "type": "message|system",
+    "username": "user123",
+    "text": "Message content",
+    "timestamp": "2025-01-30T12:34:56.789Z"
+}
+```
 
 ## Development
 
-- Each application can be developed independently
 - Uses Uvicorn's auto-reload feature for development
-- Consistent styling across all applications
-- Local SSL provided by Caddy
+- WebSocket connections handled by FastAPI
+- Styling matches DunamisMax main theme
+- Real-time message broadcasting
+
+## Error Handling
+
+- Username collision detection
+- Connection state management
+- Automatic reconnection attempts
+- Graceful error messages
+- Connection status indicators
+
+## Security Features
+
+- HTML escape for message content
+- Username validation and sanitization
+- Secure WebSocket connections (wss://)
+- Rate limiting (via Cloudflare)
 
 ## Deployment
 
-- Caddy handles reverse proxy and SSL
-- Cloudflare manages DNS and provides CDN
-- Each application runs on its own subdomain
-- Automatic HTTPS certification
+- Runs on port 8100
+- Reverse proxied through Caddy
+- SSL/TLS provided by Cloudflare
+- Automatic HTTPS redirection
 
-## Contact
+## Contributing
 
-- **Email:** [dunamismax@tutamail.com](mailto:dunamismax@tutamail.com)
-- **GitHub:** [github.com/dunamismax](https://github.com/dunamismax)
-- **Beaker Profile:** [bsky.app/profile/dunamismax.bsky.social](https://bsky.app/profile/dunamismax.bsky.social)
+1. Fork the repository
+2. Create your feature branch
+
+   ```bash
+   git checkout -b feature/new-feature
+   ```
+
+3. Commit your changes
+
+   ```bash
+   git commit -am 'Add new feature'
+   ```
+
+4. Push to the branch
+
+   ```bash
+   git push origin feature/new-feature
+   ```
+
+5. Create a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.

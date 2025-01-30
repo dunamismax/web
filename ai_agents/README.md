@@ -1,48 +1,215 @@
 # DunamisMax AI Agents
 
-**DunamisMax AI Agents** provides interactive AI-powered assistants built with FastAPI, offering intelligent responses and assistance for various tasks.
+Interactive AI chat interface built with FastAPI and WebSockets. Part of the DunamisMax suite of web applications.
 
 ## Features
 
-- **AI Interaction:** Engage with intelligent AI agents.
-- **Multiple Personalities:** Different AI agents with unique traits.
-- **Responsive Design:** Accessible on all devices.
-- **Seamless Integration:** Consistent UI with the main DunamisMax site.
+- Real-time AI chat interactions
+- Multiple specialized AI agents
+- Streaming responses for immediate feedback
+- Chat history within session
+- Responsive design for all devices
+- Connection status indicators
+- Error handling and recovery
+- Automatic reconnection
+- Clean Nord-themed interface
+
+## Technology Stack
+
+### Backend
+
+- FastAPI - Web framework
+- WebSockets - Real-time communication
+- Uvicorn - ASGI server
+- Python 3.x - Core language
+- AI Agent System - Custom implementation
+
+### Frontend
+
+- HTML5 - Semantic markup
+- CSS3 - Styling
+  - CSS Variables
+  - Nord color theme
+  - Flexbox/Grid layouts
+- Vanilla JavaScript - No framework dependencies
+- Feather Icons - UI icons
+- Fira Code - Monospace font
+
+### Infrastructure
+
+- Caddy - Reverse proxy
+- Cloudflare - DNS and CDN
+- WebSocket secure connections (wss://)
+
+## Project Structure
+
+```bash
+ai_agents/
+├── app/
+│   ├── static/
+│   │   ├── favicon.ico     # Site favicon
+│   │   ├── logo.svg        # Site logo
+│   │   └── styles.css      # Stylesheets
+│   ├── templates/
+│   │   ├── base.html       # Base template
+│   │   ├── chat.html       # Chat interface
+│   │   └── index.html      # Agent selection
+│   ├── __init__.py
+│   ├── agents.py          # AI agent definitions
+│   └── main.py           # FastAPI application
+├── .env                  # Environment variables
+├── README.md
+└── requirements.txt
+```
+
+## Available Agents
+
+Each agent has specialized capabilities and personality traits:
+
+1. **General Assistant**
+   - General-purpose help
+   - Task assistance
+   - Information queries
+
+2. **Code Assistant**
+   - Programming help
+   - Code review
+   - Debugging assistance
+
+3. **Writing Assistant**
+   - Content creation
+   - Editing and proofreading
+   - Style suggestions
 
 ## Installation
 
-1. **Navigate to AI Agents Directory**
+1. **Set Up Virtual Environment**
 
    ```bash
-   cd app/ai_agents
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-2. **Activate Virtual Environment**
+2. **Install Dependencies**
 
    ```bash
-   source ../../venv/bin/activate  # On Windows: ../../venv/Scripts/activate
+   pip install -r requirements.txt
    ```
 
-3. **Set Up Environment Variables**
-
-   Create a `.env` file and add your OpenAI API key:
-
-   ```env
-   OPENAI_API_KEY=your_openai_api_key_here
-   ```
-
-4. **Run the AI Agents**
+3. **Configure Environment Variables**
 
    ```bash
-   uvicorn agents.agents:app --host 0.0.0.0 --port 8002 --reload
+   cp .env.example .env
+   # Edit .env with your settings
    ```
 
-5. **Access AI Agents**
+4. **Run the Application**
 
-   Open [http://localhost:8002](http://localhost:8002) in your browser.
+   ```bash
+   uvicorn app.main:app --host 0.0.0.0 --port 8200 --reload
+   ```
 
-## Contact
+5. **Access the Application**
+   - Local development: `http://localhost:8200`
+   - Production: `https://agents.dunamismax.com`
 
-- **Email:** [dunamismax@tutamail.com](mailto:dunamismax@tutamail.com)
-- **GitHub:** [github.com/dunamismax](https://github.com/dunamismax)
-- **Beaker Profile:** [bsky.app/profile/dunamismax.bsky.social](https://bsky.app/profile/dunamismax.bsky.social)
+## WebSocket Protocol
+
+### Message Format
+
+```javascript
+{
+    "type": "message|system|error",
+    "role": "user|assistant",
+    "content": "Message content",
+    "agent_id": "agent-identifier",
+    "is_chunk": boolean,
+    "is_complete": boolean
+}
+```
+
+### Streaming Responses
+
+- Messages are streamed in chunks for real-time feedback
+- Final chunk marked with `is_complete: true`
+- Error handling for incomplete streams
+
+## Development
+
+### Adding New Agents
+
+1. Define agent in `agents.py`:
+
+   ```python
+   class NewAgent(BaseAgent):
+       id = "unique-id"
+       name = "Agent Name"
+       description = "Agent capabilities"
+       icon = "feather-icon-name"
+   ```
+
+2. Register in available agents:
+
+   ```python
+   available_agents = {
+       "new-agent": NewAgent()
+   }
+   ```
+
+### Testing
+
+```bash
+# Run tests
+python -m pytest tests/
+```
+
+## Error Handling
+
+- Connection state management
+- Automatic reconnection logic
+- Rate limiting protection
+- Input validation
+- Response validation
+- System notifications for errors
+
+## Security Features
+
+- Environment variable configuration
+- Input sanitization
+- Rate limiting (via Cloudflare)
+- Secure WebSocket connections
+- Error message sanitization
+
+## Deployment
+
+- Runs on port 8200
+- Reverse proxied through Caddy
+- SSL/TLS provided by Cloudflare
+- Automatic HTTPS redirection
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+
+   ```bash
+   git checkout -b feature/new-feature
+   ```
+
+3. Commit your changes
+
+   ```bash
+   git commit -am 'Add new feature'
+   ```
+
+4. Push to the branch
+
+   ```bash
+   git push origin feature/new-feature
+   ```
+
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
