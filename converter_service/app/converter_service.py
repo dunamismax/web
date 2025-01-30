@@ -6,6 +6,7 @@ import subprocess
 from pathlib import Path
 from datetime import datetime
 from fastapi import HTTPException, UploadFile
+from fastapi.responses import FileResponse
 from typing import Dict, Optional
 
 # ✅ Configure logging
@@ -27,24 +28,6 @@ class FileConverterService:
         self.allowed_formats = {
             "audio": ["mp3", "wav", "ogg", "flac", "aac", "m4a"],
             "video": ["mp4", "mov", "avi", "mkv", "webm"],
-            "special": ["voicemail_wav"],
-        }
-
-        # ✅ FFmpeg conversion settings
-        self.conversion_profiles = {
-            "voicemail_wav": {
-                "extension": "wav",
-                "ffmpeg_args": [
-                    "-acodec",
-                    "pcm_mulaw",
-                    "-ar",
-                    "8000",
-                    "-ac",
-                    "1",
-                    "-vn",
-                    "-y",
-                ],
-            }
         }
 
     def _create_dirs(self):
@@ -52,18 +35,25 @@ class FileConverterService:
         self.upload_dir.mkdir(parents=True, exist_ok=True)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
-    async def handle_conversion(
-        self, file: UploadFile, output_format: str = "mp3"
-    ) -> dict:
+    async def handle_conversion(self, file: UploadFile, output_format: str) -> dict:
+        """Handles file upload and starts conversion."""
         file_ext = self._get_file_extension(file.filename)
         task_id = str(uuid.uuid4())
 
+        # ✅ Validate file format
         if not self._is_valid_extension(file_ext):
             raise HTTPException(400, "Unsupported file format.")
 
+        if not self._is_valid_conversion(file_ext, output_format):
+            raise HTTPException(
+                400, "Invalid conversion type. Must be within the same category."
+            )
+
+        # ✅ Save file to the upload directory
         upload_path = self.upload_dir / f"{task_id}_original.{file_ext}"
         await self._save_file(file, upload_path)
 
+        # ✅ Initialize conversion task
         self.tasks[task_id] = {
             "status": "queued",
             "original_name": file.filename,
@@ -73,10 +63,9 @@ class FileConverterService:
             "error": None,
         }
 
-        logger.info(
-            f"🚀 Task Created: {task_id} - {self.tasks[task_id]}"
-        )  # ✅ Debugging log
+        logger.info(f"🚀 Task Created: {task_id} - {self.tasks[task_id]}")
 
+        # ✅ Start conversion asynchronously
         asyncio.create_task(self._process_file(task_id, output_format))
         return {"task_id": task_id}
 
@@ -86,48 +75,42 @@ class FileConverterService:
             task = self.tasks[task_id]
             task["status"] = "processing"
 
-            # ✅ Determine output format
-            output_ext = self.conversion_profiles.get(output_format, {}).get(
-                "extension", output_format
-            )
-            output_filename = f"{task_id}_converted.{output_ext}"
-            output_path = self.output_dir / output_filename
+            input_path = Path(task["upload_path"])
+            input_stem = input_path.stem  # Filename without extension
+            input_dir = input_path.parent  # Keep file in the same directory
+
+            # ✅ Generate output filename with "-output_format"
+            output_filename = f"{input_stem}-{output_format}.{output_format}"
+            output_path = input_dir / output_filename
 
             # ✅ Build FFmpeg command
-            ffmpeg_args = self.conversion_profiles.get(output_format, {}).get(
-                "ffmpeg_args", []
-            )
             cmd = [
-                "ffmpeg",
+                "/usr/bin/ffmpeg",  # Ensure absolute path
                 "-y",
                 "-i",
-                task["upload_path"],
-                *ffmpeg_args,
+                str(input_path),
                 str(output_path),
             ]
 
-            # ✅ Run FFmpeg conversion
-            logger.info(f"Starting conversion: {task['upload_path']} -> {output_path}")
+            logger.info(f"🎥 Converting: {input_path} -> {output_path}")
             proc = await asyncio.create_subprocess_exec(
                 *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
             )
 
-            # ✅ Handle timeout
-            timeout = 300  # 5 minutes
-            try:
-                await asyncio.wait_for(proc.communicate(), timeout=timeout)
-            except asyncio.TimeoutError:
-                proc.kill()
-                raise RuntimeError("Conversion timed out.")
+            # ✅ Handle timeout (5 minutes)
+            timeout = 300
+            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
 
-            # ✅ Check for FFmpeg success
+            # ✅ Check if FFmpeg was successful
             if proc.returncode != 0:
-                raise RuntimeError(f"FFmpeg error: {proc.stderr.decode()}")
+                error_msg = stderr.decode().strip()
+                logger.error(f"FFmpeg failed: {error_msg}")
+                raise RuntimeError(f"FFmpeg error: {error_msg}")
 
             # ✅ Mark task as completed
             task["output_path"] = str(output_path)
             task["status"] = "completed"
-            logger.info(f"Conversion successful: {output_path}")
+            logger.info(f"✅ Conversion successful: {output_path}")
 
         except Exception as e:
             logger.error(f"Conversion failed: {e}")
@@ -142,10 +125,11 @@ class FileConverterService:
                 logger.error(f"Cleanup error: {e}")
 
     async def get_status(self, task_id: str) -> dict:
+        """Check conversion task status."""
         task = self.tasks.get(task_id)
 
         if not task:
-            logger.error(f"❌ Task Not Found: {task_id}")  # ✅ Debugging log
+            logger.error(f"❌ Task Not Found: {task_id}")
             raise HTTPException(404, "Task not found.")
 
         return {
@@ -159,10 +143,10 @@ class FileConverterService:
         }
 
     async def serve_file(self, filename: str):
-        """Serves converted files with security checks."""
+        """Serves converted files for download over the internet."""
         file_path = self.output_dir / filename
 
-        # ✅ Security checks
+        # ✅ Security check
         if not file_path.exists() or ".." in filename:
             raise HTTPException(404, "File not found.")
 
@@ -181,6 +165,16 @@ class FileConverterService:
     def _is_valid_extension(self, ext: str) -> bool:
         """Checks if a file extension is valid for conversion."""
         return any(ext in formats for formats in self.allowed_formats.values())
+
+    def _is_valid_conversion(self, input_ext: str, output_ext: str) -> bool:
+        """Ensure conversions happen within the same type (audio-to-audio or video-to-video)."""
+        for category in self.allowed_formats:
+            if (
+                input_ext in self.allowed_formats[category]
+                and output_ext in self.allowed_formats[category]
+            ):
+                return True
+        return False
 
     async def _save_file(self, file: UploadFile, path: Path):
         """Saves an uploaded file asynchronously."""
