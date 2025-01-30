@@ -9,7 +9,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
     <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
 
-    <!-- Core Styles -->
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
 
     <!-- Fonts and Icons -->
@@ -25,16 +25,17 @@
     <meta property="og:description" content="Convert between audio/video formats with professional quality, including voicemail-optimized WAV files">
     <meta property="og:type" content="website">
     <meta property="og:image" content="{{ url_for('static', path='og-file-converter.png') }}">
+
 </head>
-<body class="color-bg-primary color-text-primary">
+<body>
     <div class="page-wrapper">
         <main class="container">
             {% block content %}{% endblock %}
         </main>
 
-        <footer class="color-text-muted">
+        <footer>
             <p>&copy; <span id="current-year"></span> DunamisMax. Secure file conversions · 
-                <a href="/privacy" class="color-link">Privacy Policy</a>
+                <a href="/privacy">Privacy Policy</a>
             </p>
         </footer>
     </div>
@@ -42,10 +43,7 @@
     <!-- Core Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Feather Icons
-            feather.replace();
-            
-            // Set current year
+            feather.replace();  // Initialize Feather Icons
             document.getElementById('current-year').textContent = new Date().getFullYear();
         });
     </script>
