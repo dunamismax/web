@@ -171,9 +171,9 @@ web/
 
 ## Service Documentation
 
-- [AI Agents Documentation](web/ai_agents/README.md)
-- [Messenger Documentation](web/messenger/README.md)
-- [Main Site Documentation](web/dunamismax/README.md)
+- [AI Agents Documentation](/ai_agents/README.md)
+- [Messenger Documentation](/messenger/README.md)
+- [Main Site Documentation](/dunamismax/README.md)
 
 ## Contributing
 
