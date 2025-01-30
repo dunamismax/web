@@ -2,8 +2,6 @@
 
 **DunamisMax** is a professional suite of modern web applications built with FastAPI, offering seamless real-time communication and intelligent assistance through its integrated services.
 
-![DunamisMax Banner](app/static/logo.svg)
-
 ## Core Services
 
 ### [Main Site](https://dunamismax.com)
