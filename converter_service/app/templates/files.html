@@ -13,7 +13,6 @@
     <div class="messenger-container card">
         <div class="chat-header">
             <div class="converter-status">
-                <span id="status-indicator" class="indicator ready">
                 <span id="status-text">Ready for conversion</span>
             </div>
             <div class="format-pills">
@@ -66,6 +65,30 @@
             </div>
         </div>
     </div>
+
+    <!-- Add the cool features grid here -->
+    <div class="features-grid">
+        <div class="card feature-card">
+            <i data-feather="zap"></i>
+            <h4>Real-time Chat</h4>
+            <p>Instant responses with streaming messages</p>
+        </div>
+        <div class="card feature-card">
+            <i data-feather="shield"></i>
+            <h4>Secure</h4>
+            <p>Private conversations, no data stored</p>
+        </div>
+        <div class="card feature-card">
+            <i data-feather="cpu"></i>
+            <h4>Expert Knowledge</h4>
+            <p>Specialized agents for different topics</p>
+        </div>
+        <div class="card feature-card">
+            <i data-feather="users"></i>
+            <h4>Free to Use</h4>
+            <p>No registration required</p>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -77,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
     const convertButton = document.getElementById('convertButton');
-    const statusIndicator = document.getElementById('status-indicator');
     const statusText = document.getElementById('status-text');
     const conversionList = document.getElementById('conversionList');
 

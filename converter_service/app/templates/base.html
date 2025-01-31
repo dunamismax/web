@@ -108,24 +108,27 @@
 
     <!-- Core Scripts -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             feather.replace();
             document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+            const currentUrl = window.location.href;
             
-            const currentPath = window.location.hostname;
             document.querySelectorAll('.nav-links a').forEach(link => {
-                if (link.href.includes(currentPath)) {
+                if (link.href === currentUrl || link.href === currentUrl + '/') {
                     link.classList.add('active');
+                } else {
+                    link.classList.remove('active'); // Ensure only one link gets the class
                 }
             });
-
+        
             document.querySelectorAll('.alert').forEach(alert => {
                 setTimeout(() => {
                     alert.style.opacity = '0';
                     setTimeout(() => alert.remove(), 300);
                 }, 5000);
             });
-        });
+        });        
     </script>
 
     {% block scripts %}{% endblock %}

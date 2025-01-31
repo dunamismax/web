@@ -127,21 +127,24 @@
 
     <!-- Core Scripts -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize Feather Icons
             feather.replace();
-            
+        
             // Set current year
             document.getElementById('current-year').textContent = new Date().getFullYear();
-            
-            // Handle navigation highlighting
-            const currentPath = window.location.hostname;
+        
+            // Get the full URL to correctly highlight only the current page's navigation button
+            const currentUrl = window.location.href;
+        
             document.querySelectorAll('.nav-links a').forEach(link => {
-                if (link.href.includes(currentPath)) {
+                if (link.href === currentUrl || link.href === currentUrl + '/') {
                     link.classList.add('active');
+                } else {
+                    link.classList.remove('active'); // Ensure only the correct button is highlighted
                 }
             });
-
+        
             // Handle alert dismissal
             document.querySelectorAll('.alert').forEach(alert => {
                 setTimeout(() => {
@@ -149,7 +152,7 @@
                     setTimeout(() => alert.remove(), 300);
                 }, 5000);
             });
-        });
+        });        
     </script>
 
     {% block scripts %}{% endblock %}
