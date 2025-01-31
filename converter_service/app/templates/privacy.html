@@ -3,82 +3,105 @@
 {% block content %}
 <div class="privacy-page fade-in">
     <header class="privacy-header">
-        <div class="header-content">
-            <div class="logo-container">
-                <i data-feather="lock" class="header-icon"></i>
-                <div>
-                    <h1>Privacy Policy</h1>
-                    <p class="last-updated">
-                        <i data-feather="calendar"></i>
-                        Last Updated: January 30, 2025
-                    </p>
-                </div>
-            </div>
-            <a href="/" class="btn btn-return">
-                <i data-feather="arrow-left"></i>
-                Back to Home
-            </a>
+        <div class="logo">
+            <i data-feather="lock"></i>
+            <h1>Privacy Policy</h1>
         </div>
+        <p class="tagline">
+            <i data-feather="calendar"></i>
+            Last Updated: January 30, 2025
+        </p>
+        <a href="/" class="btn">
+            <i data-feather="arrow-left"></i>
+            Back to Home
+        </a>
     </header>
 
-    <main class="privacy-container card">
+    <div class="main-container card">
+        <!-- Services Overview -->
         <section class="policy-section">
             <div class="section-header">
-                <i data-feather="box" class="section-icon"></i>
-                <h2>Services Overview</h2>
+                <div class="header-content">
+                    <i data-feather="box"></i>
+                    <h2>Services Overview</h2>
+                </div>
+                <p>DunamisMax provides open-source services through our platform</p>
             </div>
-            <p class="section-intro">DunamisMax provides open-source services through our platform:</p>
+
             <div class="service-grid">
-                {% set services = [
-                    ('terminal', 'Main Portal', 'dunamismax.com'),
-                    ('file', 'File Converter', 'files.dunamismax.com'),
-                    ('cpu', 'AI Agents', 'agents.dunamismax.com'),
-                    ('message-square', 'Messenger', 'messenger.dunamismax.com')
-                ] %}
-                {% for icon, name, url in services %}
                 <div class="service-card">
-                    <i data-feather="{{ icon }}"></i>
-                    <div>
-                        <h3>{{ name }}</h3>
-                        <p>{{ url }}</p>
-                    </div>
+                    <i data-feather="terminal"></i>
+                    <h3>Main Portal</h3>
+                    <p>dunamismax.com</p>
                 </div>
-                {% endfor %}
+                <div class="service-card">
+                    <i data-feather="file"></i>
+                    <h3>File Converter</h3>
+                    <p>files.dunamismax.com</p>
+                </div>
+                <div class="service-card">
+                    <i data-feather="cpu"></i>
+                    <h3>AI Agents</h3>
+                    <p>agents.dunamismax.com</p>
+                </div>
+                <div class="service-card">
+                    <i data-feather="message-square"></i>
+                    <h3>Messenger</h3>
+                    <p>messenger.dunamismax.com</p>
+                </div>
             </div>
         </section>
 
+        <!-- Open Source -->
         <section class="policy-section">
             <div class="section-header">
-                <i data-feather="code" class="section-icon"></i>
-                <h2>Open Source Commitment</h2>
+                <div class="header-content">
+                    <i data-feather="code"></i>
+                    <h2>Open Source Commitment</h2>
+                </div>
+                <p>We believe in transparency and security through open development</p>
             </div>
-            <p class="section-intro">We believe in transparency and security through open development:</p>
+
             <div class="feature-grid">
-                {% set features = [
-                    ('github', 'Public Code', 'All source code available on GitHub'),
-                    ('shield', 'Verifiable Security', 'Audit our security implementations'),
-                    ('users', 'Community Driven', 'Contribute or fork our codebase'),
-                    ('eye', 'Transparent', 'No hidden features or data collection')
-                ] %}
-                {% for icon, title, text in features %}
                 <div class="feature-card">
-                    <i data-feather="{{ icon }}"></i>
-                    <h3>{{ title }}</h3>
-                    <p>{{ text }}</p>
+                    <i data-feather="github"></i>
+                    <h3>Public Code</h3>
+                    <p>All source code available on GitHub</p>
                 </div>
-                {% endfor %}
+                <div class="feature-card">
+                    <i data-feather="shield"></i>
+                    <h3>Verifiable Security</h3>
+                    <p>Audit our security implementations</p>
+                </div>
+                <div class="feature-card">
+                    <i data-feather="users"></i>
+                    <h3>Community Driven</h3>
+                    <p>Contribute or fork our codebase</p>
+                </div>
+                <div class="feature-card">
+                    <i data-feather="eye"></i>
+                    <h3>Transparent</h3>
+                    <p>No hidden features or data collection</p>
+                </div>
             </div>
         </section>
 
+        <!-- Data Handling -->
         <section class="policy-section">
             <div class="section-header">
-                <i data-feather="database" class="section-icon"></i>
-                <h2>Data Handling</h2>
+                <div class="header-content">
+                    <i data-feather="database"></i>
+                    <h2>Data Handling</h2>
+                </div>
             </div>
+
             <div class="data-grid">
                 <div class="data-card">
-                    <h3><i data-feather="download"></i> Data Collection</h3>
-                    <ul class="data-list">
+                    <div class="card-header">
+                        <i data-feather="download"></i>
+                        <h3>Data Collection</h3>
+                    </div>
+                    <ul>
                         <li>IP addresses</li>
                         <li>Browser information</li>
                         <li>Access timestamps</li>
@@ -86,8 +109,11 @@
                     </ul>
                 </div>
                 <div class="data-card">
-                    <h3><i data-feather="activity"></i> Data Usage</h3>
-                    <ul class="data-list">
+                    <div class="card-header">
+                        <i data-feather="activity"></i>
+                        <h3>Data Usage</h3>
+                    </div>
+                    <ul>
                         <li>Service operation</li>
                         <li>Performance monitoring</li>
                         <li>Security measures</li>
@@ -97,54 +123,65 @@
             </div>
         </section>
 
+        <!-- Data Retention -->
         <section class="policy-section">
             <div class="section-header">
-                <i data-feather="clock" class="section-icon"></i>
-                <h2>Data Retention</h2>
-            </div>
-            <p class="section-intro">We practice minimal data retention:</p>
-            <div class="retention-grid">
-                {% set retention = [
-                    ('x', 'Converted Files', 'Deleted immediately after download'),
-                    ('message-circle', 'Chat Messages', 'Not stored - real-time only'),
-                    ('cpu', 'AI Conversations', 'Not persisted after session ends')
-                ] %}
-                {% for icon, title, text in retention %}
-                <div class="retention-card">
-                    <i data-feather="{{ icon }}"></i>
-                    <div>
-                        <h3>{{ title }}</h3>
-                        <p>{{ text }}</p>
-                    </div>
+                <div class="header-content">
+                    <i data-feather="clock"></i>
+                    <h2>Data Retention</h2>
                 </div>
-                {% endfor %}
+                <p>We practice minimal data retention</p>
+            </div>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="card-header">
+                        <i data-feather="file"></i>
+                        <h3>Converted Files</h3>
+                    </div>
+                    <p>Deleted immediately after download</p>
+                </div>
+                <div class="data-card">
+                    <div class="card-header">
+                        <i data-feather="message-circle"></i>
+                        <h3>Chat Messages</h3>
+                    </div>
+                    <p>Not stored - real-time only</p>
+                </div>
+                <div class="data-card">
+                    <div class="card-header">
+                        <i data-feather="cpu"></i>
+                        <h3>AI Conversations</h3>
+                    </div>
+                    <p>Not persisted after session ends</p>
+                </div>
             </div>
         </section>
 
+        <!-- Contact -->
         <section class="policy-section">
             <div class="section-header">
-                <i data-feather="mail" class="section-icon"></i>
-                <h2>Contact Information</h2>
+                <div class="header-content">
+                    <i data-feather="mail"></i>
+                    <h2>Contact Information</h2>
+                </div>
             </div>
+
             <div class="contact-grid">
                 <div class="contact-card">
                     <i data-feather="mail"></i>
-                    <div>
-                        <h3>Email</h3>
-                        <p>dunamismax@tutamail.com</p>
-                    </div>
+                    <h3>Email</h3>
+                    <p>dunamismax@tutamail.com</p>
                 </div>
                 <div class="contact-card">
                     <i data-feather="github"></i>
-                    <div>
-                        <h3>GitHub</h3>
-                        <a href="https://github.com/dunamismax" target="_blank">
-                            github.com/dunamismax
-                        </a>
-                    </div>
+                    <h3>GitHub</h3>
+                    <a href="https://github.com/dunamismax" target="_blank" rel="noopener">
+                        github.com/dunamismax
+                    </a>
                 </div>
             </div>
         </section>
-    </main>
+    </div>
 </div>
 {% endblock %}
