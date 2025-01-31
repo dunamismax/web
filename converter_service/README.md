@@ -4,43 +4,39 @@ High-performance file conversion service built with FastAPI. Part of the Dunamis
 
 ## Features
 
-- Real-time conversion progress
-- Multiple format support
-- Audio format conversion
-- Video format conversion
-- Streaming upload/download
-- Progress indicators
-- Error handling and recovery
-- Automatic cleanup
-- Clean Nord-themed interface
-- Drag-and-drop file uploads
+- **Real-time conversion progress tracking**
+- **Multiple format support** for audio and video files
+- **Drag-and-drop file uploads** for convenience
+- **Streaming upload and download** support
+- **Secure and efficient processing** using FFmpeg
+- **Error handling and automatic cleanup**
+- **Modern, user-friendly web interface**
+- **Logging for monitoring and debugging**
 
 ## Technology Stack
 
 ### Backend
 
-- FastAPI - Web framework
-- FFmpeg - Media conversion
-- Uvicorn - ASGI server
-- Python 3.x - Core language
-- asyncio - Asynchronous I/O
+- **FastAPI** - Web framework
+- **FFmpeg** - Media processing
+- **Uvicorn** - ASGI server
+- **Python 3.x** - Core language
+- **asyncio** - Asynchronous processing
 
 ### Frontend
 
-- HTML5 - Semantic markup
-- CSS3 - Styling
-  - CSS Variables
-  - Nord color theme
-  - Flexbox/Grid layouts
-- Vanilla JavaScript - No framework dependencies
-- Feather Icons - UI icons
-- Fira Code - Monospace font
+- **HTML5** - Markup structure
+- **CSS3** - Styling and responsiveness
+- **JavaScript** - Interactive elements
+- **Jinja2** - Templating engine
+- **Feather Icons** - UI icons
+- **Fira Code** - Monospace font
 
 ### Infrastructure
 
-- Caddy - Reverse proxy
-- Cloudflare - DNS and CDN
-- FFmpeg - Media processing
+- **Caddy** - Reverse proxy
+- **Cloudflare** - DNS and CDN
+- **FFmpeg** - Media processing
 
 ## Project Structure
 
@@ -50,18 +46,21 @@ converter_service/
 │   ├── static/
 │   │   ├── favicon.ico      # Site favicon
 │   │   ├── logo.svg         # Site logo
-│   │   └── styles.css       # Stylesheets
+│   │   └── styles.css       # Stylesheet
 │   ├── templates/
 │   │   ├── base.html        # Base template
-│   │   └── files.html       # File upload interface
-│   ├── uploads/             # Temporary upload storage
-│   ├── converted/           # Converted file storage
+│   │   ├── files.html       # File upload/conversion page
+│   │   └── privacy.html     # Privacy policy page
+│   ├── uploads/             # Uploaded files
+│   ├── converted/           # Converted files
 │   ├── __init__.py
-│   └── main.py             # FastAPI application
-├── logs/                   # Application logs
-├── .env                    # Environment variables
-├── README.md
-└── requirements.txt
+│   ├── main.py              # FastAPI application entry point
+│   ├── converter_service.py # File conversion logic
+├── logs/
+│   ├── file-converter.log   # Log file for monitoring
+├── .env                     # Environment variables
+├── README.md                # Project documentation
+├── requirements.txt         # Python dependencies
 ```
 
 ## Supported Formats
@@ -95,8 +94,8 @@ converter_service/
 2. **Set Up Virtual Environment**
 
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. **Install Dependencies**
@@ -109,7 +108,7 @@ converter_service/
 
    ```bash
    cp .env.example .env
-   # Edit .env with your settings
+   # Edit .env with necessary API keys and settings
    ```
 
 5. **Run the Application**
@@ -118,8 +117,8 @@ converter_service/
    uvicorn app.main:app --host 0.0.0.0 --port 8300 --reload
    ```
 
-6. **Access the Application**
-   - Local development: `http://localhost:8300`
+6. **Access the Service**
+   - Local: `http://localhost:8300`
    - Production: `https://files.dunamismax.com`
 
 ## API Endpoints
@@ -140,69 +139,42 @@ converter_service/
 }
 ```
 
-## Development
+## Logging & Debugging
 
-### Environment Variables
-
-```env
-APP_NAME="DunamisMax File Converter"
-ENVIRONMENT="production"
-DEBUG=false
-HOST="0.0.0.0"
-PORT=8300
-MAX_FILE_SIZE="100MB"
-FFMPEG_PATH="/usr/bin/ffmpeg"
-```
-
-### Testing
-
-```bash
-# Run tests
-python -m pytest tests/
-```
-
-## Error Handling
-
-- File size validation
-- Format validation
-- Conversion monitoring
-- Cleanup on failure
-- Input sanitization
-- Progress tracking
-- System notifications
+- Logs are stored in `logs/file-converter.log`
+- Use `tail -f logs/file-converter.log` to monitor activity
 
 ## Security Features
 
-- File type validation
-- Size restrictions
-- Input sanitization
-- Rate limiting
-- File cleanup
-- Safe file naming
+- Environment variable configuration
+- Input validation for uploaded files
+- Rate limiting via Cloudflare
+- Secure file handling and auto-cleanup
+- File size and format restrictions
 
 ## Deployment
 
 - Runs on port 8300
-- Reverse proxied through Caddy
-- SSL/TLS via Cloudflare
-- Automatic HTTPS redirection
+- Reverse proxy managed via Caddy
+- Cloudflare CDN and DNS setup
+- Automatic SSL/TLS enforcement
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch
+2. Create a feature branch:
 
    ```bash
    git checkout -b feature/new-feature
    ```
 
-3. Commit your changes
+3. Commit changes:
 
    ```bash
-   git commit -am 'Add new feature'
+   git commit -m "Add new feature"
    ```
 
-4. Push to the branch
+4. Push to GitHub:
 
    ```bash
    git push origin feature/new-feature
@@ -212,4 +184,4 @@ python -m pytest tests/
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

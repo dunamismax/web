@@ -15,27 +15,27 @@ Central hub for the DunamisMax web application suite, serving as the primary ent
 
 ### Backend
 
-- FastAPI - Web framework
-- Uvicorn - ASGI server
-- Python 3.x - Core language
-- Jinja2 - Template engine
+- **FastAPI** - Web framework
+- **Uvicorn** - ASGI server
+- **Python 3.x** - Core language
+- **Jinja2** - Template engine
 
 ### Frontend
 
-- HTML5 - Semantic markup
-- CSS3
+- **HTML5** - Semantic markup
+- **CSS3**
   - CSS Variables
   - Nord color theme
   - Flexbox/Grid layouts
   - Responsive design
-- Vanilla JavaScript - Minimal, no frameworks
-- Feather Icons - UI icons
-- Fira Code - Monospace font
+- **Vanilla JavaScript** - Minimal, no frameworks
+- **Feather Icons** - UI icons
+- **Fira Code** - Monospace font
 
 ### Infrastructure
 
-- Caddy - Reverse proxy
-- Cloudflare - DNS and CDN
+- **Caddy** - Reverse proxy
+- **Cloudflare** - DNS and CDN
 
 ## Project Structure
 
@@ -173,13 +173,15 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 1. Configure Caddy reverse proxy:
 
    ```caddy
-   dunamismax.com {
-       reverse_proxy localhost:8000
-       encode gzip
-       header {
-           Strict-Transport-Security "max-age=31536000;"
-       }
-   }
+
+dunamismax.com {
+    reverse_proxy localhost:8000
+    encode gzip
+    header {
+        Strict-Transport-Security "max-age=31536000;"
+    }
+}
+
    ```
 
 2. Set up Cloudflare:

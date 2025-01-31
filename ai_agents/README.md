@@ -1,90 +1,178 @@
 # DunamisMax AI Agents
 
-Interactive AI chat interface built with FastAPI, WebSockets, and chatgpt-4o-latest. Part of the DunamisMax suite of web applications.
+High-performance AI chat service built with FastAPI, WebSockets, and ChatGPT-4o. Part of the DunamisMax suite of web applications, offering real-time, interactive AI experiences with multiple specialized agents.
 
 ## Features
 
-- Real-time AI chat interactions
-- Multiple specialized AI agents
-- Streaming responses for immediate feedback
-- Intelligent problem-solving
-- Natural conversation flow
-- Chat history within session
-- Responsive design for all devices
-- Connection status indicators
-- Error handling and recovery
-- Automatic reconnection
-- Clean Nord-themed interface
+- **Real-time AI chat interactions** with streaming responses
+- **Multiple specialized AI agents** tailored for different tasks
+- **WebSocket-based communication** for seamless updates
+- **Session-based chat history**
+- **User-friendly and responsive web interface**
+- **Error handling and automatic reconnection**
+- **Secure and efficient processing**
+- **Logging for monitoring and debugging**
 
 ## Technology Stack
 
 ### Backend
 
-- FastAPI - Web framework
-- WebSockets - Real-time communication
-- Uvicorn - ASGI server
-- Python 3.x - Core language
-- chatgpt-4o-latest - AI language model
+- **FastAPI** - Web framework
+- **WebSockets** - Real-time communication
+- **Uvicorn** - ASGI server
+- **Python 3.x** - Core language
+- **ChatGPT-4o** - AI language model
+- **asyncio** - Asynchronous processing
 
 ### Frontend
 
-- HTML5 - Semantic markup
-- CSS3 - Styling
-  - CSS Variables
-  - Nord color theme
-  - Flexbox/Grid layouts
-- Vanilla JavaScript - No framework dependencies
-- Feather Icons - UI icons
-- Fira Code - Monospace font
+- **HTML5** - Markup structure
+- **CSS3** - Styling and responsiveness
+- **JavaScript** - Interactive elements
+- **Jinja2** - Templating engine
+- **Feather Icons** - UI icons
+- **Fira Code** - Monospace font
 
 ### Infrastructure
 
-- Caddy - Reverse proxy
-- Cloudflare - DNS and CDN
-- WebSocket secure connections (wss://)
+- **Caddy** - Reverse proxy
+- **Cloudflare** - DNS and CDN
+- **Secure WebSocket (wss://) connections**
 
 ## Project Structure
 
 ```bash
-ai_agents/
+dunamismax_ai_agents/
 ├── app/
 │   ├── static/
-│   │   ├── favicon.ico     # Site favicon
-│   │   ├── logo.svg        # Site logo
-│   │   └── styles.css      # Stylesheets
+│   │   ├── favicon.ico      # Site favicon
+│   │   ├── logo.svg         # Site logo
+│   │   └── styles.css       # Stylesheet
 │   ├── templates/
-│   │   ├── base.html       # Base template
-│   │   ├── chat.html       # Chat interface
-│   │   └── index.html      # Agent selection
+│   │   ├── base.html        # Base template
+│   │   ├── chat.html        # Chat interface
+│   │   └── index.html       # Agent selection
 │   ├── __init__.py
-│   ├── agents.py          # AI agent definitions
-│   └── main.py           # FastAPI application
-├── .env                  # Environment variables
-├── README.md
-└── requirements.txt
+│   ├── agents.py            # AI agent definitions
+│   └── main.py              # FastAPI application entry point
+├── logs/
+│   ├── ai-agents.log        # Log file for monitoring
+├── .env                     # Environment variables
+├── README.md                # Project documentation
+├── requirements.txt         # Python dependencies
 ```
 
-## Available Agents
+## Available AI Agents
 
-Each agent is specialized for specific tasks:
+### 1. System Administrator
 
-1. **General Assistant**
-   - Task assistance
-   - Information queries
-   - General guidance
-   - Problem-solving
+- IT infrastructure and server management
+- Troubleshooting and security guidance
 
-2. **Code Assistant**
-   - Programming help
-   - Code review
-   - Debugging assistance
-   - Technical guidance
+### 2. Hacker
 
-3. **Research Assistant**
-   - Information gathering
-   - Topic exploration
-   - Data analysis
-   - Knowledge synthesis
+- Ethical hacking and cybersecurity advice
+- Penetration testing methodologies
+
+### 3. IT Support
+
+- Technical assistance and troubleshooting
+- Common software/hardware issue resolution
+
+### 4. Python Developer
+
+- Python programming guidance
+- Code debugging and best practices
+
+### 5. Linus Torvalds
+
+- Insights into Linux and open-source development
+- Kernel programming discussions
+
+### 6. Bible Scholar
+
+- Scriptural interpretation and historical context
+- Religious discussions and theological analysis
+
+### 7. Statistician
+
+- Data analysis and statistical modeling
+- Probability and quantitative research
+
+### 8. Research Scientist
+
+- Scientific methodology and research guidance
+- Experiment design and data interpretation
+
+### 9. Chess Grandmaster
+
+- Chess strategy and tactics
+- Game analysis and training techniques
+
+### 10. Business Consultant
+
+- Business strategy and market analysis
+- Financial and operational planning
+
+### 11. Lawyer
+
+- Legal consultation and case evaluation
+- Contract law, intellectual property, and compliance
+
+### 12. University Professor
+
+- Academic guidance and mentoring
+- Teaching strategies and curriculum design
+
+### 13. Psychologist
+
+- Cognitive and behavioral insights
+- Mental health advice and counseling techniques
+
+### 14. History Professor
+
+- Historical analysis and interpretations
+- Researching historical events and figures
+
+### 15. Writer
+
+- Creative writing tips and storytelling guidance
+- Editing and content structuring
+
+### 16. Digital Artist
+
+- Digital painting and graphic design techniques
+- Software and creative workflow advice
+
+### 17. Music Teacher
+
+- Music theory and instrument instruction
+- Composition and performance guidance
+
+### 18. Fitness Coach
+
+- Workout routines and exercise science
+- Nutrition and health coaching
+
+### 19. Chef
+
+- Cooking techniques and recipe suggestions
+- Culinary tips for various cuisines
+
+### 20. Mechanic
+
+- Vehicle diagnostics and repair guidance
+- Auto maintenance tips and troubleshooting
+
+### 21. Translator
+
+- Multilingual translation and language learning
+- Linguistic structure and cultural insights
+
+### 22. Gardener
+
+- Plant care and landscaping advice
+- Sustainable gardening techniques
 
 ## Installation
 
@@ -105,7 +193,7 @@ Each agent is specialized for specific tasks:
 
    ```bash
    cp .env.example .env
-   # Edit .env with your OPENAI_API_KEY and other settings
+   # Edit .env with necessary API keys and settings
    ```
 
 4. **Run the Application**
@@ -115,14 +203,14 @@ Each agent is specialized for specific tasks:
    ```
 
 5. **Access the Application**
-   - Local development: `http://localhost:8200`
+   - Local: `http://localhost:8200`
    - Production: `https://agents.dunamismax.com`
 
-## WebSocket Protocol
+## WebSocket Communication
 
 ### Message Format
 
-```javascript
+```json
 {
     "type": "message|system|error",
     "role": "user|assistant",
@@ -135,80 +223,46 @@ Each agent is specialized for specific tasks:
 
 ### Streaming Responses
 
-- Real-time response streaming
-- Final chunk marked with `is_complete: true`
-- Error handling for incomplete streams
+- Responses are streamed in real-time
+- The final chunk is marked with `is_complete: true`
+- Errors are handled gracefully with automatic reconnection
 
-## Development
+## Logging & Debugging
 
-### Adding New Agents
-
-1. Define agent in `agents.py`:
-
-   ```python
-   class NewAgent(BaseAgent):
-       id = "unique-id"
-       name = "Agent Name"
-       description = "Agent capabilities"
-       icon = "feather-icon-name"
-   ```
-
-2. Register in available agents:
-
-   ```python
-   available_agents = {
-       "new-agent": NewAgent()
-   }
-   ```
-
-### Testing
-
-```bash
-# Run tests
-python -m pytest tests/
-```
-
-## Error Handling
-
-- Connection state management
-- Automatic reconnection logic
-- Rate limiting protection
-- Input validation
-- Response validation
-- System notifications for errors
+- Logs are stored in `logs/ai-agents.log`
+- Use `tail -f logs/ai-agents.log` to monitor activity
 
 ## Security Features
 
-- Environment variable configuration
-- Input sanitization
-- Rate limiting (via Cloudflare)
-- Secure WebSocket connections
-- Error message sanitization
-- API key protection
+- **Environment variable configuration** for API keys
+- **Input validation** for preventing malformed data
+- **Rate limiting via Cloudflare**
+- **Secure WebSocket connections** with TLS encryption
+- **Automatic error handling and sanitization**
 
 ## Deployment
 
 - Runs on port 8200
-- Reverse proxied through Caddy
-- SSL/TLS provided by Cloudflare
-- Automatic HTTPS redirection
+- Reverse proxy managed via Caddy
+- Cloudflare for CDN and DNS
+- Automatic SSL/TLS enforcement
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch
+2. Create a feature branch:
 
    ```bash
    git checkout -b feature/new-feature
    ```
 
-3. Commit your changes
+3. Commit changes:
 
    ```bash
-   git commit -am 'Add new feature'
+   git commit -m "Add new feature"
    ```
 
-4. Push to the branch
+4. Push to GitHub:
 
    ```bash
    git push origin feature/new-feature
@@ -218,4 +272,4 @@ python -m pytest tests/
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

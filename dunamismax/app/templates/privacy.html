@@ -1,61 +1,300 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="privacy-page">
+<div class="privacy-page fade-in">
     <header class="privacy-header">
-        <a href="/" class="back-link">
-            <i data-feather="arrow-left"></i>
-            Back to Home
-        </a>
-        <h1>Privacy Policy</h1>
-        <p class="last-updated">Last updated: January 30, 2025</p>
+        <div class="header-content">
+            <div class="logo-container">
+                <i data-feather="lock" class="header-icon"></i>
+                <div>
+                    <h1>Privacy Policy</h1>
+                    <p class="last-updated">
+                        <i data-feather="calendar"></i>
+                        Last Updated: January 30, 2025
+                    </p>
+                </div>
+            </div>
+            <a href="/" class="btn btn-return">
+                <i data-feather="arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
     </header>
 
-    <div class="privacy-content card">
-        <section class="overview">
-            <h2>Overview</h2>
-            <p>DunamisMax provides multiple open-source services through our websites:</p>
-            <ul>
-                <li>dunamismax.com - Main portal</li>
-                <li>files.dunamismax.com - File conversion service</li>
-                <li>agents.dunamismax.com - AI interaction platform</li>
-                <li>messenger.dunamismax.com - Messaging service</li>
-            </ul>
+    <main class="privacy-container card">
+        <section class="policy-section">
+            <div class="section-header">
+                <i data-feather="box" class="section-icon"></i>
+                <h2>Services Overview</h2>
+            </div>
+            <p class="section-intro">DunamisMax provides open-source services through our platform:</p>
+            <div class="service-grid">
+                {% set services = [
+                    ('terminal', 'Main Portal', 'dunamismax.com'),
+                    ('file', 'File Converter', 'files.dunamismax.com'),
+                    ('cpu', 'AI Agents', 'agents.dunamismax.com'),
+                    ('message-square', 'Messenger', 'messenger.dunamismax.com')
+                ] %}
+                {% for icon, name, url in services %}
+                <div class="service-card">
+                    <i data-feather="{{ icon }}"></i>
+                    <div>
+                        <h3>{{ name }}</h3>
+                        <p>{{ url }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </section>
 
-        <section class="open-source">
-            <h2>Open Source Nature</h2>
-            <p>All DunamisMax services are open source and freely available on GitHub:</p>
-            <ul>
-                <li>The code is publicly available for inspection</li>
-                <li>You can verify our privacy and security practices</li>
-                <li>You can contribute to or fork our codebase</li>
-            </ul>
+        <section class="policy-section">
+            <div class="section-header">
+                <i data-feather="code" class="section-icon"></i>
+                <h2>Open Source Commitment</h2>
+            </div>
+            <p class="section-intro">We believe in transparency and security through open development:</p>
+            <div class="feature-grid">
+                {% set features = [
+                    ('github', 'Public Code', 'All source code available on GitHub'),
+                    ('shield', 'Verifiable Security', 'Audit our security implementations'),
+                    ('users', 'Community Driven', 'Contribute or fork our codebase'),
+                    ('eye', 'Transparent', 'No hidden features or data collection')
+                ] %}
+                {% for icon, title, text in features %}
+                <div class="feature-card">
+                    <i data-feather="{{ icon }}"></i>
+                    <h3>{{ title }}</h3>
+                    <p>{{ text }}</p>
+                </div>
+                {% endfor %}
+            </div>
         </section>
 
-        <section class="data-handling">
-            <h2>Data Handling</h2>
-            <h3>What We Collect</h3>
-            <ul>
-                <li>Technical information (IP addresses, browser data)</li>
-                <li>User-submitted content during service usage</li>
-            </ul>
-
-            <h3>How We Use Data</h3>
-            <ul>
-                <li>To provide and maintain our Services</li>
-                <li>To improve service performance</li>
-            </ul>
+        <section class="policy-section">
+            <div class="section-header">
+                <i data-feather="database" class="section-icon"></i>
+                <h2>Data Handling</h2>
+            </div>
+            <div class="data-grid">
+                <div class="data-card">
+                    <h3><i data-feather="download"></i> Data Collection</h3>
+                    <ul class="data-list">
+                        <li>IP addresses</li>
+                        <li>Browser information</li>
+                        <li>Access timestamps</li>
+                        <li>User-submitted content</li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <h3><i data-feather="activity"></i> Data Usage</h3>
+                    <ul class="data-list">
+                        <li>Service operation</li>
+                        <li>Performance monitoring</li>
+                        <li>Security measures</li>
+                        <li>Service improvements</li>
+                    </ul>
+                </div>
+            </div>
         </section>
 
-        <section class="contact">
-            <h2>Contact Information</h2>
-            <p>For privacy inquiries:</p>
-            <ul>
-                <li>Email: privacy@dunamismax.com</li>
-                <li>GitHub: https://github.com/dunamismax</li>
-            </ul>
+        <section class="policy-section">
+            <div class="section-header">
+                <i data-feather="clock" class="section-icon"></i>
+                <h2>Data Retention</h2>
+            </div>
+            <p class="section-intro">We practice minimal data retention:</p>
+            <div class="retention-grid">
+                {% set retention = [
+                    ('x', 'Converted Files', 'Deleted immediately after download'),
+                    ('message-circle', 'Chat Messages', 'Not stored - real-time only'),
+                    ('cpu', 'AI Conversations', 'Not persisted after session ends')
+                ] %}
+                {% for icon, title, text in retention %}
+                <div class="retention-card">
+                    <i data-feather="{{ icon }}"></i>
+                    <div>
+                        <h3>{{ title }}</h3>
+                        <p>{{ text }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </section>
-    </div>
+
+        <section class="policy-section">
+            <div class="section-header">
+                <i data-feather="mail" class="section-icon"></i>
+                <h2>Contact Information</h2>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <i data-feather="mail"></i>
+                    <div>
+                        <h3>Email</h3>
+                        <p>dunamismax@tutamail.com</p>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <i data-feather="github"></i>
+                    <div>
+                        <h3>GitHub</h3>
+                        <a href="https://github.com/dunamismax" target="_blank">
+                            github.com/dunamismax
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Base Styling */
+.privacy-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-2xl);
+}
+
+.privacy-header {
+    margin-bottom: var(--space-2xl);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.header-icon {
+    width: 48px;
+    height: 48px;
+    padding: var(--space-sm);
+    background: var(--color-primary);
+    border-radius: var(--border-radius);
+    color: white;
+}
+
+.last-updated {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-secondary);
+}
+
+/* Section Styling */
+.policy-section {
+    margin-bottom: var(--space-2xl);
+    padding: var(--space-xl);
+    background: var(--color-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.section-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--color-primary);
+}
+
+.section-intro {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-xl);
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* Grid Layouts */
+.service-grid,
+.feature-grid,
+.data-grid,
+.retention-grid,
+.contact-grid {
+    display: grid;
+    gap: var(--space-lg);
+}
+
+.service-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.feature-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.data-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.retention-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.contact-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+/* Cards */
+.service-card,
+.feature-card,
+.data-card,
+.retention-card,
+.contact-card {
+    padding: var(--space-lg);
+    background: var(--color-bg-secondary);
+    border-radius: var(--border-radius);
+    transition: transform 0.2s ease;
+}
+
+.service-card:hover,
+.feature-card:hover {
+    transform: translateY(-2px);
+}
+
+.service-card i,
+.feature-card i,
+.retention-card i {
+    width: 24px;
+    height: 24px;
+    margin-bottom: var(--space-sm);
+    color: var(--color-primary);
+}
+
+.data-card h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.data-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.data-list li {
+    padding: var(--space-xs) 0;
+    color: var(--color-text-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .privacy-page {
+        padding: var(--space-md);
+    }
+    
+    .policy-section {
+        padding: var(--space-lg);
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
 {% endblock %}
