@@ -87,8 +87,8 @@
 
     /* Button Colors */
     --color-button-primary: var(--nord10);
-    --color-button-hover: var(--nord8);
-    --color-button-active: var(--nord9);
+    --color-button-hover: var(--nord9);
+    --color-button-active: var(--nord10);
 
     /* Icon Colors */
     --color-icon-primary: var(--nord8);
@@ -1103,7 +1103,13 @@ a:hover {
 .agent-card .btn {
     margin-top: auto;
     width: 100%;
-    background-color: var(--color-bg-tertiary);
+    padding: var(--space-md);
+    background-color: var(--color-button-primary);
+    color: var(--color-text-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
     transition: all var(--transition-fast);
 }
 
@@ -1114,7 +1120,21 @@ a:hover {
 }
 
 .agent-card:hover .btn {
-    background-color: var(--color-accent-primary);
+    background-color: var(--color-button-hover);
+    transform: translateY(-2px);
+}
+
+.agent-card .btn:hover {
+    background-color: var(--nord10); /* Ensures dark background on direct button hover */
+    transform: translateY(-2px);
+}
+
+/* Ensure text remains readable */
+.btn, 
+.btn:hover,
+.agent-card:hover .btn,
+.agent-card .btn:hover {
+    color: var(--color-text-bright);
 }
 
 /* Animations */
