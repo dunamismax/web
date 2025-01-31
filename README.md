@@ -1,6 +1,6 @@
 # DunamisMax
 
-**DunamisMax** is a professional suite of modern web applications built with FastAPI and powered by chatgpt-4o-latest. It offers seamless real-time communication and intelligent assistance through its integrated services.
+**DunamisMax** is a professional suite of Modern Web Applications Built with Python & FastAPI and powered by chatgpt-4o-latest. It offers seamless real-time communication and intelligent assistance through its integrated services.
 
 ## Core Services
 
