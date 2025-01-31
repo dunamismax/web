@@ -1,60 +1,55 @@
 {% extends "base.html" %}
 
-{% block title %}{{ agent.name }} - DunamisMax AI Agents{% endblock %}
-
 {% block content %}
 <div class="chat-page fade-in">
-    <header class="converter-header">
-        <a href="/" class="back-link">
-            <i data-feather="arrow-left"></i>
-            Back to Agents
-        </a>
-        <h1>{{ agent.name }}</h1>
+    <header class="messenger-header">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="{{ agent.icon_path|default('M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z') }}"/>
+            </svg>
+            <h1>{{ agent.name }}</h1>
+        </div>
         <p class="tagline">{{ agent.description }}</p>
     </header>
 
-    <div class="converter-container card">
-        <div class="converter-header">
-            <h2>
-                <i data-feather="{{ agent.icon }}"></i>
-                Chat Session
-            </h2>
-            <p class="format-info">Real-time conversation with {{ agent.name }}</p>
+    <div id="chat-interface" class="messenger-container card">
+        <div class="chat-header">
+            <div class="chat-status">
+                <span id="connection-indicator" class="indicator offline"></span>
+                <span id="status-text">Not Connected</span>
+            </div>
+            <a href="/" class="btn btn-small btn-outline" title="Back to Agents">
+                <i data-feather="arrow-left"></i>
+                Back
+            </a>
         </div>
 
-        <div class="chat-container">
-            <div class="chat-messages" id="chat-messages">
-                <div class="message system">
-                    <div class="message-content">
-                        <i data-feather="info"></i>
-                        <span>Connected to {{ agent.name }}. Start chatting!</span>
-                    </div>
+        <div class="message-list" id="message-list">
+            <div class="message system">
+                <div class="message-content">
+                    <i data-feather="info"></i>
+                    Connected to {{ agent.name }}. Start chatting!
                 </div>
             </div>
-
-            <div class="message-input">
-                <form id="message-form" onsubmit="return sendMessage(event)">
-                    <div class="input-group">
-                        <input 
-                            type="text" 
-                            id="message-input"
-                            placeholder="Type your message..." 
-                            autocomplete="off"
-                            required
-                        >
-                        <button type="submit" class="btn">
-                            <i data-feather="send"></i>
-                            Send
-                        </button>
-                    </div>
-                </form>
-            </div>
         </div>
-    </div>
 
-    <div id="connection-status" class="connection-status" style="display: none;">
-        <i data-feather="wifi-off"></i>
-        <span>Reconnecting...</span>
+        <div class="message-input">
+            <form id="message-form" onsubmit="return sendMessage(event)">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="message-input"
+                        placeholder="Type your message..." 
+                        autocomplete="off"
+                        required
+                    >
+                    <button type="submit" class="btn">
+                        <i data-feather="send"></i>
+                        Send
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -62,9 +57,10 @@
 {% block scripts %}
 <script>
 let ws = null;
-const messagesContainer = document.getElementById('chat-messages');
+const messageList = document.getElementById('message-list');
 const messageInput = document.getElementById('message-input');
-const connectionStatus = document.getElementById('connection-status');
+const connectionIndicator = document.getElementById('connection-indicator');
+const statusText = document.getElementById('status-text');
 
 function connectWebSocket() {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -73,18 +69,61 @@ function connectWebSocket() {
     ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
-        connectionStatus.style.display = 'none';
+        connectionIndicator.className = 'indicator online';
+        statusText.textContent = 'Connected';
+        messageInput.focus();
     };
 
     ws.onclose = () => {
-        connectionStatus.style.display = 'flex';
+        connectionIndicator.className = 'indicator offline';
+        statusText.textContent = 'Disconnected';
         setTimeout(connectWebSocket, 1000);
     };
 
     ws.onmessage = (event) => {
         const message = JSON.parse(event.data);
-        addMessage(message);
+        handleMessage(message);
     };
+}
+
+function handleMessage(message) {
+    if (message.is_error) {
+        addMessage({
+            type: 'system',
+            content: message.content,
+            error: true
+        });
+        return;
+    }
+
+    if (message.is_chunk) {
+        if (message.is_complete) {
+            messageList.scrollTop = messageList.scrollHeight;
+            return;
+        }
+
+        if (message.is_first_chunk) {
+            addMessage({
+                type: message.role,
+                content: message.content
+            });
+        } else {
+            const lastMessage = messageList.lastElementChild;
+            if (lastMessage && lastMessage.classList.contains(message.role)) {
+                const contentSpan = lastMessage.querySelector('.message-content span');
+                if (contentSpan) {
+                    contentSpan.textContent += message.content;
+                }
+            }
+        }
+    } else {
+        addMessage({
+            type: message.role,
+            content: message.content
+        });
+    }
+    
+    messageList.scrollTop = messageList.scrollHeight;
 }
 
 function sendMessage(event) {
@@ -93,8 +132,7 @@ function sendMessage(event) {
     
     if (message && ws && ws.readyState === WebSocket.OPEN) {
         addMessage({
-            type: 'message',
-            role: 'user',
+            type: 'user',
             content: message
         });
 
@@ -106,53 +144,45 @@ function sendMessage(event) {
 }
 
 function addMessage(message) {
-    if (message.is_error) {
-        createMessageElement(message);
-        return;
-    }
-
-    if (message.is_chunk) {
-        if (message.is_complete) {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            return;
-        }
-
-        if (message.is_first_chunk) {
-            createMessageElement(message);
-        } else {
-            const lastMessage = messagesContainer.lastElementChild;
-            if (lastMessage && lastMessage.classList.contains('assistant')) {
-                const contentDiv = lastMessage.querySelector('.message-content');
-                contentDiv.textContent += message.content;
-            }
-        }
-    } else {
-        createMessageElement(message);
-    }
-    
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-function createMessageElement(message) {
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${message.role}`;
+    messageDiv.className = `message ${message.type}`;
     
     const contentDiv = document.createElement('div');
     contentDiv.className = 'message-content';
     
-    if (message.is_error) {
-        contentDiv.innerHTML = `<i data-feather="alert-triangle"></i><span>${message.content}</span>`;
+    if (message.type === 'system') {
+        contentDiv.innerHTML = `
+            <i data-feather="${message.error ? 'alert-triangle' : 'info'}"></i>
+            <span>${escapeHtml(message.content)}</span>
+        `;
     } else {
-        contentDiv.textContent = message.content || '';
+        const time = new Date().toLocaleTimeString();
+        messageDiv.innerHTML = `
+            <div class="message-header">
+                <span class="username">${message.type === 'user' ? 'You' : '{{ agent.name }}'}</span>
+                <span class="timestamp">${time}</span>
+            </div>
+            <div class="message-content">
+                <span>${escapeHtml(message.content)}</span>
+            </div>
+        `;
     }
     
     messageDiv.appendChild(contentDiv);
-    messagesContainer.appendChild(messageDiv);
+    messageList.appendChild(messageDiv);
     feather.replace();
 }
 
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    feather.replace();
     connectWebSocket();
     messageInput.focus();
 });

@@ -2,6 +2,7 @@ import os
 import uuid
 import logging
 import asyncio
+import aiofiles  # Added this import
 from pathlib import Path
 from datetime import datetime
 from fastapi import FastAPI, Request, UploadFile, File, HTTPException, Form
@@ -13,19 +14,17 @@ from dotenv import load_dotenv
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
+    level=os.getenv("LOG_LEVEL", "INFO"),
     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-    handlers=[logging.StreamHandler(), logging.FileHandler("logs/file-converter.log")],
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("logs/file-converter.log", mode="a"),
+    ],
 )
 logger = logging.getLogger("DunamisMaxFiles")
 
 # Load environment variables
-ENV_PATH = Path(__file__).parent.parent / ".env"
-(
-    load_dotenv(ENV_PATH)
-    if os.path.exists(ENV_PATH)
-    else logger.warning(".env file not found")
-)
+load_dotenv()
 
 app = FastAPI(title=os.getenv("APP_NAME", "DunamisMax File Converter"))
 
@@ -33,15 +32,19 @@ app = FastAPI(title=os.getenv("APP_NAME", "DunamisMax File Converter"))
 BASE_DIR = Path(__file__).parent
 UPLOAD_DIR = BASE_DIR / "uploads"
 CONVERTED_DIR = BASE_DIR / "converted"
-STATIC_DIR = BASE_DIR / "static"
-TEMPLATES_DIR = BASE_DIR / "templates"
 
 # Ensure directories exist
-for dir_path in [UPLOAD_DIR, CONVERTED_DIR, STATIC_DIR, TEMPLATES_DIR]:
-    dir_path.mkdir(parents=True, exist_ok=True)
-    dir_path.chmod(0o755)
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+CONVERTED_DIR.mkdir(parents=True, exist_ok=True)
 
-# Allowed formats with codec mappings
+# Mount static files
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
+
+# Track conversion tasks
+conversion_tasks = {}
+
+# Get allowed formats from environment
 ALLOWED_FORMATS = {
     "audio": {
         "mp3": ["-acodec", "libmp3lame", "-ab", "192k"],
@@ -60,17 +63,12 @@ ALLOWED_FORMATS = {
     },
 }
 
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-templates = Jinja2Templates(directory=TEMPLATES_DIR)
-
-conversion_tasks = {}
-
 
 async def verify_ffmpeg():
-    """Verify FFmpeg installation with proper permissions"""
+    """Verify FFmpeg installation"""
     try:
         proc = await asyncio.create_subprocess_exec(
-            "ffmpeg",
+            os.getenv("FFMPEG_PATH", "ffmpeg"),
             "-version",
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
@@ -82,161 +80,198 @@ async def verify_ffmpeg():
         return False
 
 
-async def save_upload(file: UploadFile, path: Path):
-    """Save uploaded file with chunked writing"""
-    try:
-        with path.open("wb") as buffer:
-            while content := await file.read(16 * 1024):  # 16KB chunks
-                buffer.write(content)
-        path.chmod(0o644)
-        return True
-    except Exception as e:
-        logger.error(f"File save failed: {e}")
-        raise HTTPException(500, "File upload failed")
-
-
 @app.get("/")
 async def root(request: Request):
-    """Main conversion interface"""
+    """Render the main page"""
     return templates.TemplateResponse("files.html", {"request": request})
 
 
 @app.post("/api/convert")
 async def convert_file(file: UploadFile = File(...), output_format: str = Form(...)):
-    """Handle file conversion requests with improved validation"""
-    if not file.filename or not output_format:
-        raise HTTPException(400, "Missing required parameters")
-
-    file_ext = Path(file.filename).suffix[1:].lower()
-    output_format = output_format.lower()
-
-    # Validate formats
-    valid_formats = {fmt for fmts in ALLOWED_FORMATS.values() for fmt in fmts}
-    if file_ext not in valid_formats or output_format not in valid_formats:
-        raise HTTPException(400, "Unsupported file format")
-
-    task_id = str(uuid.uuid4())
-    output_filename = f"{task_id}.{output_format}"
-    upload_path = UPLOAD_DIR / f"{task_id}_original.{file_ext}"
-    output_path = CONVERTED_DIR / output_filename
-
+    """Handle file conversion requests"""
     try:
-        await save_upload(file, upload_path)
+        # Log the incoming request
+        logger.info(
+            f"Received conversion request for file: {file.filename} to {output_format}"
+        )
 
+        # Validate file and format
+        if not file.filename:
+            logger.warning("No file provided in request")
+            raise HTTPException(400, "No file provided")
+
+        file_ext = Path(file.filename).suffix[1:].lower()
+        output_format = output_format.lower()
+
+        # Log format information
+        logger.info(f"File extension: {file_ext}, Target format: {output_format}")
+
+        # Check if formats are supported
+        valid_formats = {fmt for fmts in ALLOWED_FORMATS.values() for fmt in fmts}
+        if file_ext not in valid_formats or output_format not in valid_formats:
+            logger.warning(f"Unsupported format requested: {output_format}")
+            raise HTTPException(400, f"Unsupported format: {output_format}")
+
+        # Generate unique ID and paths
+        task_id = str(uuid.uuid4())
+        upload_path = UPLOAD_DIR / f"{task_id}_original.{file_ext}"
+        output_path = CONVERTED_DIR / f"{task_id}.{output_format}"
+
+        logger.info(f"Created task {task_id}")
+        logger.info(f"Upload path: {upload_path}")
+        logger.info(f"Output path: {output_path}")
+
+        # Save uploaded file with error handling
+        try:
+            content = await file.read()
+            async with aiofiles.open(str(upload_path), "wb") as buffer:
+                await buffer.write(content)
+            logger.info(f"Successfully saved uploaded file to {upload_path}")
+        except Exception as e:
+            logger.error(f"Failed to save uploaded file: {e}")
+            raise HTTPException(500, f"Failed to save uploaded file: {str(e)}")
+
+        # Initialize conversion task
         conversion_tasks[task_id] = {
             "status": "processing",
             "output_path": output_path,
             "error": None,
         }
 
+        # Start conversion process
         asyncio.create_task(
             process_conversion(task_id, upload_path, output_path, output_format)
         )
 
-        return {"task_id": task_id, "download_url": f"/download/{output_filename}"}
+        logger.info(f"Conversion task {task_id} initialized successfully")
+        return {
+            "task_id": task_id,
+            "status": "processing",
+            "download_url": f"/download/{output_path.name}",
+        }
 
     except Exception as e:
-        logger.error(f"Conversion failed: {e}")
-        raise HTTPException(500, "Conversion process failed")
+        logger.error(f"Conversion request failed: {str(e)}", exc_info=True)
+        # Cleanup any partial files
+        if "upload_path" in locals():
+            try:
+                upload_path.unlink(missing_ok=True)
+            except Exception as cleanup_error:
+                logger.error(f"Cleanup failed: {cleanup_error}")
+
+        if isinstance(e, HTTPException):
+            raise e
+        raise HTTPException(500, f"Internal server error: {str(e)}")
 
 
 async def process_conversion(
-    task_id: str, input_path: Path, output_path: Path, fmt: str
+    task_id: str, input_path: Path, output_path: Path, output_format: str
 ):
-    """Process conversion with proper codec handling"""
+    """Process the actual conversion"""
     try:
-        # Determine codec parameters
+        # Get codec parameters
+        codec_params = None
         for category, formats in ALLOWED_FORMATS.items():
-            if fmt in formats:
-                codec_params = formats[fmt]
+            if output_format in formats:
+                codec_params = formats[output_format]
                 break
-        else:
-            raise RuntimeError("Unsupported output format")
 
+        if not codec_params:
+            raise ValueError(f"No codec parameters for format: {output_format}")
+
+        # Build FFmpeg command
         cmd = [
-            "ffmpeg",
+            os.getenv("FFMPEG_PATH", "ffmpeg"),
             "-y",
             "-i",
             str(input_path),
             *codec_params,
-            "-nostdin",
-            "-loglevel",
-            "error",
             str(output_path),
         ]
 
+        # Run conversion
         proc = await asyncio.create_subprocess_exec(
             *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
 
-        _, stderr = await proc.communicate()
+        stdout, stderr = await proc.communicate()
 
         if proc.returncode != 0:
-            raise RuntimeError(f"FFmpeg error: {stderr.decode().strip()}")
-
-        if not output_path.exists():
-            raise RuntimeError("Output file not created")
+            raise RuntimeError(f"FFmpeg error: {stderr.decode()}")
 
         conversion_tasks[task_id]["status"] = "completed"
-        logger.info(f"Successful conversion: {task_id}")
+        logger.info(f"Conversion task {task_id} completed successfully")
 
     except Exception as e:
+        logger.error(f"Conversion failed for task {task_id}: {e}")
         conversion_tasks[task_id].update({"status": "failed", "error": str(e)})
-        logger.error(f"Conversion failed {task_id}: {e}")
-
     finally:
-        # Cleanup original file
+        # Cleanup input file
         try:
             input_path.unlink(missing_ok=True)
         except Exception as e:
-            logger.error(f"Cleanup error: {e}")
+            logger.error(f"Cleanup failed for {input_path}: {e}")
 
 
 @app.get("/api/conversion-status/{task_id}")
-async def conversion_status(task_id: str):
-    """Conversion status endpoint with improved error handling"""
+async def get_conversion_status(task_id: str):
+    """Get the status of a conversion task"""
     task = conversion_tasks.get(task_id)
     if not task:
         raise HTTPException(404, "Task not found")
 
     return {
         "status": task["status"],
+        "error": task["error"],
         "download_url": (
             f"/download/{task['output_path'].name}"
             if task["status"] == "completed"
             else None
         ),
-        "error": task["error"],
     }
 
 
 @app.get("/download/{filename}")
 async def download_file(filename: str):
-    """Secure file download endpoint"""
+    """Handle file downloads"""
     file_path = CONVERTED_DIR / filename
     if not file_path.exists():
         raise HTTPException(404, "File not found")
 
     return FileResponse(
-        file_path,
-        media_type="application/octet-stream",
-        filename=filename.split(".", 1)[-1],  # Original filename
+        file_path, media_type="application/octet-stream", filename=filename
     )
+
+
+@app.get("/privacy")
+async def privacy(request: Request):
+    """Render the privacy policy page"""
+    try:
+        logger.info("Rendering privacy page")
+        return templates.TemplateResponse(
+            "privacy.html",
+            {
+                "request": request,
+                "page_title": "Privacy Policy - DunamisMax",
+            },
+        )
+    except Exception as e:
+        logger.error(f"Error rendering privacy page: {e}", exc_info=True)
+        raise
 
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialization with proper FFmpeg verification"""
+    """Startup tasks"""
     if not await verify_ffmpeg():
-        logger.critical("FFmpeg not found - conversions will fail")
-    else:
-        logger.info("FFmpeg verified successfully")
+        logger.critical("FFmpeg not found or not working")
+    logger.info("File Converter service started")
 
 
 if __name__ == "__main__":
     uvicorn.run(
-        "main:app",
+        "app.main:app",
         host=os.getenv("HOST", "0.0.0.0"),
         port=int(os.getenv("PORT", 8300)),
-        log_level="info",
+        reload=os.getenv("DEBUG", "false").lower() == "true",
     )

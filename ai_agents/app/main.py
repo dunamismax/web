@@ -45,6 +45,18 @@ async def chat(request: Request, agent_id: str):
     return templates.TemplateResponse("chat.html", {"request": request, "agent": agent})
 
 
+@app.get("/privacy")
+async def privacy(request: Request):
+    """Render the privacy policy page"""
+    return templates.TemplateResponse(
+        "privacy.html",
+        {
+            "request": request,
+            "page_title": "Privacy Policy - DunamisMax",
+        },
+    )
+
+
 @app.websocket("/ws/chat/{agent_id}")
 async def websocket_endpoint(websocket: WebSocket, agent_id: str):
     """WebSocket endpoint for agent chat"""
@@ -61,4 +73,4 @@ async def websocket_endpoint(websocket: WebSocket, agent_id: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8200)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8200)

@@ -2,82 +2,68 @@
 
 {% block content %}
 <div class="converter-page fade-in">
-    <header class="converter-header">
-        <a href="https://dunamismax.com" class="back-link">
-            <i data-feather="arrow-left"></i>
-            Back to Home
-        </a>
-        <h1>File Converter</h1>
+    <header class="messenger-header">
+        <div class="logo">
+            <i data-feather="file-text"></i>
+            <h1>DunamisMax File Converter</h1>
+        </div>
         <p class="tagline">Professional Media Transformation Studio</p>
     </header>
 
-    <div class="converter-container card">
-        <div class="converter-header">
-            <h2 class="action-heading">
-                <i data-feather="file-plus"></i>
-                Instant File Conversion
-            </h2>
+    <div class="messenger-container card">
+        <div class="chat-header">
+            <div class="converter-status">
+                <span id="status-indicator" class="indicator ready">
+                <span id="status-text">Ready for conversion</span>
+            </div>
             <div class="format-pills">
                 <span class="format-pill">MP3</span>
                 <span class="format-pill">WAV</span>
                 <span class="format-pill">FLAC</span>
                 <span class="format-pill">MP4</span>
                 <span class="format-pill">MOV</span>
-                <span class="format-pill">AVI</span>
             </div>
         </div>
 
-        <div class="conversion-interface">
-            <div class="drop-card" id="dropZone">
+        <div class="converter-interface">
+            <div class="drop-zone card" id="dropZone">
                 <div class="drop-content">
-                    <div class="upload-icon">
-                        <i data-feather="upload-cloud"></i>
-                    </div>
-                    <h3 class="drop-title">Drag & Drop Media Files</h3>
-                    <p class="drop-subtitle">or click to browse your device</p>
-                    <div class="supported-formats">
-                        Supported formats: Audio • Video • Archives
-                    </div>
+                    <i data-feather="upload-cloud"></i>
+                    <h3>Drag & Drop Files</h3>
+                    <p>or click to browse your device</p>
+                    <div class="format-info">Supported: Audio • Video • Archives</div>
                 </div>
-                <input type="file" id="fileInput" hidden 
-                    accept=".mp3,.wav,.ogg,.flac,.mp4,.mov,.avi,.aac,.m4a,.mkv,.webm">
+                <input type="file" id="fileInput" hidden accept=".mp3,.wav,.ogg,.flac,.mp4,.mov,.avi,.aac,.m4a,.mkv,.webm">
             </div>
 
             <div class="conversion-controls">
-                <div class="format-selector">
-                    <label for="formatSelect">Output Format:</label>
+                <div class="input-group">
                     <div class="select-wrapper">
                         <select id="formatSelect" class="custom-select">
                             <optgroup label="Audio Formats">
                                 <option value="mp3">MP3 (Standard Quality)</option>
                                 <option value="wav">WAV (Lossless)</option>
                                 <option value="flac">FLAC (High Fidelity)</option>
+                                <option value="aac">AAC (Advanced Audio)</option>
                             </optgroup>
                             <optgroup label="Video Formats">
                                 <option value="mp4">MP4 (Universal)</option>
                                 <option value="mov">MOV (Pro Quality)</option>
-                                <option value="webm">WebM (Streaming)</option>
+                                <option value="webm">WebM (Web Optimized)</option>
                             </optgroup>
                         </select>
-                        <i data-feather="chevron-down" class="select-arrow"></i>
+                        <i data-feather="chevron-down"></i>
                     </div>
-                </div>
-
-                <button class="convert-button" id="convertTrigger">
-                    <i data-feather="zap"></i>
-                    Start Conversion
-                </button>
-            </div>
-        </div>
-
-        <div class="processing-ui">
-            <div class="progress-track">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                    <div class="progress-text" id="statusText">Ready for conversion</div>
+                    <button id="convertButton" class="btn">
+                        <i data-feather="zap"></i>
+                        Convert
+                    </button>
                 </div>
             </div>
-            <div class="output-container" id="resultsContainer"></div>
+
+            <div class="conversion-list" id="conversionList">
+                <!-- Conversion items will be added here -->
+            </div>
         </div>
     </div>
 </div>
@@ -85,44 +71,131 @@
 
 {% block scripts %}
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const dropZone = document.getElementById("dropZone");
-    const fileInput = document.getElementById("fileInput");
-    const convertBtn = document.getElementById("convertTrigger");
+let activeConversions = new Map();
 
-    // Style updates
-    feather.replace({ width: 24, height: 24, 'stroke-width': 1.5 });
+document.addEventListener('DOMContentLoaded', function() {
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const convertButton = document.getElementById('convertButton');
+    const statusIndicator = document.getElementById('status-indicator');
+    const statusText = document.getElementById('status-text');
+    const conversionList = document.getElementById('conversionList');
 
-    // Enhanced drag/drop handling
-    const handleDrag = (e) => {
+    // Drag and drop handling
+    function handleDragEvent(e) {
         e.preventDefault();
+        e.stopPropagation();
         dropZone.classList.toggle('dragover', e.type === 'dragover');
-    };
+    }
 
-    ['dragover', 'dragleave', 'drop'].forEach(evt => {
-        dropZone.addEventListener(evt, handleDrag);
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, handleDragEvent);
     });
 
-    // File handling
-    const handleFile = file => {
-        if (!file) return;
-        
-        // Show processing UI
-        document.getElementById('statusText').textContent = `Processing ${file.name}...`;
-        document.getElementById('progressFill').style.width = '10%';
+    dropZone.addEventListener('drop', async (e) => {
+        const file = e.dataTransfer.files[0];
+        if (file) await handleFileSelection(file);
+    });
 
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("output_format", document.getElementById("formatSelect").value);
+    fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (file) await handleFileSelection(file);
+    });
 
-        // Conversion logic...
-    };
-
-    // Event listeners
     dropZone.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
-    dropZone.addEventListener('drop', e => handleFile(e.dataTransfer.files[0]));
-    convertBtn.addEventListener('click', () => fileInput.click());
+
+    async function handleFileSelection(file) {
+        const conversionId = crypto.randomUUID();
+        
+        // Add conversion item to list
+        const conversionItem = document.createElement('div');
+        conversionItem.className = 'conversion-item';
+        conversionItem.innerHTML = `
+            <div class="conversion-info">
+                <i data-feather="file"></i>
+                <span class="filename">${file.name}</span>
+            </div>
+            <div class="conversion-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <span class="progress-text">Preparing...</span>
+            </div>
+        `;
+        conversionList.insertBefore(conversionItem, conversionList.firstChild);
+        feather.replace();
+
+        // Start conversion
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('output_format', document.getElementById('formatSelect').value);
+
+            const response = await fetch('/api/convert', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) throw new Error('Conversion failed to start');
+            
+            const data = await response.json();
+            activeConversions.set(conversionId, {
+                element: conversionItem,
+                taskId: data.task_id
+            });
+
+            // Start polling for status
+            pollConversionStatus(data.task_id, conversionItem);
+
+        } catch (error) {
+            conversionItem.querySelector('.progress-text').textContent = 'Error: ' + error.message;
+            conversionItem.classList.add('error');
+        }
+    }
+
+    async function pollConversionStatus(taskId, conversionItem) {
+        const progressFill = conversionItem.querySelector('.progress-fill');
+        const progressText = conversionItem.querySelector('.progress-text');
+
+        while (true) {
+            try {
+                const response = await fetch(`/api/conversion-status/${taskId}`);
+                const data = await response.json();
+
+                switch (data.status) {
+                    case 'completed':
+                        progressFill.style.width = '100%';
+                        progressText.textContent = 'Completed';
+                        conversionItem.classList.add('completed');
+                        
+                        // Add download button
+                        const downloadBtn = document.createElement('a');
+                        downloadBtn.href = data.download_url;
+                        downloadBtn.className = 'btn btn-small';
+                        downloadBtn.innerHTML = '<i data-feather="download"></i> Download';
+                        conversionItem.appendChild(downloadBtn);
+                        feather.replace();
+                        return;
+
+                    case 'failed':
+                        progressText.textContent = `Error: ${data.error}`;
+                        conversionItem.classList.add('error');
+                        return;
+
+                    case 'processing':
+                        progressFill.style.width = '50%';
+                        progressText.textContent = 'Converting...';
+                        break;
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            } catch (error) {
+                progressText.textContent = 'Status check failed';
+                conversionItem.classList.add('error');
+                return;
+            }
+        }
+    }
 });
 </script>
 {% endblock %}

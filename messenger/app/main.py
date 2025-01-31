@@ -4,16 +4,18 @@ from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import uvicorn
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI(title="DunamisMax Messenger")
 
-# Mount static files
-app.mount(
-    "/static", StaticFiles(directory=Path(__file__).parent / "static"), name="static"
-)
-
-# Templates
-templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
+# Mount static files and templates
+BASE_DIR = Path(__file__).parent
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 # Connection Manager
@@ -63,6 +65,18 @@ async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
+@app.get("/privacy")
+async def privacy(request: Request):
+    """Render the privacy policy page"""
+    return templates.TemplateResponse(
+        "privacy.html",
+        {
+            "request": request,
+            "page_title": "Privacy Policy - DunamisMax",
+        },
+    )
+
+
 @app.websocket("/ws/chat/{username}")
 async def websocket_endpoint(websocket: WebSocket, username: str):
     """WebSocket endpoint for chat"""
@@ -93,4 +107,9 @@ async def websocket_endpoint(websocket: WebSocket, username: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8100, reload=True)
+    uvicorn.run(
+        "app.main:app",
+        host=os.getenv("HOST", "0.0.0.0"),
+        port=int(os.getenv("PORT", 8100)),
+        reload=os.getenv("DEBUG", "false").lower() == "true",
+    )
