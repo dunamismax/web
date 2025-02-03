@@ -2,189 +2,184 @@
 
 {% block content %}
 <div class="chat-page fade-in">
-    <header class="messenger-header">
-        <div class="logo">
-            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
-                <path d="{{ agent.icon_path|default('M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z') }}"/>
-            </svg>
-            <h1>{{ agent.name }}</h1>
-        </div>
-        <p class="tagline">{{ agent.description }}</p>
-    </header>
-
-    <div id="chat-interface" class="messenger-container card">
-        <div class="chat-header">
-            <div class="chat-status">
-                <span id="connection-indicator" class="indicator offline"></span>
-                <span id="status-text">Not Connected</span>
-            </div>
-            <a href="/" class="btn btn-small btn-outline" title="Back to Agents">
-                <i data-feather="arrow-left"></i>
-                Back
-            </a>
-        </div>
-
-        <div class="message-list" id="message-list">
-            <div class="message system">
-                <div class="message-content">
-                    <i data-feather="info"></i>
-                    Connected to {{ agent.name }}. Start chatting!
-                </div>
-            </div>
-        </div>
-
-        <div class="message-input">
-            <form id="message-form" onsubmit="return sendMessage(event)">
-                <div class="input-group">
-                    <input 
-                        type="text" 
-                        id="message-input"
-                        placeholder="Type your message..." 
-                        autocomplete="off"
-                        required
-                    >
-                    <button type="submit" class="btn">
-                        <i data-feather="send"></i>
-                        Send
-                    </button>
-                </div>
-            </form>
-        </div>
+  <header class="messenger-header">
+    <div class="logo">
+      <!-- If the agent provides a custom icon path, use it; fallback otherwise -->
+      <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
+        <path d="{{ agent.icon_path|default('M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z') }}"/>
+      </svg>
+      <h1>{{ agent.name }}</h1>
     </div>
+    <p class="tagline">{{ agent.description }}</p>
+  </header>
+
+  <div id="chat-interface" class="messenger-container card">
+    <!-- Chat Header (status + back button) -->
+    <div class="chat-header">
+      <div class="chat-status">
+        <span id="connection-indicator" class="indicator offline"></span>
+        <span id="status-text">Not Connected</span>
+      </div>
+      <a href="/" class="btn btn-small btn-outline" title="Back to Agents">
+        <i data-feather="arrow-left"></i>
+        Back
+      </a>
+    </div>
+
+    <!-- Message List Area -->
+    <div class="message-list" id="message-list">
+      <!-- Initial system message -->
+      <div class="message system">
+        <div class="message-content">
+          <i data-feather="info"></i>
+          <span>Connected to {{ agent.name }}. Start chatting!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="message-input">
+      <form id="message-form" onsubmit="return sendMessage(event)">
+        <div class="input-group">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Type your message..."
+            autocomplete="off"
+            required
+          >
+          <button type="submit" class="btn">
+            <i data-feather="send"></i>
+            Send
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
+// WebSocket & DOM references
 let ws = null;
 const messageList = document.getElementById('message-list');
 const messageInput = document.getElementById('message-input');
 const connectionIndicator = document.getElementById('connection-indicator');
 const statusText = document.getElementById('status-text');
 
+/** Connect to WebSocket, using agent.id to build the endpoint */
 function connectWebSocket() {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws/chat/{{ agent.id }}`;
-    
-    ws = new WebSocket(wsUrl);
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${protocol}//${window.location.host}/ws/chat/{{ agent.id }}`;
 
-    ws.onopen = () => {
-        connectionIndicator.className = 'indicator online';
-        statusText.textContent = 'Connected';
-        messageInput.focus();
-    };
+  ws = new WebSocket(wsUrl);
 
-    ws.onclose = () => {
-        connectionIndicator.className = 'indicator offline';
-        statusText.textContent = 'Disconnected';
-        setTimeout(connectWebSocket, 1000);
-    };
-
-    ws.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        handleMessage(message);
-    };
-}
-
-function handleMessage(message) {
-    if (message.is_error) {
-        addMessage({
-            type: 'system',
-            content: message.content,
-            error: true
-        });
-        return;
-    }
-
-    if (message.is_chunk) {
-        if (message.is_complete) {
-            messageList.scrollTop = messageList.scrollHeight;
-            return;
-        }
-
-        if (message.is_first_chunk) {
-            addMessage({
-                type: message.role,
-                content: message.content
-            });
-        } else {
-            const lastMessage = messageList.lastElementChild;
-            if (lastMessage && lastMessage.classList.contains(message.role)) {
-                const contentSpan = lastMessage.querySelector('.message-content span');
-                if (contentSpan) {
-                    contentSpan.textContent += message.content;
-                }
-            }
-        }
-    } else {
-        addMessage({
-            type: message.role,
-            content: message.content
-        });
-    }
-    
-    messageList.scrollTop = messageList.scrollHeight;
-}
-
-function sendMessage(event) {
-    event.preventDefault();
-    const message = messageInput.value.trim();
-    
-    if (message && ws && ws.readyState === WebSocket.OPEN) {
-        addMessage({
-            type: 'user',
-            content: message
-        });
-
-        ws.send(message);
-        messageInput.value = '';
-        messageInput.focus();
-    }
-    return false;
-}
-
-function addMessage(message) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${message.type}`;
-    
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
-    
-    if (message.type === 'system') {
-        contentDiv.innerHTML = `
-            <i data-feather="${message.error ? 'alert-triangle' : 'info'}"></i>
-            <span>${escapeHtml(message.content)}</span>
-        `;
-    } else {
-        const time = new Date().toLocaleTimeString();
-        messageDiv.innerHTML = `
-            <div class="message-header">
-                <span class="username">${message.type === 'user' ? 'You' : '{{ agent.name }}'}</span>
-                <span class="timestamp">${time}</span>
-            </div>
-            <div class="message-content">
-                <span>${escapeHtml(message.content)}</span>
-            </div>
-        `;
-    }
-    
-    messageDiv.appendChild(contentDiv);
-    messageList.appendChild(messageDiv);
-    feather.replace();
-}
-
-function escapeHtml(unsafe) {
-    return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    connectWebSocket();
+  ws.onopen = () => {
+    connectionIndicator.className = 'indicator online';
+    statusText.textContent = 'Connected';
     messageInput.focus();
+  };
+
+  ws.onclose = () => {
+    connectionIndicator.className = 'indicator offline';
+    statusText.textContent = 'Disconnected';
+    // Attempt auto-reconnect
+    setTimeout(connectWebSocket, 1000);
+  };
+
+  ws.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    handleMessage(msg);
+  };
+}
+
+/** Handle incoming messages (including chunked streaming) */
+function handleMessage(message) {
+  if (message.is_error) {
+    addMessage({ type: 'system', content: message.content, error: true });
+    return;
+  }
+
+  // If streaming chunks
+  if (message.is_chunk) {
+    if (message.is_complete) {
+      messageList.scrollTop = messageList.scrollHeight;
+      return;
+    }
+    if (message.is_first_chunk) {
+      addMessage({ type: message.role, content: message.content });
+    } else {
+      const lastMessage = messageList.lastElementChild;
+      if (lastMessage && lastMessage.classList.contains(message.role)) {
+        const contentSpan = lastMessage.querySelector('.message-content span');
+        if (contentSpan) {
+          contentSpan.textContent += message.content;
+        }
+      }
+    }
+  } else {
+    // Non-streamed single message
+    addMessage({ type: message.role, content: message.content });
+  }
+
+  messageList.scrollTop = messageList.scrollHeight;
+}
+
+/** Send a user message */
+function sendMessage(event) {
+  event.preventDefault();
+  const text = messageInput.value.trim();
+  if (text && ws && ws.readyState === WebSocket.OPEN) {
+    addMessage({ type: 'user', content: text });
+    ws.send(text);
+    messageInput.value = '';
+    messageInput.focus();
+  }
+  return false;
+}
+
+/** Add a message to the DOM */
+function addMessage({ type, content, error }) {
+  const msgDiv = document.createElement('div');
+  msgDiv.className = `message ${type}`;
+
+  if (type === 'system') {
+    msgDiv.innerHTML = `
+      <div class="message-content">
+        <i data-feather="${error ? 'alert-triangle' : 'info'}"></i>
+        <span>${escapeHtml(content)}</span>
+      </div>`;
+  } else {
+    const time = new Date().toLocaleTimeString();
+    msgDiv.innerHTML = `
+      <div class="message-header">
+        <span class="username">${type === 'user' ? 'You' : '{{ agent.name }}'}</span>
+        <span class="timestamp">${time}</span>
+      </div>
+      <div class="message-content">
+        <span>${escapeHtml(content)}</span>
+      </div>`;
+  }
+
+  messageList.appendChild(msgDiv);
+  feather.replace(); // re-init icons
+}
+
+/** Escape HTML for safe text insertion */
+function escapeHtml(unsafe) {
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Startup
+document.addEventListener('DOMContentLoaded', function() {
+  connectWebSocket();
+  messageInput.focus();
 });
 </script>
 {% endblock %}

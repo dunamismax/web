@@ -1,104 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}DunamisMax{% endblock %}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}DunamisMax{% endblock %}</title>
 
-    <!-- Security Headers -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
+  <!-- Security Headers -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com;
+                 img-src 'self' data: https:;
+                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                 script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
-    <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
+  <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    {% block extra_css %}{% endblock %}
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+  {% block extra_css %}{% endblock %}
 
-    <!-- Fonts and Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+  <!-- Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
 
-    <!-- SEO Optimization -->
-    <meta name="description" content="{% block meta_description %}Modern Web Applications Built with Python & FastAPI{% endblock %}">
-    <meta name="theme-color" content="#2E3440">
-    <meta name="keywords" content="web applications, FastAPI, DunamisMax, file converter, AI agents, messenger">
-    
-    <!-- Open Graph Metadata -->
-    <meta property="og:title" content="{% block og_title %}DunamisMax{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Modern Web Applications Built with Python & FastAPI{% endblock %}">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="DunamisMax">
-    
-    {% block extra_meta %}{% endblock %}
+  <!-- SEO Optimization -->
+  <meta name="description" content="{% block meta_description %}Modern Web Applications Built with Python & FastAPI{% endblock %}">
+  <meta name="theme-color" content="#2E3440">
+  <meta name="keywords" content="web applications, FastAPI, DunamisMax, file converter, AI agents, messenger">
 
-    <!-- Main Content -->
-    <div class="page-wrapper">
-        <!-- Status Messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.category }}">
-                    {{ message.content }}
-                </div>
-            {% endfor %}
-        {% endif %}
+  <!-- Open Graph Metadata -->
+  <meta property="og:title" content="{% block og_title %}DunamisMax{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Modern Web Applications Built with Python & FastAPI{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DunamisMax">
 
-        <main class="container">
-            {% block content %}{% endblock %}
-        </main>
+  {% block extra_meta %}{% endblock %}
+</head>
 
-        <!-- Footer -->
-        <footer class="main-footer">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="https://dunamismax.com">Home</a>
-                    <a href="/privacy">Privacy</a>
-                    <a href="https://github.com/dunamismax" target="_blank" rel="noopener">GitHub</a>
-                    {% block footer_links %}{% endblock %}
-                </div>
-                <p class="footer-copyright">&copy; <span id="current-year"></span> DunamisMax</p>
-            </div>
-        </footer>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <div class="nav-links">
+        <!-- If you want to highlight the homepage when on this site, add .active conditionally -->
+        <a href="https://dunamismax.com" class="active">Home</a>
+        <a href="https://messenger.dunamismax.com">Messenger</a>
+        <a href="https://agents.dunamismax.com">AI Agents</a>
+        <a href="https://files.dunamismax.com">File Converter</a>
+      </div>
     </div>
+  </nav>
 
-    <!-- Core Scripts -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Feather Icons
-            feather.replace();
-            
-            // Set current year
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-            
-            // Handle navigation highlighting
-            const currentPath = window.location.hostname;
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                if (link.href.includes(currentPath)) {
-                    link.classList.add('active');
-                }
-            });
-
-            // Handle alert dismissal
-            document.querySelectorAll('.alert').forEach(alert => {
-                setTimeout(() => {
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 300);
-                }, 5000);
-            });
-        });
-    </script>
-
-    {% block scripts %}{% endblock %}
-
-    <!-- Error Handling -->
-    {% if error %}
-    <div class="error-notification">
-        <i data-feather="alert-triangle"></i>
-        {{ error }}
-    </div>
+  <!-- Page Wrapper -->
+  <div class="page-wrapper">
+    <!-- Status Messages -->
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.category }}">
+        {{ message.content }}
+      </div>
+      {% endfor %}
     {% endif %}
+
+    <!-- Main Content Area -->
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="https://dunamismax.com">Home</a>
+          <a href="/privacy">Privacy</a>
+          <a href="https://github.com/dunamismax" target="_blank" rel="noopener">GitHub</a>
+          {% block footer_links %}{% endblock %}
+        </div>
+        <p class="footer-copyright">
+          &copy; <span id="current-year"></span> DunamisMax
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Core Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Feather Icons
+      feather.replace();
+
+      // Set current year
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+
+      // Optional: highlight current nav link if you want
+      const currentUrl = window.location.href;
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        if (link.href === currentUrl || link.href === currentUrl + '/') {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+
+      // Auto-dismiss alerts
+      document.querySelectorAll('.alert').forEach(alert => {
+        setTimeout(() => {
+          alert.style.opacity = '0';
+          setTimeout(() => alert.remove(), 300);
+        }, 5000);
+      });
+    });
+  </script>
+
+  {% block scripts %}{% endblock %}
+
+  <!-- Error Handling -->
+  {% if error %}
+  <div class="error-notification">
+    <i data-feather="alert-triangle"></i>
+    {{ error }}
+  </div>
+  {% endif %}
 </body>
 </html>
