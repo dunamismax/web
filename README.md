@@ -52,7 +52,7 @@ web/
 
 - **Caddy** – Reverse proxy with auto-HTTPS, HTTP/3, easy SSL
 - **Cloudflare** – DNS management, CDN, DDoS protection
-- **Docker / systemd** (optional) – Some apps may use containerization or systemd services
+- **systemd** – All app systemd services run on boot and auto-restart but can also be started manually.
 
 ---
 
