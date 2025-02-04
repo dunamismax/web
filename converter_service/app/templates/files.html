@@ -102,70 +102,69 @@
     <div class="features-grid">
       <div class="card feature-card">
         <i data-feather="zap"></i>
-        <h4>Real-time Chat</h4>
-        <p>Instant responses with streaming messages</p>
+        <h4>Fast Conversions</h4>
+        <p>Quickly convert between image, video, and audio formats in real-time</p>
       </div>
       <div class="card feature-card">
         <i data-feather="shield"></i>
-        <h4>Secure</h4>
-        <p>Private conversations, no data stored</p>
+        <h4>Secure & Private</h4>
+        <p>Your files are processed securely, and no data is stored on our servers</p>
       </div>
       <div class="card feature-card">
         <i data-feather="cpu"></i>
-        <h4>Expert Knowledge</h4>
-        <p>Specialized agents for different topics</p>
+        <h4>Wide Format Support</h4>
+        <p>Supports a variety of formats including JPEG, PNG, MP4, MOV, MP3, WAV, and more</p>
       </div>
       <div class="card feature-card">
         <i data-feather="users"></i>
-        <h4>Free to Use</h4>
-        <p>No registration required</p>
+        <h4>Free & Easy to Use</h4>
+        <p>No registration required – start converting files instantly</p>
       </div>
     </div>
   </section>
-</div>
-{% endblock %}
+  {% endblock %}
 
-{% block scripts %}
-<script>
-  let activeConversions = new Map();
+  {% block scripts %}
+  <script>
+    let activeConversions = new Map();
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-    const convertButton = document.getElementById('convertButton');
-    const statusText = document.getElementById('status-text');
-    const conversionList = document.getElementById('conversionList');
+    document.addEventListener('DOMContentLoaded', function () {
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const convertButton = document.getElementById('convertButton');
+      const statusText = document.getElementById('status-text');
+      const conversionList = document.getElementById('conversionList');
 
-    // Drag and drop handling
-    function handleDragEvent(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      dropZone.classList.toggle('dragover', e.type === 'dragover');
-    }
+      // Drag and drop handling
+      function handleDragEvent(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.toggle('dragover', e.type === 'dragover');
+      }
 
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-      dropZone.addEventListener(eventName, handleDragEvent);
-    });
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, handleDragEvent);
+      });
 
-    dropZone.addEventListener('drop', async (e) => {
-      const file = e.dataTransfer.files[0];
-      if (file) await handleFileSelection(file);
-    });
+      dropZone.addEventListener('drop', async (e) => {
+        const file = e.dataTransfer.files[0];
+        if (file) await handleFileSelection(file);
+      });
 
-    fileInput.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (file) await handleFileSelection(file);
-    });
+      fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (file) await handleFileSelection(file);
+      });
 
-    dropZone.addEventListener('click', () => fileInput.click());
+      dropZone.addEventListener('click', () => fileInput.click());
 
-    async function handleFileSelection(file) {
-      const conversionId = crypto.randomUUID();
+      async function handleFileSelection(file) {
+        const conversionId = crypto.randomUUID();
 
-      // Add conversion item to list
-      const conversionItem = document.createElement('div');
-      conversionItem.className = 'conversion-item';
-      conversionItem.innerHTML = `
+        // Add conversion item to list
+        const conversionItem = document.createElement('div');
+        conversionItem.className = 'conversion-item';
+        conversionItem.innerHTML = `
         <div class="conversion-info">
           <i data-feather="file"></i>
           <span class="filename">${file.name}</span>
@@ -177,80 +176,80 @@
           <span class="progress-text">Preparing...</span>
         </div>
       `;
-      conversionList.insertBefore(conversionItem, conversionList.firstChild);
-      feather.replace();
+        conversionList.insertBefore(conversionItem, conversionList.firstChild);
+        feather.replace();
 
-      // Start conversion
-      try {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('output_format', document.getElementById('formatSelect').value);
-
-        const response = await fetch('/api/convert', {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) throw new Error('Conversion failed to start');
-
-        const data = await response.json();
-        activeConversions.set(conversionId, {
-          element: conversionItem,
-          taskId: data.task_id
-        });
-
-        // Poll for status updates
-        pollConversionStatus(data.task_id, conversionItem);
-
-      } catch (error) {
-        conversionItem.querySelector('.progress-text').textContent =
-          'Error: ' + error.message;
-        conversionItem.classList.add('error');
-      }
-    }
-
-    async function pollConversionStatus(taskId, conversionItem) {
-      const progressFill = conversionItem.querySelector('.progress-fill');
-      const progressText = conversionItem.querySelector('.progress-text');
-
-      while (true) {
+        // Start conversion
         try {
-          const response = await fetch(`/api/conversion-status/${taskId}`);
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('output_format', document.getElementById('formatSelect').value);
+
+          const response = await fetch('/api/convert', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!response.ok) throw new Error('Conversion failed to start');
+
           const data = await response.json();
+          activeConversions.set(conversionId, {
+            element: conversionItem,
+            taskId: data.task_id
+          });
 
-          switch (data.status) {
-            case 'completed':
-              progressFill.style.width = '100%';
-              progressText.textContent = 'Completed';
-              conversionItem.classList.add('completed');
+          // Poll for status updates
+          pollConversionStatus(data.task_id, conversionItem);
 
-              // Add download button
-              const downloadBtn = document.createElement('a');
-              downloadBtn.href = data.download_url;
-              downloadBtn.className = 'btn btn-small';
-              downloadBtn.innerHTML = '<i data-feather="download"></i> Download';
-              conversionItem.appendChild(downloadBtn);
-              feather.replace();
-              return;
-
-            case 'failed':
-              progressText.textContent = `Error: ${data.error}`;
-              conversionItem.classList.add('error');
-              return;
-
-            case 'processing':
-              progressFill.style.width = '50%';
-              progressText.textContent = 'Converting...';
-              break;
-          }
-          await new Promise(resolve => setTimeout(resolve, 1000));
         } catch (error) {
-          progressText.textContent = 'Status check failed';
+          conversionItem.querySelector('.progress-text').textContent =
+            'Error: ' + error.message;
           conversionItem.classList.add('error');
-          return;
         }
       }
-    }
-  });
-</script>
-{% endblock %}
+
+      async function pollConversionStatus(taskId, conversionItem) {
+        const progressFill = conversionItem.querySelector('.progress-fill');
+        const progressText = conversionItem.querySelector('.progress-text');
+
+        while (true) {
+          try {
+            const response = await fetch(`/api/conversion-status/${taskId}`);
+            const data = await response.json();
+
+            switch (data.status) {
+              case 'completed':
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Completed';
+                conversionItem.classList.add('completed');
+
+                // Add download button
+                const downloadBtn = document.createElement('a');
+                downloadBtn.href = data.download_url;
+                downloadBtn.className = 'btn btn-small';
+                downloadBtn.innerHTML = '<i data-feather="download"></i> Download';
+                conversionItem.appendChild(downloadBtn);
+                feather.replace();
+                return;
+
+              case 'failed':
+                progressText.textContent = `Error: ${data.error}`;
+                conversionItem.classList.add('error');
+                return;
+
+              case 'processing':
+                progressFill.style.width = '50%';
+                progressText.textContent = 'Converting...';
+                break;
+            }
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          } catch (error) {
+            progressText.textContent = 'Status check failed';
+            conversionItem.classList.add('error');
+            return;
+          }
+        }
+      }
+    });
+  </script>
+  {% endblock %}

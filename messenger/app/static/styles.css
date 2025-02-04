@@ -419,13 +419,8 @@
   padding: var(--space-xl) var(--space-lg);
   border-radius: var(--radius-default);
   margin-bottom: var(--space-xl);
-  /* Default background color if you wish.
-     You can override per section with a more specific class or inline style. */
-  background-color: var(--nord2);
+  background-color: var(--nord2); /* Default; can override per section */
 }
-
-/* Example specialized backgrounds for each:
-   Adjust or remove if you'd rather do inline or only have one color. */
 .services-section {
   background-color: var(--nord2); /* slightly lighter dark */
 }
@@ -446,8 +441,16 @@
   flex-direction: column;
   text-align: center;
   align-items: center;
-  /* Typically these .card items get .card styles from your .card rule
+  /* .card styling is typically handled elsewhere 
      (background-color, border, padding, etc.) */
+}
+
+/* Ensure service descriptions expand, pushing the button to the bottom -- */
+.service-description {
+  flex-grow: 1;
+}
+.service-card .btn {
+  margin-top: auto;
 }
 
 /* Agent Card specifically requires bottom-aligned button for variable descriptions */
@@ -485,11 +488,10 @@
   color: var(--color-text-primary);
 }
 
-/* Expand agent description so the "Start Chat" button can pin to bottom */
+/* Agent description & button alignment */
 .agent-description {
   flex-grow: 1;
 }
-/* Pin the button at bottom of .agent-card */
 .agent-card .btn {
   margin-top: auto;
 }
