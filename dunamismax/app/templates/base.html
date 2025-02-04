@@ -1,41 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}DunamisMax{% endblock %}</title>
 
-  <!-- Security Headers -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com;
-                 img-src 'self' data: https:;
-                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-                 script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}">
-  <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}" />
+  <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}" />
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
   {% block extra_css %}{% endblock %}
 
-  <!-- Fonts and Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
 
-  <!-- SEO Optimization -->
-  <meta name="description" content="{% block meta_description %}Modern Web Applications Built with Python & FastAPI{% endblock %}">
-  <meta name="theme-color" content="#2E3440">
-  <meta name="keywords" content="web applications, FastAPI, DunamisMax, file converter, AI agents, messenger">
-
-  <!-- Open Graph Metadata -->
-  <meta property="og:title" content="{% block og_title %}DunamisMax{% endblock %}">
-  <meta property="og:description" content="{% block og_description %}Modern Web Applications Built with Python & FastAPI{% endblock %}">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="DunamisMax">
+  <!-- Basic SEO & Open Graph (optional) -->
+  <meta name="description"
+    content="{% block meta_description %}Modern Web Applications Built with Python & FastAPI{% endblock %}" />
+  <meta name="theme-color" content="#2E3440" />
+  <meta name="keywords" content="web applications, FastAPI, DunamisMax, file converter, AI agents, messenger" />
+  <meta property="og:title" content="{% block og_title %}DunamisMax{% endblock %}" />
+  <meta property="og:description"
+    content="{% block og_description %}Modern Web Applications Built with Python & FastAPI{% endblock %}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="DunamisMax" />
 
   {% block extra_meta %}{% endblock %}
 </head>
@@ -45,24 +37,24 @@
   <nav class="main-nav">
     <div class="nav-container">
       <div class="nav-links">
-        <!-- If you want to highlight the homepage when on this site, add .active conditionally -->
+        <!-- Mark 'Home' as active by default or conditionally -->
         <a href="https://dunamismax.com" class="active">Home</a>
         <a href="https://messenger.dunamismax.com">Messenger</a>
         <a href="https://agents.dunamismax.com">AI Agents</a>
         <a href="https://files.dunamismax.com">File Converter</a>
+        <a href="https://notes.dunamismax.com">Notes</a>
       </div>
     </div>
   </nav>
 
-  <!-- Page Wrapper -->
   <div class="page-wrapper">
     <!-- Status Messages -->
     {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-{{ message.category }}">
-        {{ message.content }}
-      </div>
-      {% endfor %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.category }}">
+      {{ message.content }}
+    </div>
+    {% endfor %}
     {% endif %}
 
     <!-- Main Content Area -->
@@ -88,36 +80,38 @@
 
   <!-- Core Scripts -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener("DOMContentLoaded", function () {
       // Initialize Feather Icons
       feather.replace();
 
       // Set current year
-      document.getElementById('current-year').textContent = new Date().getFullYear();
+      const yearSpan = document.getElementById("current-year");
+      if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+      }
 
-      // Optional: highlight current nav link if you want
+      // Highlight current nav link
       const currentUrl = window.location.href;
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        if (link.href === currentUrl || link.href === currentUrl + '/') {
-          link.classList.add('active');
+      document.querySelectorAll(".nav-links a").forEach((link) => {
+        if (link.href === currentUrl || link.href === currentUrl + "/") {
+          link.classList.add("active");
         } else {
-          link.classList.remove('active');
+          link.classList.remove("active");
         }
       });
 
       // Auto-dismiss alerts
-      document.querySelectorAll('.alert').forEach(alert => {
+      document.querySelectorAll(".alert").forEach((alert) => {
         setTimeout(() => {
-          alert.style.opacity = '0';
+          alert.style.opacity = "0";
           setTimeout(() => alert.remove(), 300);
         }, 5000);
       });
     });
   </script>
-
   {% block scripts %}{% endblock %}
 
-  <!-- Error Handling -->
+  <!-- Optional Error Handling -->
   {% if error %}
   <div class="error-notification">
     <i data-feather="alert-triangle"></i>
@@ -125,4 +119,5 @@
   </div>
   {% endif %}
 </body>
+
 </html>

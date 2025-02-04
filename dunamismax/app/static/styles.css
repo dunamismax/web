@@ -388,89 +388,148 @@
     gap: var(--space-xs);
   }
 
-  /* =====================================================================
-     9. Grids (Services, Features, Agents, etc.)
-     ===================================================================== */
-  /* Base grid utility for repeated patterns */
-  .grid {
-    display: grid;
-    gap: var(--space-lg);
-  }
-  .services-grid,
-  .features-grid,
-  .agents-grid,
-  .data-grid,
-  .contact-grid,
-  .service-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: var(--space-lg);
-  }
-  /* Service Card, Feature Card, Agent Card, etc. */
-  .service-card,
-  .feature-card,
-  .agent-card {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-  }
-  .service-header,
-  .agent-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    justify-content: center;
-    margin-bottom: var(--space-sm);
-  }
-  .service-header i,
-  .agent-header i,
-  .feature-card i {
-    width: 24px;
-    height: 24px;
-    stroke: var(--color-accent);
-  }
-  .service-description,
-  .agent-description {
-    margin-bottom: var(--space-md);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-primary);
-  }
+/* =====================================================================
+   9. Grids (Services, Features, Agents, etc.)
+   ===================================================================== */
 
-  /* Data card used in privacy page or data grids */
-  .data-card {
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-default);
-    padding: var(--space-md);
-  }
-  .data-card .card-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-sm);
-  }
+/* Base grid utility (optional helper if needed) */
+.grid {
+  display: grid;
+  gap: var(--space-lg);
+}
 
-  .policy-section {
-    margin-bottom: var(--space-2xl);
-  }
-  .section-header {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-  }
-  .section-header .header-content {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    justify-content: center;
-  }
-  .section-header p {
-    text-align: center;
-    color: var(--color-text-muted);
-    margin-top: var(--space-xs);
-  }
+/* Named grids: automatically create responsive columns */
+.services-grid,
+.features-grid,
+.agents-grid,
+.data-grid,
+.contact-grid,
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* Section wrappers to add background, padding, and spacing for your homepage
+   or anywhere you want a distinct "block" design. */
+.services-section,
+.features-section,
+.agents-section,
+.data-section {
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-default);
+  margin-bottom: var(--space-xl);
+  /* Default background color if you wish.
+     You can override per section with a more specific class or inline style. */
+  background-color: var(--nord2);
+}
+
+/* Example specialized backgrounds for each:
+   Adjust or remove if you'd rather do inline or only have one color. */
+.services-section {
+  background-color: var(--nord2); /* slightly lighter dark */
+}
+.features-section {
+  background-color: var(--nord3); /* a bit darker than .services-section */
+}
+.agents-section {
+  background-color: var(--nord2);
+}
+.data-section {
+  background-color: var(--nord2);
+}
+
+/* Service Card & Feature Card share similar layout rules */
+.service-card,
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  /* Typically these .card items get .card styles from your .card rule
+     (background-color, border, padding, etc.) */
+}
+
+/* Agent Card specifically requires bottom-aligned button for variable descriptions */
+.agent-card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+
+/* Headers inside service or agent cards */
+.service-header,
+.agent-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  justify-content: center;
+  margin-bottom: var(--space-sm);
+}
+
+/* Icons in service/agent headers + feature cards */
+.service-header i,
+.agent-header i,
+.feature-card i {
+  width: 24px;
+  height: 24px;
+  stroke: var(--color-accent);
+}
+
+/* Description text in service/agent cards */
+.service-description,
+.agent-description {
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+/* Expand agent description so the "Start Chat" button can pin to bottom */
+.agent-description {
+  flex-grow: 1;
+}
+/* Pin the button at bottom of .agent-card */
+.agent-card .btn {
+  margin-top: auto;
+}
+
+/* Data card styling (used in privacy page or data grids) */
+.data-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-default);
+  padding: var(--space-md);
+}
+.data-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+/* Policy sections or other sections in privacy pages */
+.policy-section {
+  margin-bottom: var(--space-2xl);
+}
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+.section-header .header-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+.section-header p {
+  text-align: center;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
 
   /* =====================================================================
      10. Forms & Inputs

@@ -1,29 +1,35 @@
 # Port Structure
 
-## Main Applications (8000-8099)
+## Main Website (8000-8099)
 
-dunamismax.com              -> 8000  # Main website
-api.dunamismax.com          -> 8001  # Main API (if needed)
+dunamismax.com              -> 8000  # Main website index page
 
-## Communication Services (8100-8199)
+## Messenger Service (8100-8199)
 
-messenger.dunamismax.com    -> 8100  # Chat service
-meet.dunamismax.com         -> 8101  # Future video service
-mail.dunamismax.com         -> 8102  # Future mail service
+messenger.dunamismax.com    -> 8100  # Real-time chat application
 
-## Tool Services (8200-8299)
+## AI Services (8200-8299)
 
-tools.dunamismax.com        -> 8200  # General tools landing
-calc.dunamismax.com         -> 8201  # Calculator service
-convert.dunamismax.com      -> 8202  # File converter
+agents.dunamismax.com       -> 8200  # AI Agents chat interface
 
-## Data Services (8300-8399)
+## File Services (8300-8399)
 
-data.dunamismax.com         -> 8300  # Data processing
-analytics.dunamismax.com    -> 8301  # Analytics dashboard
+files.dunamismax.com        -> 8300  # File conversion utility
 
-## Development/Testing (8900-8999)
+## Dashboard Services (8400-8499)
 
-dev.dunamismax.com          -> 8900  # Development instance
-staging.dunamismax.com      -> 8901  # Staging instance
-test.dunamismax.com         -> 8902  # Testing instance
+dashboard.dunamismax.com    -> 8400  # System monitoring dashboard
+
+## Productivity Services (8500-8599)
+
+notes.dunamismax.com        -> 8500  # Collaborative note-taking app
+
+## Future Services (8600-8899)
+
+### Reserved for future applications
+
+Example:
+
+collaboration.dunamismax.com -> 8600  # Future collaboration tools
+
+media.dunamismax.com         -> 8700  # Future media services

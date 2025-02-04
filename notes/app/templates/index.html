@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="notes-page fade-in">
+  <header class="page-header">
+    <div class="logo">
+      <i data-feather="book-open"></i>
+      <h1>My Notes</h1>
+    </div>
+    <p class="tagline">Create, edit, and manage your notes</p>
+  </header>
+
+  <!-- Log out button -->
+  <div style="text-align: right;">
+    <a href="/logout" class="btn btn-outline btn-small">
+      <i data-feather="lock"></i>
+      Lock
+    </a>
+  </div>
+
+  <!-- New Note Form -->
+  <div class="card" style="margin-bottom: var(--space-lg); text-align: center;">
+    <h3>Create a New Note</h3>
+    <form action="/notes/create" method="POST" class="form-group">
+      <input type="text" name="title" placeholder="Note Title" required />
+      <textarea name="content" placeholder="Note Content" rows="4" required></textarea>
+      <button type="submit" class="btn">
+        <i data-feather="plus"></i>
+        Add Note
+      </button>
+    </form>
+  </div>
+
+  <!-- Existing Notes -->
+  <div class="notes-list" style="display: flex; flex-direction: column; gap: var(--space-md);">
+    {% for note in notes %}
+    <div class="card" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+      <h3>{{ note.title }}</h3>
+      <p style="text-align: left;">{{ note.content }}</p>
+      <div style="display: flex; justify-content: flex-end; gap: var(--space-sm);">
+        <a href="/notes/{{ note.id }}/edit" class="btn btn-small">
+          <i data-feather="edit-3"></i> Edit
+        </a>
+        <form action="/notes/{{ note.id }}/delete" method="POST" style="margin: 0;">
+          <button type="submit" class="btn btn-small btn-outline" onclick="return confirm('Delete this note?')">
+            <i data-feather="trash-2"></i>
+            Delete
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

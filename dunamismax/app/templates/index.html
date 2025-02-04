@@ -5,63 +5,62 @@
   <header class="page-header">
     <div class="logo">
       <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
       </svg>
       <h1>DunamisMax</h1>
     </div>
     <p class="tagline">Modern Web Applications Built with Python &amp; FastAPI</p>
   </header>
 
-  <div class="main-container card">
+  <!-- Services Section -->
+  <section class="services-section">
     <div class="section-header">
       <div class="header-content">
         <i data-feather="layers"></i>
         <span>Available Services</span>
       </div>
     </div>
-
-    <div class="content-area">
-      <!-- Services Grid -->
-      <div class="services-grid">
-        {% for service in services %}
-        <div class="service-card card fade-in">
-          <div class="service-header">
-            <i data-feather="{{ service.icon }}"></i>
-            <h3>{{ service.name }}</h3>
-          </div>
-          <p class="service-description">{{ service.description }}</p>
-          <a href="{{ service.url }}" class="btn">
-            <i data-feather="external-link"></i>
-            Launch Service
-          </a>
+    <div class="services-grid">
+      {% for service in services %}
+      <div class="service-card card fade-in">
+        <div class="service-header">
+          <i data-feather="{{ service.icon }}"></i>
+          <h3>{{ service.name }}</h3>
         </div>
-        {% endfor %}
+        <p class="service-description">{{ service.description }}</p>
+        <a href="{{ service.url }}" class="btn">
+          <i data-feather="external-link"></i>
+          Launch Service
+        </a>
       </div>
+      {% endfor %}
+    </div>
+  </section>
 
-      <!-- Features Grid -->
-      <div class="features-grid">
-        <div class="card feature-card">
-          <i data-feather="zap"></i>
-          <h4>High Performance</h4>
-          <p>Built with FastAPI for maximum speed</p>
-        </div>
-        <div class="card feature-card">
-          <i data-feather="shield"></i>
-          <h4>Secure</h4>
-          <p>Modern security best practices</p>
-        </div>
-        <div class="card feature-card">
-          <i data-feather="clock"></i>
-          <h4>Real-time</h4>
-          <p>WebSocket for instant updates</p>
-        </div>
-        <div class="card feature-card">
-          <i data-feather="code"></i>
-          <h4>Open Source</h4>
-          <p>Available on GitHub</p>
-        </div>
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="features-grid">
+      <div class="card feature-card">
+        <i data-feather="zap"></i>
+        <h4>High Performance</h4>
+        <p>Built with FastAPI for maximum speed</p>
+      </div>
+      <div class="card feature-card">
+        <i data-feather="shield"></i>
+        <h4>Secure</h4>
+        <p>Modern security best practices</p>
+      </div>
+      <div class="card feature-card">
+        <i data-feather="clock"></i>
+        <h4>Real-time</h4>
+        <p>WebSocket for instant updates</p>
+      </div>
+      <div class="card feature-card">
+        <i data-feather="code"></i>
+        <h4>Open Source</h4>
+        <p>Available on GitHub</p>
       </div>
     </div>
-  </div>
+  </section>
 </div>
 {% endblock %}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}DunamisMax Notes{% endblock %}</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='logo.svg') }}" />
+  <link rel="alternate icon" type="image/png" href="{{ url_for('static', path='favicon.ico') }}" />
+
+  <!-- Stylesheet: Use url_for for consistent static file handling -->
+  <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
+
+  <!-- Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <div class="nav-links">
+        <a href="https://dunamismax.com">Home</a>
+        <a href="https://messenger.dunamismax.com">Messenger</a>
+        <a href="https://agents.dunamismax.com">AI Agents</a>
+        <a href="https://files.dunamismax.com">File Converter</a>
+        <a href="https://notes.dunamismax.com" class="active">Notes</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="main-footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="https://dunamismax.com">Home</a>
+          <a href="/privacy">Privacy</a>
+          <a href="https://github.com/dunamismax" target="_blank" rel="noopener">GitHub</a>
+          {% block footer_links %}{% endblock %}
+        </div>
+        <p class="footer-copyright">
+          &copy; <span id="current-year"></span> DunamisMax
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Initialize Feather Icons
+    document.addEventListener("DOMContentLoaded", function () {
+      feather.replace();
+
+      // Set current year in footer
+      const yearSpan = document.getElementById("current-year");
+      if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+
+</html>

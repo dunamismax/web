@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="notes-page fade-in">
+  <header class="page-header">
+    <div class="logo">
+      <i data-feather="edit"></i>
+      <h1>Edit Note</h1>
+    </div>
+  </header>
+
+  <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+    <form action="/notes/{{ note.id }}/edit" method="POST" class="form-group">
+      <input type="text" name="title" value="{{ note.title }}" required />
+      <textarea name="content" rows="6" required>{{ note.content }}</textarea>
+      <button type="submit" class="btn">
+        <i data-feather="save"></i>
+        Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

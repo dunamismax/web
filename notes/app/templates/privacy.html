@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="privacy-page fade-in">
+    <header class="privacy-header">
+        <div class="logo">
+            <i data-feather="lock"></i>
+            <h1>Privacy Policy</h1>
+        </div>
+        <p class="tagline">
+            <i data-feather="calendar"></i>
+            Last Updated: January 30, 2025
+        </p>
+        <a href="/" class="btn">
+            <i data-feather="arrow-left"></i>
+            Back to Home
+        </a>
+    </header>
+
+    <!-- Main Privacy Container -->
+    <div class="main-container card">
+        <!-- Services Overview -->
+        <section class="policy-section">
+            <div class="section-header">
+                <div class="header-content">
+                    <i data-feather="box"></i>
+                    <h2>Services Overview</h2>
+                </div>
+                <p>DunamisMax provides open-source services through our platform</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <i data-feather="terminal"></i>
+                    <h3>Main Portal</h3>
+                    <p>dunamismax.com</p>
+                </div>
+                <div class="service-card">
+                    <i data-feather="file"></i>
+                    <h3>File Converter</h3>
+                    <p>files.dunamismax.com</p>
+                </div>
+                <div class="service-card">
+                    <i data-feather="cpu"></i>
+                    <h3>AI Agents</h3>
+                    <p>agents.dunamismax.com</p>
+                </div>
+                <div class="service-card">
+                    <i data-feather="message-square"></i>
+                    <h3>Messenger</h3>
+                    <p>messenger.dunamismax.com</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Open Source Commitment -->
+        <section class="policy-section">
+            <div class="section-header">
+                <div class="header-content">
+                    <i data-feather="code"></i>
+                    <h2>Open Source Commitment</h2>
+                </div>
+                <p>We believe in transparency and security through open development</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i data-feather="github"></i>
+                    <h3>Public Code</h3>
+                    <p>All source code available on GitHub</p>
+                </div>
+                <div class="feature-card">
+                    <i data-feather="shield"></i>
+                    <h3>Verifiable Security</h3>
+                    <p>Audit our security implementations</p>
+                </div>
+                <div class="feature-card">
+                    <i data-feather="users"></i>
+                    <h3>Community Driven</h3>
+                    <p>Contribute or fork our codebase</p>
+                </div>
+                <div class="feature-card">
+                    <i data-feather="eye"></i>
+                    <h3>Transparent</h3>
+                    <p>No hidden features or data collection</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Handling -->
+        <section class="policy-section">
+            <div class="section-header">
+                <div class="header-content">
+                    <i data-feather="database"></i>
+                    <h2>Data Handling</h2>
+                </div>
+            </div>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="card-header">
+                        <i data-feather="download"></i>
+                        <h3>Data Collection</h3>
+                    </div>
+                    <ul>
+                        <li>IP addresses</li>
+                        <li>Browser information</li>
+                        <li>Access timestamps</li>
+                        <li>User-submitted content</li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <div class="card-header">
+                        <i data-feather="activity"></i>
+                        <h3>Data Usage</h3>
+                    </div>
+                    <ul>
+                        <li>Service operation</li>
+                        <li>Performance monitoring</li>
+                        <li>Security measures</li>
+                        <li>Service improvements</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Retention -->
+        <section class="policy-section">
+            <div class="section-header">
+                <div class="header-content">
+                    <i data-feather="clock"></i>
+                    <h2>Data Retention</h2>
+                </div>
+                <p>We practice minimal data retention</p>
+            </div>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="card-header">
+                        <i data-feather="file"></i>
+                        <h3>Converted Files</h3>
+                    </div>
+                    <p>Deleted immediately after download</p>
+                </div>
+                <div class="data-card">
+                    <div class="card-header">
+                        <i data-feather="message-circle"></i>
+                        <h3>Chat Messages</h3>
+                    </div>
+                    <p>Not stored - real-time only</p>
+                </div>
+                <div class="data-card">
+                    <div class="card-header">
+                        <i data-feather="cpu"></i>
+                        <h3>AI Conversations</h3>
+                    </div>
+                    <p>Not persisted after session ends</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Info -->
+        <section class="policy-section">
+            <div class="section-header">
+                <div class="header-content">
+                    <i data-feather="mail"></i>
+                    <h2>Contact Information</h2>
+                </div>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <i data-feather="mail"></i>
+                    <h3>Email</h3>
+                    <p>dunamismax@tutamail.com</p>
+                </div>
+                <div class="contact-card">
+                    <i data-feather="github"></i>
+                    <h3>GitHub</h3>
+                    <a href="https://github.com/dunamismax" target="_blank" rel="noopener">
+                        github.com/dunamismax
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

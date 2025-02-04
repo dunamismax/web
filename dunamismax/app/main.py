@@ -53,6 +53,13 @@ SERVICES = [
         "icon": "file",
         "features": ["FFmpeg", "Audio", "Video"],
     },
+    {
+        "name": "Notes",
+        "description": "Password-protected note-taking application with a Nord design",
+        "url": "https://notes.dunamismax.com",
+        "icon": "book-open",
+        "features": ["Password-protected", "CRUD", "PostgreSQL"],
+    },
 ]
 
 
@@ -67,7 +74,7 @@ async def root(request: Request):
                 "request": request,
                 "services": SERVICES,
                 "page_title": "DunamisMax - Modern Web Applications",
-                "meta_description": "Suite of professional web applications including real-time messaging, AI agents, and file conversion services",
+                "meta_description": "Suite of professional web applications including real-time messaging, AI agents, file conversion, and notes service",
             },
         )
     except Exception as e:
