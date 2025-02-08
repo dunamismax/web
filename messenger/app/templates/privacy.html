@@ -1,208 +1,116 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Privacy Policy - DunamisMax{%
+endblock %} {% block content %}
 <div class="privacy-page fade-in">
   <header class="privacy-header">
-    <div class="logo">
-      <i data-feather="lock"></i>
+    <div class="logo" aria-label="Privacy Logo">
+      <i data-feather="lock" aria-hidden="true"></i>
       <h1>Privacy Policy</h1>
     </div>
     <p class="tagline">
-      <i data-feather="calendar"></i>
+      <i data-feather="calendar" aria-hidden="true"></i>
       Last Updated: January 30, 2025
     </p>
-    <a href="/" class="btn">
-      <i data-feather="arrow-left"></i>
-      Back to Home
+    <a href="/" class="btn" aria-label="Back to Home">
+      <i data-feather="arrow-left" aria-hidden="true"></i> Back to Home
     </a>
   </header>
 
-  <!-- Main Privacy Container -->
   <div class="main-container card">
-
     <!-- Introduction -->
     <section class="policy-section">
-      <div class="section-header">
-        <h2>Introduction</h2>
-      </div>
+      <h2>Introduction</h2>
       <p>
-        DunamisMax is committed to protecting your privacy and ensuring transparency in how
-        we handle data across our platform. This page outlines the types of information we collect,
-        how it's used, and our dedication to keeping your data secure and confidential.
+        We at DunamisMax are committed to protecting your privacy and being
+        transparent about our data practices.
       </p>
     </section>
 
-    <!-- Services Overview -->
+    <!-- Our Services -->
     <section class="policy-section">
-      <div class="section-header">
-        <div class="header-content">
-          <i data-feather="box"></i>
-          <h2>Services Overview</h2>
-        </div>
-        <p>Below are the primary open-source services we provide:</p>
-      </div>
-
-      <!-- Fewer columns for simpler scanning -->
-      <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-        <div class="service-card">
-          <i data-feather="terminal"></i>
-          <h3>Main Portal</h3>
-          <p>dunamismax.com</p>
-        </div>
-        <div class="service-card">
-          <i data-feather="file"></i>
-          <h3>File Converter</h3>
-          <p>files.dunamismax.com</p>
-        </div>
-        <div class="service-card">
-          <i data-feather="cpu"></i>
-          <h3>AI Agents</h3>
-          <p>agents.dunamismax.com</p>
-        </div>
-        <div class="service-card">
-          <i data-feather="message-square"></i>
-          <h3>Messenger</h3>
-          <p>messenger.dunamismax.com</p>
-        </div>
-      </div>
+      <h2>Our Services</h2>
+      <p>Our open-source platform includes:</p>
+      <ul class="bullet-list">
+        <li><strong>Main Portal:</strong> dunamismax.com</li>
+        <li><strong>File Converter:</strong> files.dunamismax.com</li>
+        <li><strong>AI Agents:</strong> agents.dunamismax.com</li>
+        <li><strong>Messenger:</strong> messenger.dunamismax.com</li>
+      </ul>
     </section>
 
     <!-- Open Source Commitment -->
     <section class="policy-section">
-      <div class="section-header">
-        <div class="header-content">
-          <i data-feather="code"></i>
-          <h2>Open Source Commitment</h2>
-        </div>
-        <p>We believe in security and innovation through open development.</p>
-      </div>
-
-      <!-- Simplified columns to 2, each bullet highlighting key points -->
-      <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-        <div class="feature-card">
-          <i data-feather="github"></i>
-          <h3>Public Code</h3>
-          <p>All source code is publicly available on GitHub.</p>
-        </div>
-        <div class="feature-card">
-          <i data-feather="shield"></i>
-          <h3>Verifiable Security</h3>
-          <p>Our security implementations can be audited by anyone.</p>
-        </div>
-        <div class="feature-card">
-          <i data-feather="users"></i>
-          <h3>Community Driven</h3>
-          <p>Users can contribute or fork our projects to improve them.</p>
-        </div>
-        <div class="feature-card">
-          <i data-feather="eye"></i>
-          <h3>Transparent</h3>
-          <p>No hidden features; we do not collect data beyond what’s necessary.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Data Handling -->
-    <section class="policy-section">
-      <div class="section-header">
-        <div class="header-content">
-          <i data-feather="database"></i>
-          <h2>Data Handling</h2>
-        </div>
-      </div>
+      <h2>Open Source Commitment</h2>
       <p>
-        We collect only the information needed to operate and improve our services. This
-        includes system-related data and any user-submitted content through our tools.
+        We believe in open development and transparency. All source code is
+        public and our security practices are open for review.
       </p>
-
-      <div class="data-grid">
-        <div class="data-card">
-          <div class="card-header">
-            <i data-feather="download"></i>
-            <h3>Data Collection</h3>
-          </div>
-          <ul>
-            <li>IP addresses &amp; browser details</li>
-            <li>Access timestamps</li>
-            <li>User-submitted files or messages</li>
-          </ul>
-        </div>
-        <div class="data-card">
-          <div class="card-header">
-            <i data-feather="activity"></i>
-            <h3>Data Usage</h3>
-          </div>
-          <ul>
-            <li>Service functionality &amp; operation</li>
-            <li>Performance monitoring &amp; analytics</li>
-            <li>Security &amp; threat prevention</li>
-            <li>Continual service improvements</li>
-          </ul>
-        </div>
-      </div>
+      <ul class="bullet-list">
+        <li><strong>Public Code:</strong> Available on GitHub.</li>
+        <li>
+          <strong>Auditable Security:</strong> Implementations can be reviewed
+          by anyone.
+        </li>
+        <li>
+          <strong>Community Driven:</strong> Contributions and forks are
+          encouraged.
+        </li>
+        <li>
+          <strong>Transparency:</strong> We collect only the data that is
+          necessary.
+        </li>
+      </ul>
     </section>
 
-    <!-- Data Retention -->
+    <!-- Data Handling & Retention -->
     <section class="policy-section">
-      <div class="section-header">
-        <div class="header-content">
-          <i data-feather="clock"></i>
-          <h2>Data Retention</h2>
-        </div>
-      </div>
-      <p>We minimize stored data, retaining only what's essential for immediate operation.</p>
-
-      <div class="data-grid">
-        <div class="data-card">
-          <div class="card-header">
-            <i data-feather="file"></i>
-            <h3>Converted Files</h3>
-          </div>
-          <p>Deleted immediately after download or session termination.</p>
-        </div>
-        <div class="data-card">
-          <div class="card-header">
-            <i data-feather="message-circle"></i>
-            <h3>Chat Messages</h3>
-          </div>
-          <p>Not stored; only exist in real-time for the session.</p>
-        </div>
-        <div class="data-card">
-          <div class="card-header">
-            <i data-feather="cpu"></i>
-            <h3>AI Conversations</h3>
-          </div>
-          <p>Not persisted after your session or conversation ends.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact Info -->
-    <section class="policy-section">
-      <div class="section-header">
-        <div class="header-content">
-          <i data-feather="mail"></i>
-          <h2>Contact Information</h2>
-        </div>
-      </div>
+      <h2>Data Handling &amp; Retention</h2>
       <p>
-        For inquiries or questions about this policy, feel free to reach out.
+        We collect only the data needed for operating and improving our
+        services, which includes:
       </p>
+      <ul class="bullet-list">
+        <li>
+          <strong>Data Collection:</strong> IP addresses, browser details,
+          access timestamps, and user submissions.
+        </li>
+        <li>
+          <strong>Data Usage:</strong> For functionality, performance
+          monitoring, security, and improvements.
+        </li>
+      </ul>
+      <p>We also minimize data retention:</p>
+      <ul class="bullet-list">
+        <li>
+          <strong>Converted Files:</strong> Deleted after download or session
+          end.
+        </li>
+        <li>
+          <strong>Chat Messages:</strong> Exist only for the duration of your
+          session.
+        </li>
+        <li>
+          <strong>AI Conversations:</strong> Not stored after your session ends.
+        </li>
+      </ul>
+    </section>
 
-      <div class="contact-grid">
-        <div class="contact-card">
-          <i data-feather="mail"></i>
-          <h3>Email</h3>
-          <p>dunamismax@tutamail.com</p>
-        </div>
-        <div class="contact-card">
-          <i data-feather="github"></i>
-          <h3>GitHub</h3>
-          <a href="https://github.com/dunamismax" target="_blank" rel="noopener">
+    <!-- Contact Information -->
+    <section class="policy-section">
+      <h2>Contact Us</h2>
+      <p>For questions or concerns about this policy, please reach out:</p>
+      <ul class="bullet-list">
+        <li><strong>Email:</strong> dunamismax@tutamail.com</li>
+        <li>
+          <strong>GitHub:</strong>
+          <a
+            href="https://github.com/dunamismax"
+            target="_blank"
+            rel="noopener"
+          >
             github.com/dunamismax
           </a>
-        </div>
-      </div>
+        </li>
+      </ul>
     </section>
   </div>
 </div>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DunamisMax Notes{% endblock %}</title>
 
-    <!-- Favicon -->
+    <!-- Favicon & Icons -->
     <link rel="icon" href="{{ url_for('static', path='logo.svg') }}" />
     <link
       rel="alternate icon"
@@ -13,18 +13,13 @@
       href="{{ url_for('static', path='favicon.ico') }}"
     />
 
-    <!-- Stylesheet: Use url_for for consistent static file handling -->
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
-
-    <!-- Fonts and Icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
-
     {% block extra_head %}{% endblock %}
   </head>
-
   <body>
     <!-- Navigation -->
-    <nav class="main-nav">
+    <nav class="main-nav" role="navigation" aria-label="Main Navigation">
       <div class="nav-container">
         <div class="nav-links">
           <a href="https://dunamismax.com">Home</a>
@@ -39,7 +34,7 @@
     <div class="page-wrapper">
       <main class="container">{% block content %}{% endblock %}</main>
 
-      <footer class="main-footer">
+      <footer class="main-footer" role="contentinfo">
         <div class="footer-content">
           <div class="footer-links">
             <a href="https://dunamismax.com">Home</a>
@@ -59,14 +54,16 @@
       </footer>
     </div>
 
+    <!-- Initialize Feather Icons and set current year -->
     <script>
-      // Initialize Feather Icons
-      document.addEventListener("DOMContentLoaded", function () {
-        feather.replace();
-
-        // Set current year in footer
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof feather !== "undefined") {
+          feather.replace();
+        }
         const yearSpan = document.getElementById("current-year");
-        if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+        if (yearSpan) {
+          yearSpan.textContent = new Date().getFullYear();
+        }
       });
     </script>
     {% block scripts %}{% endblock %}

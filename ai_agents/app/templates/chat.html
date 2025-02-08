@@ -1,15 +1,21 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Chat with {{ agent.name }}{% endblock
+%} {% block content %}
 <div class="chat-page fade-in">
   <header class="messenger-header">
-    <div class="logo">
-      <!-- If agent provides a custom icon path, use it; fallback below -->
-      <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
-        <path d="{{
-            agent.icon_path
-            |default('M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z')
-          }}" />
+    <div class="logo" aria-label="{{ agent.name }} Logo">
+      <!-- If agent.custom_icon is provided, use it; else fallback to a default SVG -->
+      <svg
+        viewBox="0 0 24 24"
+        width="32"
+        height="32"
+        stroke="currentColor"
+        stroke-width="2"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="{{ agent.icon_path | default('M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z') }}"
+        />
       </svg>
       <h1>{{ agent.name }}</h1>
     </div>
@@ -17,36 +23,46 @@
   </header>
 
   <div id="chat-interface" class="messenger-container card">
-    <!-- Chat Header (status + back button) -->
     <div class="chat-header">
       <div class="chat-status">
-        <span id="connection-indicator" class="indicator offline"></span>
+        <span
+          id="connection-indicator"
+          class="indicator offline"
+          aria-hidden="true"
+        ></span>
         <span id="status-text">Not Connected</span>
       </div>
-      <a href="/" class="btn btn-small btn-outline" title="Back to Agents">
-        <i data-feather="arrow-left"></i>
+      <a
+        href="/agents"
+        class="btn btn-small btn-outline"
+        title="Back to Agents"
+      >
+        <i data-feather="arrow-left" aria-hidden="true"></i>
         Back
       </a>
     </div>
 
-    <!-- Message List Area -->
     <div class="message-list" id="message-list">
-      <!-- Initial system message -->
       <div class="message system">
         <div class="message-content">
-          <i data-feather="info"></i>
+          <i data-feather="info" aria-hidden="true"></i>
           <span>Connected to {{ agent.name }}. Start chatting!</span>
         </div>
       </div>
     </div>
 
-    <!-- Input Area -->
     <div class="message-input">
       <form id="message-form" onsubmit="return sendMessage(event)">
         <div class="input-group">
-          <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off" required />
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Type your message..."
+            autocomplete="off"
+            required
+          />
           <button type="submit" class="btn">
-            <i data-feather="send"></i>
+            <i data-feather="send" aria-hidden="true"></i>
             Send
           </button>
         </div>
@@ -54,35 +70,29 @@
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-  // WebSocket & DOM references
   let ws = null;
-  const messageList = document.getElementById('message-list');
-  const messageInput = document.getElementById('message-input');
-  const connectionIndicator = document.getElementById('connection-indicator');
-  const statusText = document.getElementById('status-text');
+  const messageList = document.getElementById("message-list");
+  const messageInput = document.getElementById("message-input");
+  const connectionIndicator = document.getElementById("connection-indicator");
+  const statusText = document.getElementById("status-text");
 
-  /** Connect to WebSocket, using agent.id to build the endpoint */
   function connectWebSocket() {
-    const protocol = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const wsUrl = `${protocol}//${window.location.host}/ws/chat/{{ agent.id }}`;
-
     ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
-      connectionIndicator.className = 'indicator online';
-      statusText.textContent = 'Connected';
+      connectionIndicator.className = "indicator online";
+      statusText.textContent = "Connected";
       messageInput.focus();
     };
 
     ws.onclose = () => {
-      connectionIndicator.className = 'indicator offline';
-      statusText.textContent = 'Disconnected';
-      // Attempt auto-reconnect
-      setTimeout(connectWebSocket, 1000);
+      connectionIndicator.className = "indicator offline";
+      statusText.textContent = "Disconnected";
+      setTimeout(connectWebSocket, 1000); // auto-reconnect
     };
 
     ws.onmessage = (event) => {
@@ -91,14 +101,11 @@
     };
   }
 
-  /** Handle incoming messages (including chunked streaming) */
   function handleMessage(message) {
     if (message.is_error) {
-      addMessage({ type: 'system', content: message.content, error: true });
+      addMessage({ type: "system", content: message.content, error: true });
       return;
     }
-
-    // If streaming chunks
     if (message.is_chunk) {
       if (message.is_complete) {
         messageList.scrollTop = messageList.scrollHeight;
@@ -107,63 +114,62 @@
       if (message.is_first_chunk) {
         addMessage({ type: message.role, content: message.content });
       } else {
-        const lastMessage = messageList.lastElementChild;
-        if (lastMessage && lastMessage.classList.contains(message.role)) {
-          const contentSpan = lastMessage.querySelector('.message-content span');
+        const lastMsg = messageList.lastElementChild;
+        if (lastMsg && lastMsg.classList.contains(message.role)) {
+          const contentSpan = lastMsg.querySelector(".message-content span");
           if (contentSpan) {
             contentSpan.textContent += message.content;
           }
         }
       }
     } else {
-      // Single message (non-streamed)
       addMessage({ type: message.role, content: message.content });
     }
-
     messageList.scrollTop = messageList.scrollHeight;
   }
 
-  /** Send a user message */
   function sendMessage(event) {
     event.preventDefault();
     const text = messageInput.value.trim();
     if (text && ws && ws.readyState === WebSocket.OPEN) {
-      addMessage({ type: 'user', content: text });
+      addMessage({ type: "user", content: text });
       ws.send(text);
-      messageInput.value = '';
+      messageInput.value = "";
       messageInput.focus();
     }
     return false;
   }
 
-  /** Add a message to the DOM */
   function addMessage({ type, content, error }) {
-    const msgDiv = document.createElement('div');
+    const msgDiv = document.createElement("div");
     msgDiv.className = `message ${type}`;
-
-    if (type === 'system') {
+    if (type === "system") {
       msgDiv.innerHTML = `
-      <div class="message-content">
-        <i data-feather="${error ? 'alert-triangle' : 'info'}"></i>
-        <span>${escapeHtml(content)}</span>
-      </div>`;
+        <div class="message-content">
+          <i data-feather="${
+            error ? "alert-triangle" : "info"
+          }" aria-hidden="true"></i>
+          <span>${escapeHtml(content)}</span>
+        </div>`;
     } else {
       const time = new Date().toLocaleTimeString();
       msgDiv.innerHTML = `
-      <div class="message-header">
-        <span class="username">${type === 'user' ? 'You' : '{{ agent.name }}'}</span>
-        <span class="timestamp">${time}</span>
-      </div>
-      <div class="message-content">
-        <span>${escapeHtml(content)}</span>
-      </div>`;
+        <div class="message-header">
+          <span class="username">${
+            type === "user" ? "You" : "{{ agent.name }}"
+          }</span>
+          <span class="timestamp">${time}</span>
+        </div>
+        <div class="message-content">
+          <span>${escapeHtml(content)}</span>
+        </div>`;
     }
-
     messageList.appendChild(msgDiv);
-    feather.replace(); // re-init icons
+    if (typeof feather !== "undefined") {
+      feather.replace();
+    }
   }
 
-  /** Escape HTML for safe text insertion */
   function escapeHtml(unsafe) {
     return String(unsafe)
       .replace(/&/g, "&amp;")
@@ -173,8 +179,7 @@
       .replace(/'/g, "&#039;");
   }
 
-  // On DOM load
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener("DOMContentLoaded", () => {
     connectWebSocket();
     messageInput.focus();
   });

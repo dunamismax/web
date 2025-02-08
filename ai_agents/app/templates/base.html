@@ -21,21 +21,22 @@
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
     {% block extra_css %}{% endblock %}
 
-    <!-- Fonts / Icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <!-- Fonts / Icons (defer improves performance) -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
+      defer
+    ></script>
 
     <!-- Basic Meta -->
     <meta
       name="description"
       content="{% block meta_description %}AI-powered assistant platform{% endblock %}"
     />
-
     {% block extra_meta %}{% endblock %}
   </head>
-
-  <body class="{% block body_class %}{% endblock %}">
+  <body>
     <!-- Navigation -->
-    <nav class="main-nav">
+    <nav class="main-nav" role="navigation" aria-label="Primary Navigation">
       <div class="nav-container">
         <div class="nav-links">
           <a href="https://dunamismax.com">Home</a>
@@ -48,18 +49,15 @@
     </nav>
 
     <div class="page-wrapper">
-      <!-- Display status or flash messages if any -->
       {% if messages %} {% for message in messages %}
-      <div class="alert alert-{{ message.category }}">
+      <div class="alert alert-{{ message.category }}" role="alert">
         {{ message.content }}
       </div>
       {% endfor %} {% endif %}
 
-      <!-- Main Content -->
       <main class="container">{% block content %}{% endblock %}</main>
 
-      <!-- Footer -->
-      <footer class="main-footer">
+      <footer class="main-footer" role="contentinfo">
         <div class="footer-content">
           <div class="footer-links">
             <a href="https://dunamismax.com">Home</a>
@@ -79,19 +77,17 @@
       </footer>
     </div>
 
-    <!-- Core Scripts -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Initialize Feather Icons
-        feather.replace();
-
-        // Set current year
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof feather !== "undefined") {
+          feather.replace();
+        }
         const yearSpan = document.getElementById("current-year");
         if (yearSpan) {
           yearSpan.textContent = new Date().getFullYear();
         }
 
-        // Highlight the current page link
+        // Highlight active nav link based on URL
         const currentUrl = window.location.href;
         document.querySelectorAll(".nav-links a").forEach((link) => {
           if (link.href === currentUrl || link.href === currentUrl + "/") {
@@ -101,7 +97,7 @@
           }
         });
 
-        // Auto-dismiss alerts
+        // Auto-dismiss alerts after 5 seconds
         document.querySelectorAll(".alert").forEach((alert) => {
           setTimeout(() => {
             alert.style.opacity = "0";
@@ -110,12 +106,6 @@
         });
       });
     </script>
-
-    {% block scripts %}{% endblock %} {% if error %}
-    <div class="error-notification">
-      <i data-feather="alert-triangle"></i>
-      {{ error }}
-    </div>
-    {% endif %}
+    {% block scripts %}{% endblock %}
   </body>
 </html>

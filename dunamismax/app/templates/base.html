@@ -22,9 +22,12 @@
     {% block extra_css %}{% endblock %}
 
     <!-- Fonts & Icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
+      defer
+    ></script>
 
-    <!-- Basic SEO & Open Graph (optional) -->
+    <!-- Basic SEO & Open Graph -->
     <meta
       name="description"
       content="{% block meta_description %}Modern Web Applications Built with Python & FastAPI{% endblock %}"
@@ -44,29 +47,32 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="DunamisMax" />
-
     {% block extra_meta %}{% endblock %}
   </head>
 
   <body>
     <!-- Navigation -->
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Primary Navigation">
       <div class="nav-container">
         <div class="nav-links">
-          <!-- Mark 'Home' as active by default or conditionally -->
-          <a href="https://dunamismax.com" class="active">Home</a>
-          <a href="https://messenger.dunamismax.com">Messenger</a>
-          <a href="https://agents.dunamismax.com">AI Agents</a>
-          <a href="https://files.dunamismax.com">File Converter</a>
-          <a href="https://notes.dunamismax.com">Notes</a>
+          <!-- Using external URLs; consider using url_for if these are internal routes -->
+          <a href="https://dunamismax.com" class="nav-item">Home</a>
+          <a href="https://messenger.dunamismax.com" class="nav-item"
+            >Messenger</a
+          >
+          <a href="https://agents.dunamismax.com" class="nav-item">AI Agents</a>
+          <a href="https://files.dunamismax.com" class="nav-item"
+            >File Converter</a
+          >
+          <a href="https://notes.dunamismax.com" class="nav-item">Notes</a>
         </div>
       </div>
     </nav>
 
     <div class="page-wrapper">
-      <!-- Status Messages -->
+      <!-- Display system or session messages, if any -->
       {% if messages %} {% for message in messages %}
-      <div class="alert alert-{{ message.category }}">
+      <div class="alert alert-{{ message.category }}" role="alert">
         {{ message.content }}
       </div>
       {% endfor %} {% endif %}
@@ -75,7 +81,7 @@
       <main class="container">{% block content %}{% endblock %}</main>
 
       <!-- Footer -->
-      <footer class="main-footer">
+      <footer class="main-footer" role="contentinfo">
         <div class="footer-content">
           <div class="footer-links">
             <a href="https://dunamismax.com">Home</a>
@@ -97,17 +103,19 @@
 
     <!-- Core Scripts -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", () => {
         // Initialize Feather Icons
-        feather.replace();
+        if (typeof feather !== "undefined") {
+          feather.replace();
+        }
 
-        // Set current year
+        // Set the current year in the footer
         const yearSpan = document.getElementById("current-year");
         if (yearSpan) {
           yearSpan.textContent = new Date().getFullYear();
         }
 
-        // Highlight current nav link
+        // Highlight active navigation link based on the current URL
         const currentUrl = window.location.href;
         document.querySelectorAll(".nav-links a").forEach((link) => {
           if (link.href === currentUrl || link.href === currentUrl + "/") {
@@ -117,7 +125,7 @@
           }
         });
 
-        // Auto-dismiss alerts
+        // Auto-dismiss alerts after 5 seconds
         document.querySelectorAll(".alert").forEach((alert) => {
           setTimeout(() => {
             alert.style.opacity = "0";
@@ -128,9 +136,9 @@
     </script>
     {% block scripts %}{% endblock %}
 
-    <!-- Optional Error Handling -->
+    <!-- Optional Error Handling Section -->
     {% if error %}
-    <div class="error-notification">
+    <div class="error-notification" role="alert">
       <i data-feather="alert-triangle"></i>
       {{ error }}
     </div>

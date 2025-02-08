@@ -1,12 +1,21 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}DunamisMax Messenger{% endblock %} {%
+block content %}
 <div class="messenger-page fade-in">
+  <!-- Header -->
   <header class="messenger-header">
-    <div class="logo">
-      <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
+    <div class="logo" aria-label="Messenger Logo">
+      <svg
+        viewBox="0 0 24 24"
+        width="32"
+        height="32"
+        stroke="currentColor"
+        stroke-width="2"
+        fill="none"
+        aria-hidden="true"
+      >
         <path
-          d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+          d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+        />
       </svg>
       <h1>DunamisMax Messenger</h1>
     </div>
@@ -14,167 +23,195 @@
   </header>
 
   <!-- Username Form -->
-  <div id="username-form" class="card login-card">
+  <section id="username-form" class="card login-card">
     <h3>Welcome to DunamisMax Messenger</h3>
-    <p class="form-description">Choose a username to start messaging</p>
+    <p class="form-description">Choose a username to join the chat</p>
     <form onsubmit="return connectToChat(event)" class="form-group">
       <div class="input-wrapper">
-        <input type="text" id="username-input" class="form-input" placeholder="Enter username..."
-          pattern="[A-Za-z0-9_]{3,15}" title="3-15 characters, letters, numbers, and underscores only" required
-          autocomplete="off" />
-        <span class="input-help">3-15 characters, letters, numbers, and underscores only</span>
+        <input
+          type="text"
+          id="username-input"
+          class="form-input"
+          placeholder="Enter username..."
+          pattern="[A-Za-z0-9_]{3,15}"
+          title="3-15 characters, letters, numbers, and underscores only"
+          required
+          autocomplete="off"
+        />
+        <span class="input-help"
+          >3-15 characters, letters, numbers, and underscores only</span
+        >
       </div>
       <button type="submit" class="btn">
-        <i data-feather="log-in"></i>
+        <i data-feather="log-in" aria-hidden="true"></i>
         Join Chat
       </button>
     </form>
-  </div>
+  </section>
 
-  <!-- Chat Interface -->
-  <div id="chat-interface" class="messenger-container card" style="display: none;">
+  <!-- Chat Interface (hidden until connected) -->
+  <section
+    id="chat-interface"
+    class="messenger-container card"
+    style="display: none"
+  >
     <div class="chat-header">
       <div class="chat-status">
-        <span id="connection-indicator" class="indicator offline"></span>
+        <span
+          id="connection-indicator"
+          class="indicator offline"
+          aria-hidden="true"
+        ></span>
         <span id="status-text">Not Connected</span>
       </div>
-      <button onclick="disconnectFromChat()" class="btn btn-small btn-outline" title="Leave Chat">
-        <i data-feather="log-out"></i>
-        Leave
+      <button
+        onclick="disconnectFromChat()"
+        class="btn btn-small btn-outline"
+        title="Leave Chat"
+      >
+        <i data-feather="log-out" aria-hidden="true"></i> Leave
       </button>
     </div>
-
     <div class="message-list" id="message-list">
       <div class="message system">
         <div class="message-content">
-          <i data-feather="info"></i>
-          Welcome to DunamisMax Messenger!
+          <i data-feather="info" aria-hidden="true"></i>
+          <span>Welcome to DunamisMax Messenger!</span>
         </div>
       </div>
     </div>
-
     <div class="message-input">
       <form id="message-form" onsubmit="return sendMessage(event)">
         <div class="input-group">
-          <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off" required />
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Type your message..."
+            autocomplete="off"
+            required
+          />
           <button type="submit" class="btn">
-            <i data-feather="send"></i>
+            <i data-feather="send" aria-hidden="true"></i>
             Send
           </button>
         </div>
       </form>
     </div>
-  </div>
+  </section>
 
   <!-- Features Grid -->
   <section class="features-section">
     <div class="features-grid">
       <div class="card feature-card">
-        <i data-feather="zap"></i>
+        <i data-feather="zap" aria-hidden="true"></i>
         <h4>Real-time Group Chat</h4>
-        <p>Join a live chat room with instant messaging powered by WebSockets</p>
+        <p>
+          Join a live chat room with instant messaging powered by WebSockets.
+        </p>
       </div>
       <div class="card feature-card">
-        <i data-feather="shield"></i>
-        <h4>Secure & Private</h4>
-        <p>Your messages are encrypted, and no chat history is stored</p>
+        <i data-feather="shield" aria-hidden="true"></i>
+        <h4>Secure &amp; Private</h4>
+        <p>Your messages are encrypted and not stored.</p>
       </div>
       <div class="card feature-card">
-        <i data-feather="user"></i>
+        <i data-feather="user" aria-hidden="true"></i>
         <h4>Simple Username Setup</h4>
-        <p>Create a unique username and start chatting instantly</p>
+        <p>Create a unique username and start chatting instantly.</p>
       </div>
       <div class="card feature-card">
-        <i data-feather="users"></i>
+        <i data-feather="users" aria-hidden="true"></i>
         <h4>Everyone's Welcome</h4>
-        <p>Join the conversation in a single, shared group chat</p>
+        <p>Join the conversation in our shared group chat.</p>
       </div>
     </div>
-    {% endblock %}
+  </section>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // WebSocket variable and username storage
+  let ws = null;
+  let username = "";
 
-    {% block scripts %}
-    <script>
-      // WebSocket variables
-      let ws = null;
-      let username = '';
+  // DOM references
+  const messageList = document.getElementById("message-list");
+  const messageForm = document.getElementById("message-form");
+  const messageInput = document.getElementById("message-input");
+  const usernameForm = document.getElementById("username-form");
+  const chatInterface = document.getElementById("chat-interface");
+  const connectionIndicator = document.getElementById("connection-indicator");
+  const statusText = document.getElementById("status-text");
 
-      // DOM References
-      const messageList = document.getElementById('message-list');
-      const messageForm = document.getElementById('message-form');
-      const messageInput = document.getElementById('message-input');
-      const usernameForm = document.getElementById('username-form');
-      const chatInterface = document.getElementById('chat-interface');
-      const connectionIndicator = document.getElementById('connection-indicator');
-      const statusText = document.getElementById('status-text');
+  // Connect to the WebSocket with the chosen username
+  function connectToChat(event) {
+    event.preventDefault();
+    username = document.getElementById("username-input").value.trim();
+    if (!username) return false;
 
-      function connectToChat(event) {
-        event.preventDefault();
-        username = document.getElementById('username-input').value.trim();
-        if (!username) return false;
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const wsUrl = `${protocol}//${
+      window.location.host
+    }/ws/chat/${encodeURIComponent(username)}`;
+    ws = new WebSocket(wsUrl);
 
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsUrl = protocol + '//' + window.location.host + '/ws/chat/' + encodeURIComponent(username);
+    ws.onopen = () => {
+      connectionIndicator.className = "indicator online";
+      statusText.textContent = "Connected";
+      usernameForm.style.display = "none";
+      chatInterface.style.display = "flex";
+      messageInput.focus();
+    };
 
-        ws = new WebSocket(wsUrl);
-
-        ws.onopen = function () {
-          connectionIndicator.className = 'indicator online';
-          statusText.textContent = 'Connected';
-          usernameForm.style.display = 'none';
-          chatInterface.style.display = 'flex';
-          messageInput.focus();
-        };
-
-        ws.onclose = function (event) {
-          connectionIndicator.className = 'indicator offline';
-          statusText.textContent = 'Disconnected';
-
-          if (event.code === 1008) {
-            showError('Username already taken. Please choose another.');
-            usernameForm.style.display = 'block';
-            chatInterface.style.display = 'none';
-          } else {
-            addSystemMessage('Disconnected from server. Please refresh to reconnect.');
-          }
-        };
-
-        ws.onerror = function (error) {
-          console.error('WebSocket error:', error);
-          addSystemMessage('Connection error occurred');
-        };
-
-        ws.onmessage = function (event) {
-          const message = JSON.parse(event.data);
-          addMessage(message);
-        };
-
-        return false;
+    ws.onclose = (event) => {
+      connectionIndicator.className = "indicator offline";
+      statusText.textContent = "Disconnected";
+      if (event.code === 1008) {
+        showError("Username already taken. Please choose another.");
+        usernameForm.style.display = "block";
+        chatInterface.style.display = "none";
+      } else {
+        addSystemMessage(
+          "Disconnected from server. Please refresh to reconnect."
+        );
       }
+    };
 
-      function disconnectFromChat() {
-        if (ws) {
-          ws.close();
-        }
-        usernameForm.style.display = 'block';
-        chatInterface.style.display = 'none';
-        messageList.innerHTML = '';
-        addSystemMessage('Welcome to DunamisMax Messenger!');
-      }
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      addSystemMessage("Connection error occurred.");
+    };
 
-      function addMessage(message) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${message.type}`;
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      addMessage(message);
+    };
 
-        if (message.type === 'system') {
-          messageDiv.innerHTML = `
+    return false;
+  }
+
+  // Disconnect from chat and reset interface
+  function disconnectFromChat() {
+    if (ws) ws.close();
+    usernameForm.style.display = "block";
+    chatInterface.style.display = "none";
+    messageList.innerHTML = "";
+    addSystemMessage("Welcome to DunamisMax Messenger!");
+  }
+
+  // Append a message to the chat window
+  function addMessage(message) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message ${message.type}`;
+    if (message.type === "system") {
+      messageDiv.innerHTML = `
         <div class="message-content">
-          <i data-feather="info"></i>
+          <i data-feather="info" aria-hidden="true"></i>
           ${escapeHtml(message.text)}
         </div>
       `;
-        } else {
-          const time = new Date(message.timestamp).toLocaleTimeString();
-          messageDiv.innerHTML = `
+    } else {
+      const time = new Date(message.timestamp).toLocaleTimeString();
+      messageDiv.innerHTML = `
         <div class="message-header">
           <span class="username">${escapeHtml(message.username)}</span>
           <span class="timestamp">${time}</span>
@@ -183,71 +220,67 @@
           ${escapeHtml(message.text)}
         </div>
       `;
-        }
+    }
+    messageList.appendChild(messageDiv);
+    messageList.scrollTop = messageList.scrollHeight;
+    if (typeof feather !== "undefined") {
+      feather.replace();
+    }
+  }
 
-        messageList.appendChild(messageDiv);
-        messageList.scrollTop = messageList.scrollHeight;
-        feather.replace();
+  // Add a system message (helper function)
+  function addSystemMessage(text) {
+    const message = {
+      type: "system",
+      text: text,
+      timestamp: new Date().toISOString(),
+    };
+    addMessage(message);
+  }
+
+  // Display an error message in the username form
+  function showError(text) {
+    const errorDiv = document.createElement("div");
+    errorDiv.className = "error-message fade-in";
+    errorDiv.innerHTML = `<i data-feather="alert-circle" aria-hidden="true"></i><span>${escapeHtml(
+      text
+    )}</span>`;
+    usernameForm.insertBefore(errorDiv, usernameForm.firstChild);
+    if (typeof feather !== "undefined") {
+      feather.replace();
+    }
+    setTimeout(() => errorDiv.remove(), 5000);
+  }
+
+  // Send a chat message through the WebSocket
+  function sendMessage(event) {
+    event.preventDefault();
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const message = messageInput.value.trim();
+      if (message) {
+        ws.send(message);
+        messageInput.value = "";
+        messageInput.focus();
       }
+    } else {
+      addSystemMessage("Not connected to server.");
+    }
+    return false;
+  }
 
-      function addSystemMessage(text) {
-        const message = {
-          type: 'system',
-          text: text,
-          timestamp: new Date().toISOString()
-        };
-        addMessage(message);
-      }
+  // Escape HTML to prevent injection
+  function escapeHtml(unsafe) {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-      function showError(text) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message fade-in';
-        errorDiv.innerHTML = `
-      <i data-feather="alert-circle"></i>
-      <span>${escapeHtml(text)}</span>
-    `;
-        usernameForm.insertBefore(errorDiv, usernameForm.firstChild);
-        feather.replace();
-
-        setTimeout(() => {
-          errorDiv.remove();
-        }, 5000);
-      }
-
-      function sendMessage(event) {
-        event.preventDefault();
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          const message = messageInput.value.trim();
-          if (message) {
-            ws.send(message);
-            messageInput.value = '';
-            messageInput.focus();
-          }
-        } else {
-          addSystemMessage('Not connected to server');
-        }
-        return false;
-      }
-
-      function escapeHtml(unsafe) {
-        return unsafe
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
-      }
-
-      // Initialize
-      document.getElementById('username-input').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          connectToChat(e);
-        }
-      });
-
-      window.addEventListener('load', function () {
-        document.getElementById('username-input').focus();
-      });
-    </script>
-    {% endblock %}
+  // Set focus to username input on load
+  window.addEventListener("load", () => {
+    document.getElementById("username-input").focus();
+  });
+</script>
+{% endblock %}

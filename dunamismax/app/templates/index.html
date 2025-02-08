@@ -1,22 +1,32 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Home - DunamisMax{% endblock %} {%
+block content %}
 <div class="home-page fade-in">
   <header class="page-header">
-    <div class="logo">
-      <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
+    <div class="logo" aria-label="DunamisMax Logo">
+      <!-- Example SVG logo; adjust the markup as needed -->
+      <svg
+        viewBox="0 0 24 24"
+        width="32"
+        height="32"
+        stroke="currentColor"
+        stroke-width="2"
+        fill="none"
+        aria-hidden="true"
+      >
         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
       </svg>
       <h1>DunamisMax</h1>
     </div>
-    <p class="tagline">Modern Web Applications Built with Python &amp; FastAPI</p>
+    <p class="tagline">
+      Modern Web Applications Built with Python &amp; FastAPI
+    </p>
   </header>
 
   <!-- Services Section -->
   <section class="services-section">
     <div class="section-header">
       <div class="header-content">
-        <i data-feather="layers"></i>
+        <i data-feather="layers" aria-hidden="true"></i>
         <span>Available Services</span>
       </div>
     </div>
@@ -24,12 +34,12 @@
       {% for service in services %}
       <div class="service-card card fade-in">
         <div class="service-header">
-          <i data-feather="{{ service.icon }}"></i>
+          <i data-feather="{{ service.icon }}" aria-hidden="true"></i>
           <h3>{{ service.name }}</h3>
         </div>
         <p class="service-description">{{ service.description }}</p>
-        <a href="{{ service.url }}" class="btn">
-          <i data-feather="external-link"></i>
+        <a href="{{ service.url }}" class="btn" target="_blank" rel="noopener">
+          <i data-feather="external-link" aria-hidden="true"></i>
           Launch Service
         </a>
       </div>
@@ -41,22 +51,22 @@
   <section class="features-section">
     <div class="features-grid">
       <div class="card feature-card">
-        <i data-feather="zap"></i>
+        <i data-feather="zap" aria-hidden="true"></i>
         <h4>High Performance</h4>
         <p>Built with FastAPI for maximum speed</p>
       </div>
       <div class="card feature-card">
-        <i data-feather="shield"></i>
+        <i data-feather="shield" aria-hidden="true"></i>
         <h4>Secure</h4>
         <p>Modern security best practices</p>
       </div>
       <div class="card feature-card">
-        <i data-feather="clock"></i>
+        <i data-feather="clock" aria-hidden="true"></i>
         <h4>Real-time</h4>
         <p>WebSocket for instant updates</p>
       </div>
       <div class="card feature-card">
-        <i data-feather="code"></i>
+        <i data-feather="code" aria-hidden="true"></i>
         <h4>Open Source</h4>
         <p>Available on GitHub</p>
       </div>

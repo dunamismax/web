@@ -1,49 +1,59 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}My Notes - DunamisMax Notes{%
+endblock %} {% block content %}
 <div class="notes-page fade-in">
   <header class="page-header">
     <div class="logo">
-      <i data-feather="book-open"></i>
+      <i data-feather="book-open" aria-hidden="true"></i>
       <h1>My Notes</h1>
     </div>
     <p class="tagline">Create, edit, and manage your notes</p>
   </header>
 
-  <!-- Log out button -->
-  <div style="text-align: right;">
+  <!-- Logout Button -->
+  <div class="text-right">
     <a href="/logout" class="btn btn-outline btn-small">
-      <i data-feather="lock"></i>
+      <i data-feather="lock" aria-hidden="true"></i>
       Lock
     </a>
   </div>
 
   <!-- New Note Form -->
-  <div class="card" style="margin-bottom: var(--space-lg); text-align: center;">
+  <div class="card form-card">
     <h3>Create a New Note</h3>
     <form action="/notes/create" method="POST" class="form-group">
       <input type="text" name="title" placeholder="Note Title" required />
-      <textarea name="content" placeholder="Note Content" rows="4" required></textarea>
+      <textarea
+        name="content"
+        placeholder="Note Content"
+        rows="4"
+        required
+      ></textarea>
       <button type="submit" class="btn">
-        <i data-feather="plus"></i>
+        <i data-feather="plus" aria-hidden="true"></i>
         Add Note
       </button>
     </form>
   </div>
 
-  <!-- Existing Notes -->
-  <div class="notes-list" style="display: flex; flex-direction: column; gap: var(--space-md);">
+  <!-- Existing Notes List -->
+  <div class="notes-list">
     {% for note in notes %}
-    <div class="card" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+    <div class="card note-card">
       <h3>{{ note.title }}</h3>
-      <p style="text-align: left;">{{ note.content }}</p>
-      <div style="display: flex; justify-content: flex-end; gap: var(--space-sm);">
+      <p>{{ note.content }}</p>
+      <div class="note-actions">
         <a href="/notes/{{ note.id }}/edit" class="btn btn-small">
-          <i data-feather="edit-3"></i> Edit
+          <i data-feather="edit-3" aria-hidden="true"></i>
+          Edit
         </a>
-        <form action="/notes/{{ note.id }}/delete" method="POST" style="margin: 0;">
-          <button type="submit" class="btn btn-small btn-outline" onclick="return confirm('Delete this note?')">
-            <i data-feather="trash-2"></i>
+        <form
+          action="/notes/{{ note.id }}/delete"
+          method="POST"
+          onsubmit="return confirm('Delete this note?')"
+          class="inline-form"
+        >
+          <button type="submit" class="btn btn-small btn-outline">
+            <i data-feather="trash-2" aria-hidden="true"></i>
             Delete
           </button>
         </form>
@@ -52,28 +62,33 @@
     {% endfor %}
   </div>
 
-  <!-- Features / Selling points -->
+  <!-- Features Section -->
   <section class="features-section">
     <div class="features-grid">
       <div class="card feature-card">
-        <i data-feather="edit"></i>
+        <i data-feather="edit" aria-hidden="true"></i>
         <h4>Create & Edit Notes</h4>
-        <p>Easily create, update, and organize your notes with a simple and intuitive interface</p>
+        <p>
+          Easily create, update, and organize your notes with a simple
+          interface.
+        </p>
       </div>
       <div class="card feature-card">
-        <i data-feather="shield"></i>
+        <i data-feather="shield" aria-hidden="true"></i>
         <h4>Secure Access</h4>
-        <p>Admins can securely log in to manage notes, with all data protected by encryption</p>
+        <p>
+          Only authorized admins can manage notes, and all data is protected.
+        </p>
       </div>
       <div class="card feature-card">
-        <i data-feather="database"></i>
+        <i data-feather="database" aria-hidden="true"></i>
         <h4>Reliable Storage</h4>
-        <p>All notes are securely stored in a PostgreSQL database, ensuring data integrity and durability</p>
+        <p>All notes are stored securely in PostgreSQL for data integrity.</p>
       </div>
       <div class="card feature-card">
-        <i data-feather="trash"></i>
-        <h4>Delete with Ease</h4>
-        <p>Quickly and permanently delete notes when they're no longer needed</p>
+        <i data-feather="trash" aria-hidden="true"></i>
+        <h4>Easy Deletion</h4>
+        <p>Quickly remove notes when they are no longer needed.</p>
       </div>
     </div>
   </section>

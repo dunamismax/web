@@ -1,23 +1,28 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Admin Login - DunamisMax Notes{%
+endblock %} {% block content %}
 <div class="login-card fade-in">
   <h2>Admin Login</h2>
   <p class="tagline">Enter the Admin Password</p>
 
   {% if request.query_params.get('error') %}
-  <div class="error-message fade-in" style="margin-bottom: var(--space-md);">
-    <i data-feather="alert-circle"></i>
+  <div class="error-message fade-in">
+    <i data-feather="alert-circle" aria-hidden="true"></i>
     <span>Incorrect password, please try again.</span>
   </div>
   {% endif %}
 
   <form action="/login" method="POST" class="form-group">
     <div class="input-wrapper">
-      <input type="password" name="password" class="form-input" placeholder="Admin Password" required />
+      <input
+        type="password"
+        name="password"
+        class="form-input"
+        placeholder="Admin Password"
+        required
+      />
     </div>
     <button type="submit" class="btn">
-      <i data-feather="log-in"></i>
+      <i data-feather="log-in" aria-hidden="true"></i>
       Unlock
     </button>
   </form>

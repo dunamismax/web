@@ -17,13 +17,16 @@
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
     {% block extra_css %}{% endblock %}
 
-    <!-- Fonts & Icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <!-- Fonts & Icons (deferred for better performance) -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
+      defer
+    ></script>
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
     <!-- Navigation -->
-    <nav class="main-nav">
+    <nav class="main-nav" role="navigation" aria-label="Main Navigation">
       <div class="nav-container">
         <div class="nav-links">
           <a href="https://dunamismax.com">Home</a>
@@ -38,18 +41,18 @@
     </nav>
 
     <div class="page-wrapper">
-      <!-- Alerts or status messages -->
+      <!-- Alerts / Status Messages -->
       {% if messages %} {% for message in messages %}
-      <div class="alert alert-{{ message.category }}">
+      <div class="alert alert-{{ message.category }}" role="alert">
         {{ message.content }}
       </div>
       {% endfor %} {% endif %}
 
-      <!-- Main content -->
+      <!-- Main Content -->
       <main class="container">{% block content %}{% endblock %}</main>
 
       <!-- Footer -->
-      <footer class="main-footer">
+      <footer class="main-footer" role="contentinfo">
         <div class="footer-content">
           <div class="footer-links">
             <a href="https://dunamismax.com">Home</a>
@@ -71,17 +74,19 @@
 
     <!-- Core Scripts -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Initialize Feather icons
-        feather.replace();
+      document.addEventListener("DOMContentLoaded", () => {
+        // Initialize Feather Icons
+        if (typeof feather !== "undefined") {
+          feather.replace();
+        }
 
-        // Set current year
+        // Set the current year in the footer
         const yearSpan = document.getElementById("current-year");
         if (yearSpan) {
           yearSpan.textContent = new Date().getFullYear();
         }
 
-        // Highlight active nav link
+        // Highlight active nav link based on current URL
         const currentUrl = window.location.href;
         document.querySelectorAll(".nav-links a").forEach((link) => {
           if (link.href === currentUrl || link.href === currentUrl + "/") {
@@ -91,7 +96,7 @@
           }
         });
 
-        // Auto-dismiss alerts
+        // Auto-dismiss alerts after 5 seconds
         document.querySelectorAll(".alert").forEach((alert) => {
           setTimeout(() => {
             alert.style.opacity = "0";
@@ -102,11 +107,10 @@
     </script>
     {% block scripts %}{% endblock %}
 
-    <!-- Optional Error Handling -->
+    <!-- Optional Error Notification -->
     {% if error %}
-    <div class="error-notification">
-      <i data-feather="alert-triangle"></i>
-      {{ error }}
+    <div class="error-notification" role="alert">
+      <i data-feather="alert-triangle"></i> {{ error }}
     </div>
     {% endif %}
   </body>

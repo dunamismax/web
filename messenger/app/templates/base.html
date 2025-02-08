@@ -21,8 +21,11 @@
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
     {% block extra_css %}{% endblock %}
 
-    <!-- Fonts and Icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <!-- Fonts & Icons (deferred for performance) -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
+      defer
+    ></script>
 
     <!-- Basic Meta -->
     <meta
@@ -49,10 +52,9 @@
 
     {% block extra_meta %}{% endblock %}
   </head>
-
   <body>
     <!-- Navigation -->
-    <nav class="main-nav">
+    <nav class="main-nav" role="navigation" aria-label="Main Navigation">
       <div class="nav-container">
         <div class="nav-links">
           <a href="https://dunamismax.com">Home</a>
@@ -67,9 +69,9 @@
     </nav>
 
     <div class="page-wrapper">
-      <!-- Status Messages -->
+      <!-- Alerts / Status Messages -->
       {% if messages %} {% for message in messages %}
-      <div class="alert alert-{{ message.category }}">
+      <div class="alert alert-{{ message.category }}" role="alert">
         {{ message.content }}
       </div>
       {% endfor %} {% endif %}
@@ -78,7 +80,7 @@
       <main class="container">{% block content %}{% endblock %}</main>
 
       <!-- Footer -->
-      <footer class="main-footer">
+      <footer class="main-footer" role="contentinfo">
         <div class="footer-content">
           <div class="footer-links">
             <a href="https://dunamismax.com">Home</a>
@@ -100,17 +102,17 @@
 
     <!-- Core Scripts -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Initialize Feather Icons
-        feather.replace();
-
-        // Set current year
+      document.addEventListener("DOMContentLoaded", () => {
+        // Initialize Feather icons (if not already initialized via defer)
+        if (typeof feather !== "undefined") {
+          feather.replace();
+        }
+        // Set the current year in the footer
         const yearSpan = document.getElementById("current-year");
         if (yearSpan) {
           yearSpan.textContent = new Date().getFullYear();
         }
-
-        // Highlight correct nav link
+        // Highlight the active navigation link based on the current URL
         const currentUrl = window.location.href;
         document.querySelectorAll(".nav-links a").forEach((link) => {
           if (link.href === currentUrl || link.href === currentUrl + "/") {
@@ -119,8 +121,7 @@
             link.classList.remove("active");
           }
         });
-
-        // Auto-dismiss alerts
+        // Auto-dismiss alerts after 5 seconds
         document.querySelectorAll(".alert").forEach((alert) => {
           setTimeout(() => {
             alert.style.opacity = "0";
@@ -129,14 +130,12 @@
         });
       });
     </script>
-
     {% block scripts %}{% endblock %}
 
-    <!-- Optional Error Handling -->
+    <!-- Optional Error Notification -->
     {% if error %}
-    <div class="error-notification">
-      <i data-feather="alert-triangle"></i>
-      {{ error }}
+    <div class="error-notification" role="alert">
+      <i data-feather="alert-triangle"></i> {{ error }}
     </div>
     {% endif %}
   </body>
