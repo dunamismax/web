@@ -13,57 +13,60 @@
       href="{{ url_for('static', path='favicon.ico') }}"
     />
 
-    <!-- Stylesheet -->
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
     {% block extra_head %}{% endblock %}
   </head>
   <body>
-    <!-- Navigation -->
-    <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-      <div class="nav-container">
-        <div class="nav-links">
-          <a href="https://dunamismax.com">Home</a>
-          <a href="https://messenger.dunamismax.com">Messenger</a>
-          <a href="https://agents.dunamismax.com">AI Agents</a>
-          <a href="https://files.dunamismax.com">File Converter</a>
-          <a href="https://notes.dunamismax.com" class="active">Notes</a>
+    <header>
+      <nav class="main-nav" role="navigation" aria-label="Main Navigation">
+        <div class="nav-container">
+          <!-- Using role="list" to ensure no default list markers -->
+          <ul class="nav-links" role="list">
+            <li><a href="https://dunamismax.com">Home</a></li>
+            <li><a href="https://messenger.dunamismax.com">Messenger</a></li>
+            <li><a href="https://agents.dunamismax.com">AI Agents</a></li>
+            <li><a href="https://files.dunamismax.com">File Converter</a></li>
+            <li>
+              <a href="https://notes.dunamismax.com" class="active">Notes</a>
+            </li>
+          </ul>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
 
     <div class="page-wrapper">
       <main class="container">{% block content %}{% endblock %}</main>
 
       <footer class="main-footer" role="contentinfo">
         <div class="footer-content">
-          <div class="footer-links">
-            <a href="https://dunamismax.com">Home</a>
-            <a href="/privacy">Privacy</a>
-            <a
-              href="https://github.com/dunamismax"
-              target="_blank"
-              rel="noopener"
-              >GitHub</a
-            >
+          <!-- Footer links as a list with role="list" -->
+          <ul class="footer-links" role="list">
+            <li><a href="https://dunamismax.com">Home</a></li>
+            <li><a href="/privacy">Privacy</a></li>
+            <li>
+              <a
+                href="https://github.com/dunamismax"
+                target="_blank"
+                rel="noopener"
+              >
+                GitHub
+              </a>
+            </li>
             {% block footer_links %}{% endblock %}
-          </div>
-          <p class="footer-copyright">
-            &copy; <span id="current-year"></span> DunamisMax
-          </p>
+          </ul>
+          <p>&copy; <span id="current-year"></span> DunamisMax</p>
         </div>
       </footer>
     </div>
 
-    <!-- Initialize Feather Icons and set current year -->
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", function () {
         if (typeof feather !== "undefined") {
           feather.replace();
         }
-        const yearSpan = document.getElementById("current-year");
-        if (yearSpan) {
-          yearSpan.textContent = new Date().getFullYear();
-        }
+        document.getElementById("current-year").textContent =
+          new Date().getFullYear();
       });
     </script>
     {% block scripts %}{% endblock %}

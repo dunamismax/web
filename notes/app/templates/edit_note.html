@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}Edit Note - DunamisMax Notes{%
 endblock %} {% block content %}
-<div class="notes-page fade-in">
+<section class="notes-page fade-in">
   <header class="page-header">
     <div class="logo">
       <i data-feather="edit" aria-hidden="true"></i>
@@ -8,23 +8,37 @@ endblock %} {% block content %}
     </div>
   </header>
 
-  <div class="card form-card">
-    <form action="/notes/{{ note.id }}/edit" method="POST" class="form-group">
-      <input
-        type="text"
-        name="title"
-        value="{{ note.title }}"
-        required
-        placeholder="Note Title"
-      />
-      <textarea name="content" rows="6" required placeholder="Note Content">
+  <article class="content-section" style="margin-top: var(--space-xl)">
+    <div class="card">
+      <form action="/notes/{{ note.id }}/edit" method="POST" class="form-group">
+        <!-- Accessible labels can be hidden if desired -->
+        <label for="note-title" class="visually-hidden">Title</label>
+        <input
+          type="text"
+          id="note-title"
+          name="title"
+          value="{{ note.title }}"
+          required
+          placeholder="Note Title"
+        />
+
+        <label for="note-content" class="visually-hidden">Content</label>
+        <textarea
+          id="note-content"
+          name="content"
+          rows="6"
+          required
+          placeholder="Note Content"
+        >
 {{ note.content }}</textarea
-      >
-      <button type="submit" class="btn">
-        <i data-feather="save" aria-hidden="true"></i>
-        Save Changes
-      </button>
-    </form>
-  </div>
-</div>
+        >
+
+        <button type="submit" class="btn">
+          <i data-feather="save" aria-hidden="true"></i>
+          Save Changes
+        </button>
+      </form>
+    </div>
+  </article>
+</section>
 {% endblock %}
