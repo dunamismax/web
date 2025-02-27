@@ -87,7 +87,7 @@ converter_service/
 1. **Install FFmpeg**
 
    ```bash
-   sudo apt update
+   sudo nala update
    sudo apt install ffmpeg
    ```
 
